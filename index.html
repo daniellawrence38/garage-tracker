@@ -1,0 +1,1505 @@
+<title>Garage Project Tracker</title>
+<style>
+  :root {
+    --bg: #F6F4EF;
+    --surface: #FFFFFF;
+    --surface-2: #EFEBE2;
+    --ink: #26292E;
+    --ink-2: #5C6370;
+    --muted: #8A8F98;
+    --line: #E3DFD6;
+    --accent: #A87430;
+    --accent-ink: #7C5420;
+    --accent-soft: #F2E7D3;
+    --good: #2E7D4F;      --good-soft: #E2F0E7;
+    --warn: #96660F;      --warn-soft: #F5EBD4;
+    --info: #33628C;      --info-soft: #E3ECF4;
+    --neutral: #676D77;   --neutral-soft: #ECECEA;
+    --danger: #A03A2E;
+    --fab-ink: #FFFFFF;
+    --shadow: 0 1px 3px rgba(38, 41, 46, 0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1B1D21;
+      --surface: #25282D;
+      --surface-2: #2C3036;
+      --ink: #ECEAE4;
+      --ink-2: #A9AEB7;
+      --muted: #7C828C;
+      --line: #383C43;
+      --accent: #D9A05B;
+      --accent-ink: #E4B87F;
+      --accent-soft: #3A3122;
+      --good: #74C295;      --good-soft: #253B2F;
+      --warn: #D9AE5F;      --warn-soft: #3E3420;
+      --info: #8FB4D8;      --info-soft: #263442;
+      --neutral: #9BA1AB;   --neutral-soft: #33373D;
+      --danger: #E08A7E;
+      --fab-ink: #1B1D21;
+      --shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #F6F4EF; --surface: #FFFFFF; --surface-2: #EFEBE2;
+    --ink: #26292E; --ink-2: #5C6370; --muted: #8A8F98; --line: #E3DFD6;
+    --accent: #A87430; --accent-ink: #7C5420; --accent-soft: #F2E7D3;
+    --good: #2E7D4F; --good-soft: #E2F0E7;
+    --warn: #96660F; --warn-soft: #F5EBD4;
+    --info: #33628C; --info-soft: #E3ECF4;
+    --neutral: #676D77; --neutral-soft: #ECECEA;
+    --danger: #A03A2E; --fab-ink: #FFFFFF; --shadow: 0 1px 3px rgba(38, 41, 46, 0.08);
+  }
+  :root[data-theme="dark"] {
+    --bg: #1B1D21; --surface: #25282D; --surface-2: #2C3036;
+    --ink: #ECEAE4; --ink-2: #A9AEB7; --muted: #7C828C; --line: #383C43;
+    --accent: #D9A05B; --accent-ink: #E4B87F; --accent-soft: #3A3122;
+    --good: #74C295; --good-soft: #253B2F;
+    --warn: #D9AE5F; --warn-soft: #3E3420;
+    --info: #8FB4D8; --info-soft: #263442;
+    --neutral: #9BA1AB; --neutral-soft: #33373D;
+    --danger: #E08A7E; --fab-ink: #1B1D21; --shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.45;
+    margin: 0;
+    -webkit-text-size-adjust: 100%;
+  }
+  .wrap { max-width: 740px; margin: 0 auto; padding: 20px 16px 96px; }
+
+  header.app { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+  .hdr-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+  .sync-status { font-size: 0.72rem; color: var(--muted); text-align: right; max-width: 170px; }
+  .gh-token { width: 100%; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); font: inherit; padding: 9px 11px; font-size: 0.9rem; }
+  .title h1 { font-size: 1.35rem; font-weight: 650; margin: 0; letter-spacing: -0.01em; }
+  .title p { margin: 2px 0 0; color: var(--ink-2); font-size: 0.85rem; }
+  .title .rule { display: inline-block; width: 34px; height: 4px; background: var(--accent); border-radius: 2px; margin-bottom: 8px; }
+
+  button { font: inherit; cursor: pointer; }
+  .btn {
+    border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+    border-radius: 8px; padding: 8px 14px; font-size: 0.9rem; font-weight: 550;
+  }
+  .btn:hover { border-color: var(--muted); }
+  .btn-accent { background: var(--accent); border-color: var(--accent); color: var(--fab-ink); }
+  .btn-accent:hover { filter: brightness(1.05); }
+  button:focus-visible, .chip:focus-visible, .tab:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+    outline: 2px solid var(--accent); outline-offset: 2px;
+  }
+
+  /* Stat row */
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
+  .stat {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+    padding: 12px 14px; box-shadow: var(--shadow);
+  }
+  .stat .lbl {
+    font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.07em;
+    color: var(--ink-2); font-weight: 600; margin-bottom: 2px;
+  }
+  .stat .val { font-size: 1.3rem; font-weight: 650; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+  .stat .sub { font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 2px; border-bottom: 2px solid var(--line); margin-bottom: 14px; }
+  .tab {
+    background: none; border: none; padding: 9px 14px 8px; font-size: 0.95rem; font-weight: 550;
+    color: var(--ink-2); border-bottom: 2px solid transparent; margin-bottom: -2px;
+  }
+  .tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+  .tab .count { color: var(--muted); font-size: 0.8rem; font-variant-numeric: tabular-nums; }
+
+  /* Zone filter chips */
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .chip {
+    border: 1px solid var(--line); background: var(--surface); color: var(--ink-2);
+    border-radius: 999px; padding: 5px 13px; font-size: 0.82rem; font-weight: 550;
+  }
+  .chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+
+  /* Cards */
+  .list { display: flex; flex-direction: column; gap: 10px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+    padding: 13px 15px; box-shadow: var(--shadow); cursor: pointer;
+  }
+  .card:hover { border-color: var(--muted); }
+  .card .row1 { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+  .card h3 { font-size: 0.98rem; font-weight: 600; margin: 0; }
+  .card .price { font-weight: 650; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .card .meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 7px; }
+  .card .body { color: var(--ink-2); font-size: 0.88rem; margin-top: 7px; white-space: pre-wrap; }
+  .card .chosen { margin-top: 7px; font-size: 0.9rem; }
+  .card .chosen strong { font-weight: 600; }
+
+  .pill {
+    display: inline-block; border-radius: 999px; padding: 2px 10px;
+    font-size: 0.72rem; font-weight: 650; letter-spacing: 0.02em;
+  }
+  .pill.zone { background: var(--surface-2); color: var(--ink-2); }
+  .pill.st-good { background: var(--good-soft); color: var(--good); }
+  .pill.st-warn { background: var(--warn-soft); color: var(--warn); }
+  .pill.st-info { background: var(--info-soft); color: var(--info); }
+  .pill.st-neutral { background: var(--neutral-soft); color: var(--neutral); }
+  .pill.st-accent { background: var(--accent-soft); color: var(--accent-ink); }
+  .card .date { color: var(--muted); font-size: 0.75rem; margin-left: auto; }
+
+  .empty {
+    text-align: center; color: var(--muted); padding: 36px 16px; font-size: 0.92rem;
+    border: 1px dashed var(--line); border-radius: 10px;
+  }
+
+  /* Floating add button */
+  .fab {
+    position: fixed; right: 18px; bottom: 18px; z-index: 5;
+    background: var(--accent); color: var(--fab-ink); border: none; border-radius: 999px;
+    padding: 13px 22px; font-size: 0.98rem; font-weight: 650;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.22);
+  }
+
+  /* Plan view */
+  .plan-toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; min-height: 38px; }
+  .plan-hint { color: var(--muted); font-size: 0.82rem; }
+  .plan-sel { font-size: 0.85rem; font-weight: 600; }
+  .plan-sel .dims { color: var(--ink-2); font-weight: 500; font-variant-numeric: tabular-nums; }
+  .plan-toolbar .spacer { flex: 1; }
+  .plan-svg-wrap { display: flex; justify-content: center; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); padding: 10px 6px; }
+  .plan-svg-wrap svg { width: 100%; max-width: 440px; height: auto; }
+  .eq { cursor: grab; touch-action: none; }
+  .eq text { pointer-events: none; user-select: none; }
+  .eq.selected rect { stroke: var(--accent); stroke-width: 55px; }
+
+  /* Dialogs */
+  dialog {
+    border: 1px solid var(--line); border-radius: 14px; padding: 0;
+    background: var(--surface); color: var(--ink);
+    width: min(480px, calc(100vw - 32px));
+    max-height: calc(100dvh - 48px);
+  }
+  dialog::backdrop { background: rgba(20, 21, 24, 0.45); }
+  .dlg-inner { padding: 18px 18px 16px; overflow-y: auto; max-height: calc(100dvh - 48px); }
+  dialog h2 { font-size: 1.05rem; margin: 0 0 14px; font-weight: 650; }
+  .field { margin-bottom: 12px; }
+  .field label {
+    display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em;
+    font-weight: 650; color: var(--ink-2); margin-bottom: 4px;
+  }
+  .field input, .field select, .field textarea {
+    width: 100%; border: 1px solid var(--line); border-radius: 8px;
+    background: var(--bg); color: var(--ink); font: inherit; padding: 9px 11px; font-size: 0.95rem;
+  }
+  .field textarea { min-height: 84px; resize: vertical; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .dlg-actions { display: flex; gap: 8px; margin-top: 16px; align-items: center; }
+  .dlg-actions .spacer { flex: 1; }
+  .btn-danger { background: none; border: 1px solid var(--line); color: var(--danger); border-radius: 8px; padding: 8px 12px; font-size: 0.88rem; font-weight: 550; }
+  .btn-danger.armed { background: var(--danger); border-color: var(--danger); color: var(--surface); }
+
+  /* Sync dialog */
+  .sync-note { font-size: 0.85rem; color: var(--ink-2); margin: 0 0 10px; }
+  .sync-ta { width: 100%; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); font-family: ui-monospace, Consolas, monospace; font-size: 0.75rem; padding: 9px; min-height: 96px; resize: vertical; }
+  .sync-sec { margin-bottom: 18px; }
+  .sync-sec h3 { font-size: 0.85rem; margin: 0 0 6px; font-weight: 650; }
+  .copied { color: var(--good); font-size: 0.82rem; font-weight: 600; }
+
+  /* Shape links */
+  .plan-links { display: flex; gap: 6px; flex-wrap: wrap; margin: -4px 0 10px; }
+  .plan-links:empty { display: none; }
+  .plan-links button.pill { border: none; cursor: pointer; font-family: inherit; }
+  .field .link-list { max-height: 190px; overflow-y: auto; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; display: flex; flex-direction: column; gap: 6px; background: var(--bg); }
+  .field .link-list .grp { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 650; margin-top: 4px; }
+  .field .link-list label { display: flex; gap: 8px; align-items: center; font-size: 0.85rem; font-weight: 500; color: var(--ink); text-transform: none; letter-spacing: 0; margin: 0; }
+  .field .link-list input[type="checkbox"] { width: auto; accent-color: var(--accent); }
+  .field .link-list .none { color: var(--muted); font-size: 0.82rem; }
+
+  @media (max-width: 480px) {
+    .stats { gap: 7px; }
+    .stat { padding: 10px 11px; }
+    .stat .val { font-size: 1.05rem; }
+    .tab { padding: 9px 10px 8px; font-size: 0.9rem; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .btn, .chip, .tab, .card { transition: border-color 0.12s, background 0.12s, color 0.12s; }
+  }
+</style>
+
+<div class="wrap">
+  <header class="app">
+    <div class="title">
+      <span class="rule"></span>
+      <h1>Garage Project</h1>
+      <p>6.2 × 3.9 m — front area + rear gym</p>
+    </div>
+    <div class="hdr-right">
+      <button class="btn" id="syncBtn">Sync / Backup</button>
+      <span class="sync-status" id="syncStatus"></span>
+    </div>
+  </header>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="tabs" role="tablist" id="tabs">
+    <button class="tab" role="tab" data-tab="plan">Plan <span class="count"></span></button>
+    <button class="tab" role="tab" data-tab="purchases">Purchases <span class="count"></span></button>
+    <button class="tab" role="tab" data-tab="decisions">Decisions <span class="count"></span></button>
+    <button class="tab" role="tab" data-tab="notes">Notes <span class="count"></span></button>
+  </div>
+
+  <div class="chips" id="zoneChips"></div>
+  <div class="chips" id="catChips" style="display:none"></div>
+
+  <div id="planView" style="display:none">
+    <div class="plan-toolbar">
+      <span class="plan-hint" id="planHint">Tap an item to move it · + Shape adds your own.</span>
+      <span class="plan-sel" id="planSel" hidden></span>
+      <button class="btn" id="rotBtn" hidden>Rotate 90°</button>
+      <button class="btn" id="parkBtn" hidden>Park</button>
+      <button class="btn" id="editShapeBtn" hidden>Edit</button>
+      <span class="spacer"></span>
+      <button class="btn" id="addShapeBtn">+ Shape</button>
+      <button class="btn" id="resetLayoutBtn">Reset layout</button>
+    </div>
+    <div class="plan-links" id="planLinks"></div>
+    <div class="plan-svg-wrap" id="planSvgWrap"></div>
+  </div>
+
+  <div class="list" id="list"></div>
+</div>
+
+<button class="fab" id="addBtn">+ Add</button>
+
+<!-- Purchase dialog -->
+<dialog id="dlg-purchase">
+  <form class="dlg-inner" id="form-purchase">
+    <h2 id="dlg-purchase-title">Add purchase</h2>
+    <div class="field"><label for="p-item">Item</label><input id="p-item" required autocomplete="off"></div>
+    <div class="field-row">
+      <div class="field"><label for="p-price">Price ($)</label><input id="p-price" type="number" step="0.01" min="0" inputmode="decimal" placeholder="—"></div>
+      <div class="field"><label for="p-zone">Zone</label><select id="p-zone"></select></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label for="p-status">Status</label><select id="p-status"></select></div>
+      <div class="field"><label for="p-cat">Category</label><select id="p-cat"></select></div>
+    </div>
+    <div class="field"><label for="p-vendor">Vendor</label><input id="p-vendor" autocomplete="off" placeholder="optional"></div>
+    <div class="field"><label for="p-notes">Notes</label><textarea id="p-notes" placeholder="optional"></textarea></div>
+    <div class="dlg-actions">
+      <button type="button" class="btn-danger" data-del hidden>Delete</button>
+      <span class="spacer"></span>
+      <button type="button" class="btn" data-cancel>Cancel</button>
+      <button type="submit" class="btn btn-accent">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Decision dialog -->
+<dialog id="dlg-decision">
+  <form class="dlg-inner" id="form-decision">
+    <h2 id="dlg-decision-title">Add decision</h2>
+    <div class="field"><label for="d-title">What's being decided</label><input id="d-title" required autocomplete="off"></div>
+    <div class="field-row">
+      <div class="field"><label for="d-status">Status</label><select id="d-status"></select></div>
+      <div class="field"><label for="d-zone">Zone</label><select id="d-zone"></select></div>
+    </div>
+    <div class="field"><label for="d-chosen">Choice (if made)</label><input id="d-chosen" autocomplete="off" placeholder="what you went with"></div>
+    <div class="field"><label for="d-notes">Options / reasoning</label><textarea id="d-notes" placeholder="options considered, why, links…"></textarea></div>
+    <div class="dlg-actions">
+      <button type="button" class="btn-danger" data-del hidden>Delete</button>
+      <span class="spacer"></span>
+      <button type="button" class="btn" data-cancel>Cancel</button>
+      <button type="submit" class="btn btn-accent">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Note dialog -->
+<dialog id="dlg-note">
+  <form class="dlg-inner" id="form-note">
+    <h2 id="dlg-note-title">Add note</h2>
+    <div class="field"><label for="n-title">Title</label><input id="n-title" required autocomplete="off"></div>
+    <div class="field"><label for="n-zone">Zone</label><select id="n-zone"></select></div>
+    <div class="field"><label for="n-body">Note</label><textarea id="n-body" placeholder="measurements, layout, reference info…" style="min-height:130px"></textarea></div>
+    <div class="dlg-actions">
+      <button type="button" class="btn-danger" data-del hidden>Delete</button>
+      <span class="spacer"></span>
+      <button type="button" class="btn" data-cancel>Cancel</button>
+      <button type="submit" class="btn btn-accent">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Shape dialog -->
+<dialog id="dlg-shape">
+  <form class="dlg-inner" id="form-shape">
+    <h2 id="dlg-shape-title">Add shape</h2>
+    <div class="field"><label for="s-name">Label</label><input id="s-name" required autocomplete="off" placeholder="e.g. Squat rack, Workbench"></div>
+    <div class="field-row">
+      <div class="field"><label for="s-w">Width (mm)</label><input id="s-w" type="number" min="100" max="6000" step="10" required inputmode="numeric"></div>
+      <div class="field"><label for="s-d">Depth (mm)</label><input id="s-d" type="number" min="100" max="6000" step="10" required inputmode="numeric"></div>
+    </div>
+    <div class="field"><label for="s-tone">Colour</label><select id="s-tone"></select></div>
+    <div class="field"><label>Linked items</label><div class="link-list" id="s-links"></div></div>
+    <div class="dlg-actions">
+      <button type="button" class="btn-danger" data-del hidden>Delete</button>
+      <span class="spacer"></span>
+      <button type="button" class="btn" data-cancel>Cancel</button>
+      <button type="submit" class="btn btn-accent">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Sync dialog -->
+<dialog id="dlg-sync">
+  <div class="dlg-inner">
+    <h2>Sync / Backup</h2>
+    <div class="sync-sec">
+      <h3>GitHub sync</h3>
+      <p class="sync-note" id="ghNote"></p>
+      <input class="gh-token" id="ghTokenInput" type="password" autocomplete="off" placeholder="github_pat_…">
+      <div class="dlg-actions" style="margin-top:8px">
+        <button type="button" class="btn" id="ghTokenSave">Save token</button>
+        <button type="button" class="btn" id="ghTokenClear">Clear token</button>
+        <span class="copied" id="ghTokenMsg" hidden></span>
+      </div>
+    </div>
+    <div class="sync-sec">
+      <h3>Add items — paste from a Claude chat</h3>
+      <p class="sync-note">Copy the format instructions into any Claude chat, describe your decisions or purchases, then paste Claude's JSON reply here. Items are added — nothing is replaced.</p>
+      <textarea class="sync-ta" id="snippetTa" placeholder="Paste Claude's JSON snippet here…"></textarea>
+      <div class="dlg-actions" style="margin-top:8px">
+        <button type="button" class="btn" id="snippetBtn">Add items</button>
+        <button type="button" class="btn" id="copyPromptBtn">Copy format instructions</button>
+        <span class="copied" id="snippetMsg" hidden></span>
+      </div>
+    </div>
+    <div class="sync-sec">
+      <h3>Export — this device's data</h3>
+      <textarea class="sync-ta" id="exportTa" readonly></textarea>
+      <div class="dlg-actions" style="margin-top:8px">
+        <button type="button" class="btn" id="copyBtn">Copy sync code</button>
+        <span class="copied" id="copiedMsg" hidden>Copied</span>
+      </div>
+    </div>
+    <div class="sync-sec">
+      <h3>Import full backup — replace this device's data</h3>
+      <textarea class="sync-ta" id="importTa" placeholder="Paste a sync code here…"></textarea>
+      <div class="dlg-actions" style="margin-top:8px">
+        <button type="button" class="btn" id="importBtn">Import (replaces everything)</button>
+        <span class="copied" id="importMsg" hidden></span>
+      </div>
+    </div>
+    <div class="dlg-actions">
+      <span class="spacer"></span>
+      <button type="button" class="btn" id="syncClose">Close</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+(function () {
+  var STORE_KEY = "garageTracker.v1";
+  var ZONES = ["Gym", "Front area", "General"];
+  var P_STATUSES = ["researching", "planned", "ordered", "delivered", "installed"];
+  var D_STATUSES = ["deciding", "decided", "revisit"];
+  var STATUS_CLASS = {
+    researching: "st-neutral", planned: "st-info", ordered: "st-warn",
+    delivered: "st-accent", installed: "st-good",
+    deciding: "st-warn", decided: "st-good", revisit: "st-info"
+  };
+
+  function seed() {
+    var t = "2026-08-03";
+    return {
+      version: 1,
+      purchases: [
+        { id: "p1", item: "9mm plywood — 14 sheets", zone: "Gym", category: "Timber", price: 659, vendor: "", status: "ordered", notes: "Wall lining for the whole space.", date: t },
+        { id: "p2", item: "LED strip lighting", zone: "Gym", category: "Electrical", price: null, vendor: "", status: "planned", notes: "Runs in the gap at the top of the plywood.", date: t },
+        { id: "p3", item: "Dimmable LED battens ×2", zone: "Gym", category: "Electrical", price: null, vendor: "", status: "planned", notes: "", date: t },
+        { id: "p4", item: "Solid double doors", zone: "Front area", category: "Doors", price: null, vendor: "", status: "planned", notes: "Replaces the single garage door. Opening: 2587 × 2152 mm. Doors open outwards.", date: t },
+        { id: "p5", item: "Rubber gym flooring", zone: "Gym", category: "Flooring", price: null, vendor: "", status: "planned", notes: "Full coverage of the rear gym zone — 4.2 × 3.9 m ≈ 16.4 m².", date: t },
+        { id: "p6", item: "Concrete paint / sealer (front floor)", zone: "Front area", category: "Paint", price: null, vendor: "", status: "planned", notes: "Front 1.5 m stays painted/sealed concrete.", date: t },
+        { id: "p7", item: "Power rack (second-hand)", zone: "Gym", category: "Equipment", price: null, vendor: "", status: "researching", notes: "Type still being decided — see Decisions.", date: t },
+        { id: "p8", item: "Barbell, plates, bench (second-hand)", zone: "Gym", category: "Equipment", price: null, vendor: "", status: "researching", notes: "Lifting basics.", date: t },
+        { id: "p9", item: "Treadmill (second-hand)", zone: "Gym", category: "Equipment", price: null, vendor: "", status: "researching", notes: "", date: t },
+        { id: "p10", item: "Gymnastic rings", zone: "Gym", category: "Equipment", price: null, vendor: "", status: "planned", notes: "To hang from the steel beam.", date: t },
+        { id: "p11", item: "Bike wall hooks ×2", zone: "Front area", category: "Storage", price: null, vendor: "", status: "planned", notes: "Vertical hang for 2 bikes.", date: t },
+        { id: "p12", item: "Storage racks", zone: "Front area", category: "Storage", price: null, vendor: "", status: "planned", notes: "", date: t },
+        { id: "p13", item: "Enclosed storage cupboard", zone: "Front area", category: "Storage", price: null, vendor: "", status: "researching", notes: "Maybe — hides clutter; see Decisions.", date: t },
+        { id: "p14", item: "JetBlack Volt trainer", zone: "Gym", category: "Equipment", price: null, vendor: "", status: "installed", notes: "Already owned.", date: t }
+      ],
+      decisions: [
+        { id: "d1", title: "Gym flooring", zone: "Gym", status: "decided", chosen: "Full rubber matting across the rear gym zone; painted/sealed concrete in the front area", notes: "Options were full rubber vs painted concrete + selective mats. Full rubber wins: continuous tidy look, noise/drop protection for lifting, no mat creep.", date: t },
+        { id: "d2", title: "Garage door replacement", zone: "Front area", status: "decided", chosen: "Solid double doors", notes: "Opening is 2587 × 2152 mm. Solid over glazed: secure, insulated, cheaper.", date: t },
+        { id: "d3", title: "Wall covering", zone: "Gym", status: "decided", chosen: "9mm plywood over the rendered walls", notes: "14 sheets ordered ($659). Consider clear-seal or whitewash finish rather than paint.", date: t },
+        { id: "d4", title: "Lighting", zone: "Gym", status: "decided", chosen: "LED strips in a gap at the top of the plywood + 2 dimmable LED battens", notes: "", date: t },
+        { id: "d5", title: "Ceiling finish", zone: "Gym", status: "decided", chosen: "Paint the concrete ceiling white", notes: "Done — already painted.", date: t },
+        { id: "d6", title: "Pull-up setup", zone: "Gym", status: "deciding", chosen: "", notes: "Gymnastic rings on the steel beam are planned. Still deciding whether to also add a ceiling-mounted pull-up bar (2.4 m ceiling — check head clearance).", date: t },
+        { id: "d7", title: "Which power rack", zone: "Gym", status: "deciding", chosen: "", notes: "Second-hand. Options to weigh: full cage vs half rack vs folding wall-mount (folding saves floor in a 3.9 m-wide room).", date: t },
+        { id: "d8", title: "Enclosed cupboard vs open racks only", zone: "Front area", status: "deciding", chosen: "", notes: "Enclosed cupboard hides clutter (better for the 'inviting' goal); open racks for grab-every-session items.", date: t }
+      ],
+      notes: [
+        { id: "n1", title: "Space dimensions", zone: "General", body: "Whole garage: 6.2 m long × 3.9 m wide, ceiling 2.4 m.\nRear gym zone: 4.2 × 3.9 m (the 4.2 m walls are the side/long walls).\nFront area: 1.5 m long, from the garage door.\nDivide between front and rear: 430 × 430 mm pillars on either side, joined by a 300 × 300 mm overhead lintel.\nGarage door opening: 2587 mm wide × 2152 mm high.\nSteel beam runs down the middle of the ceiling, parallel to the long walls.\nWindow on the left long wall: 2.1 m from the rear corner, 550 mm wide × ~700 mm high.", date: "2026-08-03" },
+        { id: "n2", title: "Finishes", zone: "General", body: "Concrete ceiling painted white.\nWalls rendered and painted limestone; being lined with 9mm plywood.\nLED strips sit in a gap at the top of the ply.\nFloor: bare concrete → rubber matting (rear) + painted/sealed concrete (front).", date: "2026-08-03" },
+        { id: "n3", title: "Layout ideas (to pressure-test)", zone: "Gym", body: "Power rack against a side wall, clear of the beam's drop zone.\nRings on the steel beam = room centreline, keep that floor clear.\nTreadmill along the other long wall (2.4 m ceiling OK unless very tall).\nVolt trainer + bikes toward the front area.\nMirror panel on the long wall opposite the window to bounce light.\nFrench cleat rail on one ply wall for movable hooks/holders.", date: "2026-08-03" }
+      ]
+    };
+  }
+
+  // ---------- floor plan geometry (all mm, top-down, door at bottom) ----------
+  var PLAN = {
+    rx: 500, ry: 300,          // interior top-left in SVG user space
+    w: 3900, l: 6200,          // interior width / length
+    gymL: 4200,                // rear gym zone depth (from top)
+    pilW: 430, pilD: 430,      // pillars at the zone divide
+    lintelW: 300,
+    doorW: 2587
+  };
+  PLAN.pillarY = PLAN.ry + PLAN.gymL;                 // 4500
+  PLAN.frontY = PLAN.pillarY + PLAN.pilD;             // 4930
+  PLAN.botY = PLAN.ry + PLAN.l;                       // 6500
+  PLAN.doorX1 = PLAN.rx + (PLAN.w - PLAN.doorW) / 2;  // 1156.5
+  PLAN.doorX2 = PLAN.doorX1 + PLAN.doorW;             // 3743.5
+  PLAN.midX = PLAN.rx + PLAN.w / 2;                   // 2450
+  var VB_W = 4800;
+  var SHELF_Y = 8120; // below the outward door-swing arcs
+
+  var TONES = ["accent", "info", "good", "warn", "neutral"];
+  var TONE_LABELS = { accent: "Amber", info: "Blue", good: "Green", warn: "Gold", neutral: "Grey" };
+  var DEFAULT_SHAPES = [
+    { id: "rack", name: "Power rack", w: 1200, d: 1200, tone: "accent", links: [] },
+    { id: "treadmill", name: "Treadmill", w: 1800, d: 800, tone: "info", links: [] },
+    { id: "bench", name: "Bench", w: 1200, d: 350, tone: "info", links: [] },
+    { id: "volt", name: "Volt trainer", w: 1400, d: 600, tone: "good", links: [] },
+    { id: "bike1", name: "Bike 1", w: 700, d: 400, tone: "neutral", links: [] },
+    { id: "bike2", name: "Bike 2", w: 700, d: 400, tone: "neutral", links: [] },
+    { id: "rings", name: "Rings zone", w: 1000, d: 1000, tone: "warn", links: [] },
+    { id: "store1", name: "Storage", w: 900, d: 450, tone: "neutral", links: [] },
+    { id: "store2", name: "Storage", w: 900, d: 450, tone: "neutral", links: [] },
+    { id: "cupboard", name: "Cupboard", w: 900, d: 500, tone: "warn", links: [] }
+  ];
+  var CATEGORIES = ["Equipment", "Timber", "Electrical", "Flooring", "Doors", "Storage", "Paint", "Other"];
+  var SEED_CATEGORY = {
+    p1: "Timber", p2: "Electrical", p3: "Electrical", p4: "Doors", p5: "Flooring",
+    p6: "Paint", p7: "Equipment", p8: "Equipment", p9: "Equipment", p10: "Equipment",
+    p11: "Storage", p12: "Storage", p13: "Storage", p14: "Equipment"
+  };
+
+  function shapeById(id) {
+    for (var i = 0; i < data.shapes.length; i++) if (data.shapes[i].id === id) return data.shapes[i];
+    return null;
+  }
+
+  // Parked positions: pack shapes into rows in the shelf strip below the room
+  function defaultLayout(shapes) {
+    var lay = {}, gap = 120, x = PLAN.rx, y = SHELF_Y, rowH = 0, maxX = PLAN.rx + PLAN.w;
+    shapes.forEach(function (s) {
+      var w = Math.min(s.w, PLAN.w);
+      if (x + w > maxX + 1) { x = PLAN.rx; y += rowH + gap; rowH = 0; }
+      lay[s.id] = { x: x + w / 2, y: y + s.d / 2, rot: 0 };
+      x += w + gap;
+      if (s.d > rowH) rowH = s.d;
+    });
+    return lay;
+  }
+  var VB_H = 0;
+  function computeVBH(d) {
+    var m = SHELF_Y + 800;
+    var def = defaultLayout(d.shapes);
+    d.shapes.forEach(function (s) {
+      var half = Math.max(s.w, s.d) / 2;
+      var it = d.layout[s.id];
+      m = Math.max(m, def[s.id].y + s.d / 2, (it ? it.y : 0) + half);
+    });
+    return Math.ceil(m + 150);
+  }
+
+  function normalizeData(d) {
+    if (!Array.isArray(d.shapes)) d.shapes = JSON.parse(JSON.stringify(DEFAULT_SHAPES));
+    d.shapes.forEach(function (s) {
+      if (!Array.isArray(s.links)) s.links = [];
+      if (TONES.indexOf(s.tone) < 0) s.tone = "neutral";
+      s.w = Math.min(Math.max(Number(s.w) || 500, 100), 6000);
+      s.d = Math.min(Math.max(Number(s.d) || 500, 100), 6000);
+    });
+    if (!d.layout || typeof d.layout !== "object") d.layout = {};
+    var def = defaultLayout(d.shapes);
+    d.shapes.forEach(function (s) {
+      var it = d.layout[s.id];
+      if (!it || typeof it.x !== "number" || typeof it.y !== "number") {
+        d.layout[s.id] = { x: def[s.id].x, y: def[s.id].y, rot: 0 };
+      } else if (it.y > PLAN.botY && it.y < SHELF_Y) {
+        // outside the room but above the current shelf (old shelf position) — re-park
+        d.layout[s.id] = { x: def[s.id].x, y: def[s.id].y, rot: 0 };
+      } else if (it.rot !== 0 && it.rot !== 90) {
+        it.rot = 0;
+      }
+    });
+    d.purchases.forEach(function (p) {
+      if (!p.category || CATEGORIES.indexOf(p.category) < 0) p.category = SEED_CATEGORY[p.id] || "Other";
+    });
+    return d;
+  }
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORE_KEY);
+      if (raw) {
+        var d = JSON.parse(raw);
+        if (d && d.purchases && d.decisions && d.notes) return d;
+      }
+    } catch (e) {}
+    var s = seed();
+    saveLocal(s); // no timestamp — seed must never win against remote data
+    return s;
+  }
+  function saveLocal(d) {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(d)); } catch (e) {}
+  }
+  function save(d) {
+    d.updatedAt = new Date().toISOString();
+    saveLocal(d);
+    schedulePush();
+  }
+
+  // Items placed here (by Claude, when republishing the artifact) are merged into
+  // every device's stored data on next load. Each needs a unique id and a kind.
+  // Example: { id: "inbox-2026-08-10-1", kind: "decision", title: "…", status: "decided", chosen: "…", zone: "Gym", notes: "…" }
+  var INBOX = [];
+
+  function applyInbox(d) {
+    if (!Array.isArray(d.inboxApplied)) d.inboxApplied = [];
+    INBOX.forEach(function (m) {
+      if (!m || !m.id || d.inboxApplied.indexOf(m.id) >= 0) return;
+      d.inboxApplied.push(m.id);
+      d.updatedAt = new Date().toISOString(); // inbox additions should propagate to other devices
+      var t = m.date || new Date().toISOString().slice(0, 10);
+      var zone = ZONES.indexOf(m.zone) >= 0 ? m.zone : "General";
+      if (m.kind === "purchase" && m.item) {
+        d.purchases.unshift({
+          id: m.id, item: m.item,
+          price: (typeof m.price === "number" && isFinite(m.price)) ? m.price : null,
+          vendor: m.vendor || "", zone: zone,
+          category: CATEGORIES.indexOf(m.category) >= 0 ? m.category : "Other",
+          status: P_STATUSES.indexOf(m.status) >= 0 ? m.status : "planned",
+          notes: m.notes || "", date: t
+        });
+      } else if (m.kind === "decision" && m.title) {
+        d.decisions.unshift({
+          id: m.id, title: m.title, chosen: m.chosen || "", zone: zone,
+          status: D_STATUSES.indexOf(m.status) >= 0 ? m.status : "deciding",
+          notes: m.notes || "", date: t
+        });
+      } else if (m.kind === "note" && m.title) {
+        d.notes.unshift({ id: m.id, title: m.title, body: m.body || "", zone: zone, date: t });
+      }
+    });
+    return d;
+  }
+
+  var data = applyInbox(normalizeData(load()));
+  saveLocal(data);
+  var activeTab = "plan";
+  var activeZone = "All";
+  var activeCat = "All";
+  var editingId = null;
+
+  function uid() {
+    return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : "id" + Date.now() + Math.random().toString(36).slice(2, 7);
+  }
+  function today() { return new Date().toISOString().slice(0, 10); }
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function money(n) {
+    if (n == null || isNaN(n)) return "—";
+    return "$" + Number(n).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  }
+  function fmtDate(iso) {
+    if (!iso) return "";
+    var d = new Date(iso + "T00:00:00");
+    if (isNaN(d)) return iso;
+    return d.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
+  }
+  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  function byZone(items) {
+    if (activeZone === "All") return items;
+    return items.filter(function (x) { return x.zone === activeZone; });
+  }
+  function filteredPurchases() {
+    return byZone(data.purchases).filter(function (p) {
+      return activeCat === "All" || p.category === activeCat;
+    });
+  }
+
+  // ---------- render ----------
+  function render() {
+    renderStats();
+    renderTabs();
+    renderChips();
+    renderList();
+    var isPlan = activeTab === "plan";
+    document.getElementById("planView").style.display = isPlan ? "block" : "none";
+    document.getElementById("list").style.display = isPlan ? "none" : "";
+    document.getElementById("zoneChips").style.display = isPlan ? "none" : "";
+    document.getElementById("catChips").style.display = activeTab === "purchases" ? "" : "none";
+    document.getElementById("addBtn").style.display = isPlan ? "none" : "";
+  }
+
+  function renderStats() {
+    var spent = 0, planned = 0;
+    data.purchases.forEach(function (p) {
+      var v = (p.price == null || isNaN(p.price)) ? 0 : Number(p.price);
+      if (p.status === "ordered" || p.status === "delivered" || p.status === "installed") spent += v;
+      else planned += v;
+    });
+    var open = data.decisions.filter(function (d) { return d.status !== "decided"; }).length;
+    var noPrice = data.purchases.filter(function (p) { return (p.status === "researching" || p.status === "planned") && (p.price == null || isNaN(p.price)); }).length;
+    document.getElementById("stats").innerHTML =
+      '<div class="stat"><div class="lbl">Spent</div><div class="val">' + money(spent) + '</div><div class="sub">ordered + delivered + installed</div></div>' +
+      '<div class="stat"><div class="lbl">Planned</div><div class="val">' + money(planned) + '</div><div class="sub">' + (noPrice ? noPrice + " item" + (noPrice > 1 ? "s" : "") + " unpriced" : "still to buy") + '</div></div>' +
+      '<div class="stat"><div class="lbl">Open decisions</div><div class="val">' + open + '</div><div class="sub">deciding or revisit</div></div>';
+  }
+
+  function renderTabs() {
+    var counts = { purchases: filteredPurchases().length, decisions: byZone(data.decisions).length, notes: byZone(data.notes).length };
+    document.querySelectorAll("#tabs .tab").forEach(function (t) {
+      var name = t.dataset.tab;
+      t.setAttribute("aria-selected", String(name === activeTab));
+      var c = counts[name];
+      t.querySelector(".count").textContent = c == null ? "" : "(" + c + ")";
+    });
+  }
+
+  function renderChips() {
+    var el = document.getElementById("zoneChips");
+    var zones = ["All"].concat(ZONES);
+    el.innerHTML = zones.map(function (z) {
+      return '<button class="chip" aria-pressed="' + (z === activeZone) + '" data-zone="' + esc(z) + '">' + esc(z) + "</button>";
+    }).join("");
+    var ce = document.getElementById("catChips");
+    var cats = ["All"].concat(CATEGORIES);
+    ce.innerHTML = cats.map(function (c) {
+      return '<button class="chip" aria-pressed="' + (c === activeCat) + '" data-cat="' + esc(c) + '">' + esc(c) + "</button>";
+    }).join("");
+  }
+
+  function pill(status) {
+    return '<span class="pill ' + (STATUS_CLASS[status] || "st-neutral") + '">' + cap(status) + "</span>";
+  }
+  function zonePill(z) { return '<span class="pill zone">' + esc(z) + "</span>"; }
+
+  function renderList() {
+    var el = document.getElementById("list");
+    if (activeTab === "plan") { el.innerHTML = ""; return; }
+    var html = "";
+    if (activeTab === "purchases") {
+      var items = filteredPurchases();
+      if (!items.length) html = '<div class="empty">No purchases here yet. Tap + Add.</div>';
+      items.forEach(function (p) {
+        html += '<div class="card" data-id="' + esc(p.id) + '" tabindex="0" role="button">' +
+          '<div class="row1"><h3>' + esc(p.item) + '</h3><span class="price">' + money(p.price) + "</span></div>" +
+          (p.notes ? '<div class="body">' + esc(p.notes) + "</div>" : "") +
+          '<div class="meta">' + pill(p.status) + zonePill(p.category) + zonePill(p.zone) +
+          (p.vendor ? '<span class="pill zone">' + esc(p.vendor) + "</span>" : "") +
+          '<span class="date">' + fmtDate(p.date) + "</span></div></div>";
+      });
+    } else if (activeTab === "decisions") {
+      var items2 = byZone(data.decisions);
+      if (!items2.length) html = '<div class="empty">No decisions here yet. Tap + Add.</div>';
+      items2.forEach(function (d) {
+        html += '<div class="card" data-id="' + esc(d.id) + '" tabindex="0" role="button">' +
+          '<div class="row1"><h3>' + esc(d.title) + "</h3></div>" +
+          (d.chosen ? '<div class="chosen">→ <strong>' + esc(d.chosen) + "</strong></div>" : "") +
+          (d.notes ? '<div class="body">' + esc(d.notes) + "</div>" : "") +
+          '<div class="meta">' + pill(d.status) + zonePill(d.zone) +
+          '<span class="date">' + fmtDate(d.date) + "</span></div></div>";
+      });
+    } else {
+      var items3 = byZone(data.notes);
+      if (!items3.length) html = '<div class="empty">No notes here yet. Tap + Add.</div>';
+      items3.forEach(function (n) {
+        html += '<div class="card" data-id="' + esc(n.id) + '" tabindex="0" role="button">' +
+          '<div class="row1"><h3>' + esc(n.title) + "</h3></div>" +
+          (n.body ? '<div class="body">' + esc(n.body) + "</div>" : "") +
+          '<div class="meta">' + zonePill(n.zone) + '<span class="date">' + fmtDate(n.date) + "</span></div></div>";
+      });
+    }
+    el.innerHTML = html;
+  }
+
+  // ---------- dialogs ----------
+  function fillSelect(sel, options, value) {
+    sel.innerHTML = options.map(function (o) {
+      return '<option value="' + esc(o) + '"' + (o === value ? " selected" : "") + ">" + esc(o) + "</option>";
+    }).join("");
+  }
+  function fillStatusSelect(sel, options, value) {
+    sel.innerHTML = options.map(function (o) {
+      return '<option value="' + o + '"' + (o === value ? " selected" : "") + ">" + cap(o) + "</option>";
+    }).join("");
+  }
+  function resetDeleteBtn(dlg) {
+    var del = dlg.querySelector("[data-del]");
+    del.classList.remove("armed");
+    del.textContent = "Delete";
+  }
+
+  function openPurchase(p) {
+    editingId = p ? p.id : null;
+    var dlg = document.getElementById("dlg-purchase");
+    document.getElementById("dlg-purchase-title").textContent = p ? "Edit purchase" : "Add purchase";
+    document.getElementById("p-item").value = p ? p.item : "";
+    document.getElementById("p-price").value = p && p.price != null ? p.price : "";
+    document.getElementById("p-vendor").value = p ? p.vendor || "" : "";
+    document.getElementById("p-notes").value = p ? p.notes || "" : "";
+    fillSelect(document.getElementById("p-zone"), ZONES, p ? p.zone : (activeZone !== "All" ? activeZone : "Gym"));
+    fillSelect(document.getElementById("p-cat"), CATEGORIES, p ? p.category : (activeCat !== "All" ? activeCat : "Equipment"));
+    fillStatusSelect(document.getElementById("p-status"), P_STATUSES, p ? p.status : "planned");
+    dlg.querySelector("[data-del]").hidden = !p;
+    resetDeleteBtn(dlg);
+    dlg.showModal();
+  }
+
+  function openDecision(d) {
+    editingId = d ? d.id : null;
+    var dlg = document.getElementById("dlg-decision");
+    document.getElementById("dlg-decision-title").textContent = d ? "Edit decision" : "Add decision";
+    document.getElementById("d-title").value = d ? d.title : "";
+    document.getElementById("d-chosen").value = d ? d.chosen || "" : "";
+    document.getElementById("d-notes").value = d ? d.notes || "" : "";
+    fillSelect(document.getElementById("d-zone"), ZONES, d ? d.zone : (activeZone !== "All" ? activeZone : "Gym"));
+    fillStatusSelect(document.getElementById("d-status"), D_STATUSES, d ? d.status : "deciding");
+    dlg.querySelector("[data-del]").hidden = !d;
+    resetDeleteBtn(dlg);
+    dlg.showModal();
+  }
+
+  function openNote(n) {
+    editingId = n ? n.id : null;
+    var dlg = document.getElementById("dlg-note");
+    document.getElementById("dlg-note-title").textContent = n ? "Edit note" : "Add note";
+    document.getElementById("n-title").value = n ? n.title : "";
+    document.getElementById("n-body").value = n ? n.body || "" : "";
+    fillSelect(document.getElementById("n-zone"), ZONES, n ? n.zone : (activeZone !== "All" ? activeZone : "Gym"));
+    dlg.querySelector("[data-del]").hidden = !n;
+    resetDeleteBtn(dlg);
+    dlg.showModal();
+  }
+
+  function findById(list, id) {
+    for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
+    return null;
+  }
+  function removeById(list, id) {
+    if (id == null) return;
+    var idx = list.findIndex(function (x) { return x.id === id; });
+    if (idx >= 0) list.splice(idx, 1);
+  }
+
+  // Purchase form
+  document.getElementById("form-purchase").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var priceRaw = document.getElementById("p-price").value.trim();
+    var existing = editingId ? findById(data.purchases, editingId) : null;
+    var rec = {
+      id: editingId || uid(),
+      item: document.getElementById("p-item").value.trim(),
+      price: priceRaw === "" ? null : Number(priceRaw),
+      vendor: document.getElementById("p-vendor").value.trim(),
+      zone: document.getElementById("p-zone").value,
+      category: document.getElementById("p-cat").value,
+      status: document.getElementById("p-status").value,
+      notes: document.getElementById("p-notes").value.trim(),
+      date: existing ? existing.date : today()
+    };
+    removeById(data.purchases, editingId);
+    data.purchases.unshift(rec);
+    save(data); render();
+    document.getElementById("dlg-purchase").close();
+  });
+
+  // Decision form
+  document.getElementById("form-decision").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var existing = editingId ? findById(data.decisions, editingId) : null;
+    var rec = {
+      id: editingId || uid(),
+      title: document.getElementById("d-title").value.trim(),
+      chosen: document.getElementById("d-chosen").value.trim(),
+      zone: document.getElementById("d-zone").value,
+      status: document.getElementById("d-status").value,
+      notes: document.getElementById("d-notes").value.trim(),
+      date: existing ? existing.date : today()
+    };
+    removeById(data.decisions, editingId);
+    data.decisions.unshift(rec);
+    save(data); render();
+    document.getElementById("dlg-decision").close();
+  });
+
+  // Note form
+  document.getElementById("form-note").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var existing = editingId ? findById(data.notes, editingId) : null;
+    var rec = {
+      id: editingId || uid(),
+      title: document.getElementById("n-title").value.trim(),
+      body: document.getElementById("n-body").value,
+      zone: document.getElementById("n-zone").value,
+      date: existing ? existing.date : today()
+    };
+    removeById(data.notes, editingId);
+    data.notes.unshift(rec);
+    save(data); render();
+    document.getElementById("dlg-note").close();
+  });
+
+  // Delete buttons: two-tap confirm
+  [["dlg-purchase", "purchases"], ["dlg-decision", "decisions"], ["dlg-note", "notes"]].forEach(function (pair) {
+    var dlg = document.getElementById(pair[0]);
+    var del = dlg.querySelector("[data-del]");
+    del.addEventListener("click", function () {
+      if (!del.classList.contains("armed")) {
+        del.classList.add("armed");
+        del.textContent = "Really delete?";
+        return;
+      }
+      removeById(data[pair[1]], editingId);
+      save(data); render();
+      dlg.close();
+    });
+    dlg.querySelector("[data-cancel]").addEventListener("click", function () { dlg.close(); });
+  });
+
+  // Card click / keyboard -> edit
+  document.getElementById("list").addEventListener("click", function (e) {
+    var card = e.target.closest(".card");
+    if (card) openEditor(card.dataset.id);
+  });
+  document.getElementById("list").addEventListener("keydown", function (e) {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    var card = e.target.closest(".card");
+    if (!card) return;
+    e.preventDefault();
+    openEditor(card.dataset.id);
+  });
+  function openEditor(id) {
+    if (activeTab === "purchases") openPurchase(findById(data.purchases, id));
+    else if (activeTab === "decisions") openDecision(findById(data.decisions, id));
+    else openNote(findById(data.notes, id));
+  }
+
+  // Tabs & chips & add
+  document.getElementById("tabs").addEventListener("click", function (e) {
+    var t = e.target.closest(".tab");
+    if (!t) return;
+    activeTab = t.dataset.tab;
+    render();
+  });
+  document.getElementById("zoneChips").addEventListener("click", function (e) {
+    var c = e.target.closest(".chip");
+    if (!c) return;
+    activeZone = c.dataset.zone;
+    render();
+  });
+  document.getElementById("catChips").addEventListener("click", function (e) {
+    var c = e.target.closest(".chip");
+    if (!c) return;
+    activeCat = c.dataset.cat;
+    render();
+  });
+  document.getElementById("addBtn").addEventListener("click", function () {
+    if (activeTab === "purchases") openPurchase(null);
+    else if (activeTab === "decisions") openDecision(null);
+    else openNote(null);
+  });
+
+  // Sync dialog
+  var syncDlg = document.getElementById("dlg-sync");
+  document.getElementById("syncBtn").addEventListener("click", function () {
+    document.getElementById("exportTa").value = JSON.stringify(data);
+    document.getElementById("importTa").value = "";
+    document.getElementById("copiedMsg").hidden = true;
+    document.getElementById("importMsg").hidden = true;
+    var hasToken = false;
+    try { hasToken = !!localStorage.getItem("garageTracker.ghToken"); } catch (e) {}
+    document.getElementById("ghNote").textContent = hasToken
+      ? "A token is saved in this browser — changes sync to GitHub automatically."
+      : "Create a fine-grained token on GitHub (Settings → Developer settings → Fine-grained tokens), scoped to only the garage-tracker repo with Contents: Read and write. Paste it here — it stays in this browser only.";
+    document.getElementById("ghTokenMsg").hidden = true;
+    syncDlg.showModal();
+  });
+  document.getElementById("syncClose").addEventListener("click", function () { syncDlg.close(); });
+  document.getElementById("copyBtn").addEventListener("click", function () {
+    var ta = document.getElementById("exportTa");
+    ta.select();
+    function showCopied() { document.getElementById("copiedMsg").hidden = false; }
+    function fallbackCopy() {
+      try { document.execCommand("copy"); showCopied(); } catch (e) {}
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(ta.value).then(showCopied, fallbackCopy);
+    } else {
+      fallbackCopy();
+    }
+  });
+  // Add-items snippet (merge, not replace)
+  var CLAUDE_PROMPT =
+    "When I describe decisions, purchases, or notes for my garage gym project, format them as a single JSON code block with exactly this schema (only include the arrays and fields I give you information for):\n" +
+    '{"purchases":[{"item":"","price":null,"vendor":"","zone":"Gym","category":"Equipment","status":"planned","notes":""}],' +
+    '"decisions":[{"title":"","status":"decided","chosen":"","zone":"Gym","notes":""}],' +
+    '"notes":[{"title":"","zone":"Gym","body":""}]}\n' +
+    "Rules: zone must be one of Gym, Front area, General. category must be one of Equipment, Timber, Electrical, Flooring, Doors, Storage, Paint, Other. purchase status must be one of researching, planned, ordered, delivered, installed. decision status must be one of deciding, decided, revisit. price is a plain number or null. Put reasoning in notes. Output only the JSON block, nothing else.";
+
+  function extractJson(raw) {
+    var a = raw.indexOf("{"), b = raw.lastIndexOf("}");
+    if (a < 0 || b <= a) return null;
+    try { return JSON.parse(raw.slice(a, b + 1)); } catch (e) { return null; }
+  }
+
+  function mergeItems(parsed) {
+    var added = 0, t = today();
+    function zoneOf(z) { return ZONES.indexOf(z) >= 0 ? z : "General"; }
+    (Array.isArray(parsed.purchases) ? parsed.purchases : []).forEach(function (p) {
+      if (!p || typeof p.item !== "string" || !p.item.trim()) return;
+      data.purchases.unshift({
+        id: uid(), item: p.item.trim(),
+        price: (typeof p.price === "number" && isFinite(p.price)) ? p.price : null,
+        vendor: typeof p.vendor === "string" ? p.vendor : "",
+        zone: zoneOf(p.zone),
+        category: CATEGORIES.indexOf(p.category) >= 0 ? p.category : "Other",
+        status: P_STATUSES.indexOf(p.status) >= 0 ? p.status : "planned",
+        notes: typeof p.notes === "string" ? p.notes : "", date: t
+      });
+      added++;
+    });
+    (Array.isArray(parsed.decisions) ? parsed.decisions : []).forEach(function (d) {
+      if (!d || typeof d.title !== "string" || !d.title.trim()) return;
+      data.decisions.unshift({
+        id: uid(), title: d.title.trim(),
+        chosen: typeof d.chosen === "string" ? d.chosen : "",
+        zone: zoneOf(d.zone),
+        status: D_STATUSES.indexOf(d.status) >= 0 ? d.status : "deciding",
+        notes: typeof d.notes === "string" ? d.notes : "", date: t
+      });
+      added++;
+    });
+    (Array.isArray(parsed.notes) ? parsed.notes : []).forEach(function (n) {
+      if (!n || typeof n.title !== "string" || !n.title.trim()) return;
+      data.notes.unshift({
+        id: uid(), title: n.title.trim(),
+        body: typeof n.body === "string" ? n.body : "",
+        zone: zoneOf(n.zone), date: t
+      });
+      added++;
+    });
+    return added;
+  }
+
+  document.getElementById("copyPromptBtn").addEventListener("click", function () {
+    var msg = document.getElementById("snippetMsg");
+    function ok() { msg.hidden = false; msg.style.color = "var(--good)"; msg.textContent = "Instructions copied — paste into any Claude chat."; }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(CLAUDE_PROMPT).then(ok, function () {});
+    }
+  });
+
+  document.getElementById("snippetBtn").addEventListener("click", function () {
+    var msg = document.getElementById("snippetMsg");
+    msg.hidden = false;
+    var raw = document.getElementById("snippetTa").value.trim();
+    var parsed = raw ? extractJson(raw) : null;
+    if (!parsed) {
+      msg.textContent = "Couldn't read that — paste the whole JSON block from Claude.";
+      msg.style.color = "var(--danger)";
+      return;
+    }
+    var added = mergeItems(parsed);
+    if (!added) {
+      msg.textContent = "No valid items found in that snippet.";
+      msg.style.color = "var(--danger)";
+      return;
+    }
+    save(data); render();
+    document.getElementById("snippetTa").value = "";
+    document.getElementById("exportTa").value = JSON.stringify(data);
+    msg.textContent = "Added " + added + " item" + (added > 1 ? "s" : "") + ".";
+    msg.style.color = "var(--good)";
+  });
+
+  document.getElementById("importBtn").addEventListener("click", function () {
+    var msg = document.getElementById("importMsg");
+    msg.hidden = false;
+    var raw = document.getElementById("importTa").value.trim();
+    if (!raw) { msg.textContent = "Paste a sync code first."; msg.style.color = "var(--danger)"; return; }
+    var parsed;
+    try { parsed = JSON.parse(raw); } catch (e) { parsed = null; }
+    if (!parsed || !Array.isArray(parsed.purchases) || !Array.isArray(parsed.decisions) || !Array.isArray(parsed.notes)) {
+      msg.textContent = "That doesn't look like a valid sync code.";
+      msg.style.color = "var(--danger)";
+      return;
+    }
+    data = applyInbox(normalizeData(parsed));
+    save(data); render(); rebuildShapes(); selectEq(null);
+    msg.textContent = "Imported — this device now matches the sync code.";
+    msg.style.color = "var(--good)";
+  });
+
+  // ---------- floor plan ----------
+  var SVGNS = "http://www.w3.org/2000/svg";
+  var planSvg = null;
+  var selectedKey = null;
+  var eqGroups = {};
+
+  function svgEl(name, attrs, text) {
+    var e = document.createElementNS(SVGNS, name);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    return e;
+  }
+
+  function buildPlan() {
+    var P = PLAN;
+    var svg = svgEl("svg", { viewBox: "0 0 " + VB_W + " " + VB_H, "aria-label": "Floor plan of the garage" });
+    planSvg = svg;
+
+    // zone fills
+    svg.appendChild(svgEl("rect", { x: P.rx, y: P.ry, width: P.w, height: P.gymL, fill: "var(--surface-2)" }));
+    svg.appendChild(svgEl("rect", { x: P.rx, y: P.frontY, width: P.w, height: P.botY - P.frontY, fill: "var(--bg)" }));
+    svg.appendChild(svgEl("text", { x: P.midX, y: P.ry + 320, "text-anchor": "middle", "font-size": 130, "letter-spacing": 30, fill: "var(--muted)" }, "GYM — RUBBER FLOOR"));
+    svg.appendChild(svgEl("text", { x: P.midX, y: P.frontY + 260, "text-anchor": "middle", "font-size": 130, "letter-spacing": 30, fill: "var(--muted)" }, "FRONT — PAINTED CONCRETE"));
+
+    // steel beam (overhead, dashed) down the middle of the gym zone
+    svg.appendChild(svgEl("line", { x1: P.midX, y1: P.ry + 60, x2: P.midX, y2: P.pillarY, stroke: "var(--muted)", "stroke-width": 50, "stroke-dasharray": "220 140" }));
+    svg.appendChild(svgEl("text", { "font-size": 115, fill: "var(--muted)", transform: "rotate(90 " + (P.midX + 130) + " " + (P.ry + 500) + ")", x: P.midX + 130, y: P.ry + 500 }, "steel beam (overhead)"));
+
+    // lintel (overhead, dashed) spanning between the pillars
+    svg.appendChild(svgEl("rect", { x: P.rx + P.pilW, y: P.pillarY + (P.pilD - P.lintelW) / 2, width: P.w - 2 * P.pilW, height: P.lintelW, fill: "none", stroke: "var(--muted)", "stroke-width": 35, "stroke-dasharray": "160 120" }));
+    svg.appendChild(svgEl("text", { x: P.midX, y: P.pillarY + P.pilD / 2 + 45, "text-anchor": "middle", "font-size": 110, fill: "var(--muted)" }, "lintel over"));
+
+    // pillars
+    svg.appendChild(svgEl("rect", { x: P.rx, y: P.pillarY, width: P.pilW, height: P.pilD, fill: "var(--ink-2)" }));
+    svg.appendChild(svgEl("rect", { x: P.rx + P.w - P.pilW, y: P.pillarY, width: P.pilW, height: P.pilD, fill: "var(--ink-2)" }));
+
+    // walls (gap at the door opening)
+    svg.appendChild(svgEl("path", {
+      d: "M " + P.doorX2 + " " + P.botY + " L " + (P.rx + P.w) + " " + P.botY +
+         " L " + (P.rx + P.w) + " " + P.ry + " L " + P.rx + " " + P.ry +
+         " L " + P.rx + " " + P.botY + " L " + P.doorX1 + " " + P.botY,
+      fill: "none", stroke: "var(--ink)", "stroke-width": 80, "stroke-linecap": "square"
+    }));
+
+    // window on the left long wall: 2.1 m from the rear corner, 550 mm wide (~700 mm high)
+    var winY1 = P.ry + 2100, winY2 = winY1 + 550;
+    svg.appendChild(svgEl("line", { x1: P.rx, y1: winY1, x2: P.rx, y2: winY2, stroke: "var(--info)", "stroke-width": 110 }));
+    svg.appendChild(svgEl("text", { "font-size": 105, fill: "var(--info)", transform: "rotate(90 " + (P.rx + 150) + " " + (winY1 - 250) + ")", x: P.rx + 150, y: winY1 - 250 }, "window 550 w × 700 h"));
+
+    // double door leaves + swing arcs (doors open outwards)
+    var leaf = P.doorW / 2;
+    svg.appendChild(svgEl("line", { x1: P.doorX1, y1: P.botY, x2: P.doorX1, y2: P.botY + leaf, stroke: "var(--ink-2)", "stroke-width": 40 }));
+    svg.appendChild(svgEl("line", { x1: P.doorX2, y1: P.botY, x2: P.doorX2, y2: P.botY + leaf, stroke: "var(--ink-2)", "stroke-width": 40 }));
+    svg.appendChild(svgEl("path", { d: "M " + P.midX + " " + P.botY + " A " + leaf + " " + leaf + " 0 0 1 " + P.doorX1 + " " + (P.botY + leaf), fill: "none", stroke: "var(--muted)", "stroke-width": 25, "stroke-dasharray": "110 100" }));
+    svg.appendChild(svgEl("path", { d: "M " + P.midX + " " + P.botY + " A " + leaf + " " + leaf + " 0 0 0 " + P.doorX2 + " " + (P.botY + leaf), fill: "none", stroke: "var(--muted)", "stroke-width": 25, "stroke-dasharray": "110 100" }));
+
+    // dimension lines + labels
+    function tick(x, y, vertical) {
+      return svgEl("line", vertical
+        ? { x1: x - 60, y1: y, x2: x + 60, y2: y, stroke: "var(--line)", "stroke-width": 25 }
+        : { x1: x, y1: y - 60, x2: x, y2: y + 60, stroke: "var(--line)", "stroke-width": 25 });
+    }
+    // top: 3.9 m
+    svg.appendChild(svgEl("line", { x1: P.rx, y1: 180, x2: P.rx + P.w, y2: 180, stroke: "var(--line)", "stroke-width": 25 }));
+    svg.appendChild(tick(P.rx, 180, false)); svg.appendChild(tick(P.rx + P.w, 180, false));
+    svg.appendChild(svgEl("text", { x: P.midX, y: 130, "text-anchor": "middle", "font-size": 135, fill: "var(--ink-2)" }, "3.9 m"));
+    // right: 6.2 m overall
+    svg.appendChild(svgEl("line", { x1: 4620, y1: P.ry, x2: 4620, y2: P.botY, stroke: "var(--line)", "stroke-width": 25 }));
+    svg.appendChild(tick(4620, P.ry, true)); svg.appendChild(tick(4620, P.botY, true));
+    svg.appendChild(svgEl("text", { "font-size": 135, fill: "var(--ink-2)", transform: "rotate(90 4740 3300)", x: 4740, y: 3300, "text-anchor": "middle" }, "6.2 m"));
+    // left: 4.2 m gym + 1.5 m front
+    svg.appendChild(svgEl("line", { x1: 300, y1: P.ry, x2: 300, y2: P.pillarY, stroke: "var(--line)", "stroke-width": 25 }));
+    svg.appendChild(tick(300, P.ry, true)); svg.appendChild(tick(300, P.pillarY, true));
+    svg.appendChild(svgEl("text", { "font-size": 135, fill: "var(--ink-2)", transform: "rotate(-90 180 2400)", x: 180, y: 2400, "text-anchor": "middle" }, "4.2 m"));
+    svg.appendChild(svgEl("line", { x1: 300, y1: P.frontY, x2: 300, y2: P.botY, stroke: "var(--line)", "stroke-width": 25 }));
+    svg.appendChild(tick(300, P.frontY, true)); svg.appendChild(tick(300, P.botY, true));
+    svg.appendChild(svgEl("text", { "font-size": 135, fill: "var(--ink-2)", transform: "rotate(-90 180 5715)", x: 180, y: 5715, "text-anchor": "middle" }, "1.5 m"));
+    // door width
+    svg.appendChild(svgEl("text", { x: P.midX, y: P.botY - 120, "text-anchor": "middle", "font-size": 120, fill: "var(--ink-2)" }, "door 2587 mm — opens out"));
+
+    // shelf label
+    svg.appendChild(svgEl("text", { x: P.rx, y: SHELF_Y - 110, "font-size": 115, "letter-spacing": 25, fill: "var(--muted)" }, "SHELF — DRAG ITEMS INTO THE ROOM"));
+
+    rebuildShapes();
+
+    document.getElementById("planSvgWrap").appendChild(svg);
+    wirePlanEvents();
+  }
+
+  function rebuildShapes() {
+    Object.keys(eqGroups).forEach(function (k) {
+      if (eqGroups[k].parentNode) eqGroups[k].parentNode.removeChild(eqGroups[k]);
+    });
+    eqGroups = {};
+    data.shapes.forEach(function (s) {
+      var g = svgEl("g", { class: "eq", "data-key": s.id });
+      g.appendChild(svgEl("rect", { x: -s.w / 2, y: -s.d / 2, width: s.w, height: s.d, rx: 60, fill: "var(--" + s.tone + "-soft)", stroke: "var(--" + s.tone + ")", "stroke-width": 30 }));
+      g.appendChild(svgEl("text", { x: 0, y: 0, "text-anchor": "middle", "dominant-baseline": "central", "font-size": 120, "font-weight": 600, fill: "var(--ink)" }, s.name));
+      eqGroups[s.id] = g;
+      planSvg.appendChild(g);
+    });
+    VB_H = computeVBH(data);
+    planSvg.setAttribute("viewBox", "0 0 " + VB_W + " " + VB_H);
+    applyLayout();
+  }
+
+  function applyOne(key) {
+    var it = data.layout[key];
+    if (!it || !eqGroups[key]) return;
+    eqGroups[key].setAttribute("transform", "translate(" + it.x + " " + it.y + ") rotate(" + it.rot + ")");
+  }
+  function applyLayout() {
+    data.shapes.forEach(function (s) { applyOne(s.id); });
+  }
+
+  function selectEq(key) {
+    if (selectedKey && eqGroups[selectedKey]) eqGroups[selectedKey].classList.remove("selected");
+    selectedKey = key;
+    var sel = document.getElementById("planSel");
+    var hint = document.getElementById("planHint");
+    var rot = document.getElementById("rotBtn");
+    var park = document.getElementById("parkBtn");
+    var edit = document.getElementById("editShapeBtn");
+    var s = key ? shapeById(key) : null;
+    if (!s) {
+      selectedKey = null;
+      sel.hidden = true; rot.hidden = true; park.hidden = true; edit.hidden = true; hint.hidden = false;
+      renderPlanLinks();
+      return;
+    }
+    eqGroups[key].classList.add("selected");
+    sel.innerHTML = esc(s.name) + ' <span class="dims">' + s.w + "×" + s.d + " mm</span>";
+    sel.hidden = false; rot.hidden = false; park.hidden = false; edit.hidden = false; hint.hidden = true;
+    renderPlanLinks();
+  }
+
+  function findItemAnywhere(id) {
+    var it = findById(data.purchases, id);
+    if (it) return { list: "purchases", item: it };
+    it = findById(data.decisions, id);
+    if (it) return { list: "decisions", item: it };
+    it = findById(data.notes, id);
+    if (it) return { list: "notes", item: it };
+    return null;
+  }
+
+  function renderPlanLinks() {
+    var el = document.getElementById("planLinks");
+    el.innerHTML = "";
+    var s = selectedKey ? shapeById(selectedKey) : null;
+    if (!s || !s.links.length) return;
+    var html = "";
+    s.links.forEach(function (id) {
+      var hit = findItemAnywhere(id);
+      if (!hit) return;
+      html += '<button class="pill st-accent" data-link="' + esc(id) + '">' + esc(hit.item.item || hit.item.title) + "</button>";
+    });
+    el.innerHTML = html;
+  }
+
+  function toSvgPoint(e) {
+    var p = planSvg.createSVGPoint();
+    p.x = e.clientX; p.y = e.clientY;
+    return p.matrixTransform(planSvg.getScreenCTM().inverse());
+  }
+
+  function wirePlanEvents() {
+    var drag = null;
+    planSvg.addEventListener("pointerdown", function (e) {
+      var g = e.target.closest ? e.target.closest(".eq") : null;
+      if (!g) { selectEq(null); return; }
+      var key = g.getAttribute("data-key");
+      selectEq(key);
+      var pt = toSvgPoint(e);
+      var it = data.layout[key];
+      drag = { key: key, dx: it.x - pt.x, dy: it.y - pt.y };
+      try { g.setPointerCapture(e.pointerId); } catch (err) {}
+      e.preventDefault();
+    });
+    planSvg.addEventListener("pointermove", function (e) {
+      if (!drag) return;
+      var pt = toSvgPoint(e);
+      var it = data.layout[drag.key];
+      var eq = shapeById(drag.key);
+      if (!it || !eq) return;
+      var hw = (it.rot === 90 ? eq.d : eq.w) / 2;
+      var hd = (it.rot === 90 ? eq.w : eq.d) / 2;
+      it.x = Math.min(Math.max(pt.x + drag.dx, hw + 40), VB_W - hw - 40);
+      it.y = Math.min(Math.max(pt.y + drag.dy, hd + 240), VB_H - hd - 40);
+      applyOne(drag.key);
+    });
+    function endDrag() {
+      if (drag) { save(data); drag = null; }
+    }
+    planSvg.addEventListener("pointerup", endDrag);
+    planSvg.addEventListener("pointercancel", endDrag);
+
+    document.getElementById("rotBtn").addEventListener("click", function () {
+      if (!selectedKey) return;
+      var it = data.layout[selectedKey];
+      it.rot = it.rot === 90 ? 0 : 90;
+      applyOne(selectedKey); save(data);
+    });
+    document.getElementById("parkBtn").addEventListener("click", function () {
+      if (!selectedKey) return;
+      var def = defaultLayout(data.shapes)[selectedKey];
+      data.layout[selectedKey] = { x: def.x, y: def.y, rot: 0 };
+      applyOne(selectedKey); save(data);
+    });
+    document.getElementById("resetLayoutBtn").addEventListener("click", function () {
+      data.layout = defaultLayout(data.shapes);
+      rebuildShapes(); selectEq(null); save(data);
+    });
+    document.getElementById("addShapeBtn").addEventListener("click", function () { openShape(null); });
+    document.getElementById("editShapeBtn").addEventListener("click", function () {
+      if (selectedKey) openShape(shapeById(selectedKey));
+    });
+    document.getElementById("planLinks").addEventListener("click", function (e) {
+      var b = e.target.closest("[data-link]");
+      if (!b) return;
+      var hit = findItemAnywhere(b.getAttribute("data-link"));
+      if (!hit) return;
+      activeTab = hit.list;
+      render();
+      if (hit.list === "purchases") openPurchase(hit.item);
+      else if (hit.list === "decisions") openDecision(hit.item);
+      else openNote(hit.item);
+    });
+  }
+
+  // ---------- shape dialog ----------
+  var editingShapeId = null;
+  function openShape(s) {
+    editingShapeId = s ? s.id : null;
+    var dlg = document.getElementById("dlg-shape");
+    document.getElementById("dlg-shape-title").textContent = s ? "Edit shape" : "Add shape";
+    document.getElementById("s-name").value = s ? s.name : "";
+    document.getElementById("s-w").value = s ? s.w : "";
+    document.getElementById("s-d").value = s ? s.d : "";
+    var toneSel = document.getElementById("s-tone");
+    toneSel.innerHTML = TONES.map(function (t) {
+      return '<option value="' + t + '"' + ((s ? s.tone : "neutral") === t ? " selected" : "") + ">" + TONE_LABELS[t] + "</option>";
+    }).join("");
+    var linksEl = document.getElementById("s-links");
+    var html = "";
+    [["Purchases", data.purchases, "item"], ["Decisions", data.decisions, "title"], ["Notes", data.notes, "title"]].forEach(function (grp) {
+      if (!grp[1].length) return;
+      html += '<div class="grp">' + grp[0] + "</div>";
+      grp[1].forEach(function (it) {
+        var checked = s && s.links.indexOf(it.id) >= 0 ? " checked" : "";
+        html += '<label><input type="checkbox" value="' + esc(it.id) + '"' + checked + ">" + esc(it[grp[2]]) + "</label>";
+      });
+    });
+    linksEl.innerHTML = html || '<span class="none">Nothing to link yet.</span>';
+    dlg.querySelector("[data-del]").hidden = !s;
+    resetDeleteBtn(dlg);
+    dlg.showModal();
+  }
+
+  document.getElementById("form-shape").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var w = Math.min(Math.max(Math.round(Number(document.getElementById("s-w").value)) || 500, 100), 6000);
+    var d = Math.min(Math.max(Math.round(Number(document.getElementById("s-d").value)) || 500, 100), 6000);
+    var links = [];
+    var boxes = document.querySelectorAll("#s-links input[type=checkbox]");
+    for (var i = 0; i < boxes.length; i++) if (boxes[i].checked) links.push(boxes[i].value);
+    var s;
+    if (editingShapeId) {
+      s = shapeById(editingShapeId);
+      if (!s) return;
+      s.name = document.getElementById("s-name").value.trim();
+      s.w = w; s.d = d;
+      s.tone = document.getElementById("s-tone").value;
+      s.links = links;
+    } else {
+      s = {
+        id: uid(),
+        name: document.getElementById("s-name").value.trim(),
+        w: w, d: d,
+        tone: document.getElementById("s-tone").value,
+        links: links
+      };
+      data.shapes.push(s);
+      var def = defaultLayout(data.shapes)[s.id];
+      data.layout[s.id] = { x: def.x, y: def.y, rot: 0 };
+    }
+    save(data);
+    rebuildShapes();
+    selectEq(s.id);
+    document.getElementById("dlg-shape").close();
+  });
+
+  (function () {
+    var dlg = document.getElementById("dlg-shape");
+    var del = dlg.querySelector("[data-del]");
+    del.addEventListener("click", function () {
+      if (!del.classList.contains("armed")) {
+        del.classList.add("armed");
+        del.textContent = "Really delete?";
+        return;
+      }
+      for (var i = data.shapes.length - 1; i >= 0; i--) {
+        if (data.shapes[i].id === editingShapeId) data.shapes.splice(i, 1);
+      }
+      delete data.layout[editingShapeId];
+      save(data);
+      rebuildShapes();
+      selectEq(null);
+      dlg.close();
+    });
+    dlg.querySelector("[data-cancel]").addEventListener("click", function () { dlg.close(); });
+  })();
+
+  // ---------- GitHub sync ----------
+  var GH = { owner: "daniellawrence38", repo: "garage-tracker", path: "data.json", branch: "main" };
+  var TOKEN_KEY = "garageTracker.ghToken";
+  var remoteSha = null;
+  var pushTimer = null;
+  var pushing = false;
+
+  function ghToken() { try { return localStorage.getItem(TOKEN_KEY) || ""; } catch (e) { return ""; } }
+  function setSyncStatus(txt, tone) {
+    var el = document.getElementById("syncStatus");
+    if (!el) return;
+    el.textContent = txt;
+    el.style.color = tone === "good" ? "var(--good)" : tone === "bad" ? "var(--danger)" : "var(--muted)";
+  }
+  function ghUrl() { return "https://api.github.com/repos/" + GH.owner + "/" + GH.repo + "/contents/" + GH.path; }
+  function ghHeaders() {
+    var h = { Accept: "application/vnd.github+json" };
+    var t = ghToken();
+    if (t) h.Authorization = "Bearer " + t;
+    return h;
+  }
+  function b64encode(str) { return btoa(unescape(encodeURIComponent(str))); }
+  function b64decode(b64) { return decodeURIComponent(escape(atob(b64.replace(/\s/g, "")))); }
+
+  // cb(parsed) — parsed data object, null if file doesn't exist, undefined on error
+  function fetchRemote(cb) {
+    fetch(ghUrl() + "?ref=" + GH.branch + "&_=" + Date.now(), { headers: ghHeaders() })
+      .then(function (r) {
+        if (r.status === 404) { cb(null); return null; }
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+      })
+      .then(function (j) {
+        if (!j) return;
+        remoteSha = j.sha;
+        var parsed = null;
+        try { parsed = JSON.parse(b64decode(j.content)); } catch (e) {}
+        cb(parsed);
+      })
+      .catch(function () { cb(undefined); });
+  }
+
+  function adoptRemote(remote) {
+    data = applyInbox(normalizeData(remote));
+    saveLocal(data);
+    render();
+    if (planSvg) { rebuildShapes(); selectEq(null); }
+  }
+
+  function initSync() {
+    if (!window.fetch) { setSyncStatus("sync unavailable in this browser"); return; }
+    setSyncStatus("checking GitHub…");
+    fetchRemote(function (remote) {
+      if (remote === undefined) { setSyncStatus("offline — data saved in this browser"); return; }
+      if (remote === null) {
+        if (ghToken()) schedulePush();
+        else setSyncStatus("add a GitHub token to enable sync");
+        return;
+      }
+      var r = remote.updatedAt || "", l = data.updatedAt || "";
+      if (r > l) { adoptRemote(remote); setSyncStatus("synced from GitHub ✓", "good"); }
+      else if (l > r && ghToken()) schedulePush();
+      else setSyncStatus(ghToken() ? "synced ✓" : "viewing shared data — add a token to save changes", ghToken() ? "good" : "");
+    });
+  }
+
+  function schedulePush() {
+    if (!ghToken()) { setSyncStatus("local only — add a GitHub token to sync"); return; }
+    setSyncStatus("saving to GitHub…");
+    if (pushTimer) clearTimeout(pushTimer);
+    pushTimer = setTimeout(function () { doPush(false); }, 1200);
+  }
+
+  function doPush(isRetry) {
+    if (pushing) { schedulePush(); return; }
+    pushing = true;
+    var body = { message: "Update tracker data", content: b64encode(JSON.stringify(data)), branch: GH.branch };
+    if (remoteSha) body.sha = remoteSha;
+    fetch(ghUrl(), { method: "PUT", headers: ghHeaders(), body: JSON.stringify(body) })
+      .then(function (r) {
+        pushing = false;
+        if (r.ok) {
+          return r.json().then(function (j) {
+            if (j.content && j.content.sha) remoteSha = j.content.sha;
+            setSyncStatus("synced ✓", "good");
+          });
+        }
+        if ((r.status === 409 || r.status === 422) && !isRetry) {
+          // sha out of date — another device pushed; latest timestamp wins
+          fetchRemote(function (remote) {
+            if (remote && (remote.updatedAt || "") > (data.updatedAt || "")) {
+              adoptRemote(remote);
+              setSyncStatus("synced from GitHub ✓", "good");
+            } else {
+              doPush(true);
+            }
+          });
+          return;
+        }
+        if (r.status === 401 || r.status === 403) setSyncStatus("token rejected — check your GitHub token", "bad");
+        else setSyncStatus("sync failed (HTTP " + r.status + ")", "bad");
+      })
+      .catch(function () {
+        pushing = false;
+        setSyncStatus("offline — changes saved in this browser");
+      });
+  }
+
+  document.getElementById("ghTokenSave").addEventListener("click", function () {
+    var input = document.getElementById("ghTokenInput");
+    var msg = document.getElementById("ghTokenMsg");
+    var v = input.value.trim();
+    msg.hidden = false;
+    if (!v) { msg.textContent = "Paste a token first."; msg.style.color = "var(--danger)"; return; }
+    try { localStorage.setItem(TOKEN_KEY, v); } catch (e) {}
+    input.value = "";
+    msg.textContent = "Token saved to this browser.";
+    msg.style.color = "var(--good)";
+    document.getElementById("ghNote").textContent = "A token is saved in this browser — changes sync to GitHub automatically.";
+    remoteSha = null;
+    initSync();
+  });
+  document.getElementById("ghTokenClear").addEventListener("click", function () {
+    try { localStorage.removeItem(TOKEN_KEY); } catch (e) {}
+    var msg = document.getElementById("ghTokenMsg");
+    msg.hidden = false;
+    msg.textContent = "Token cleared.";
+    msg.style.color = "var(--good)";
+    setSyncStatus("local only — add a GitHub token to sync");
+  });
+
+  buildPlan();
+  render();
+  initSync();
+})();
+</script>
