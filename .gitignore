@@ -1,0 +1,3 @@
+# Design handoff bundles live on the Desktop, not in the repo —
+# design/ holds the extracted spec instead.
+*.zip

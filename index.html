@@ -1,299 +1,481 @@
-<title>Garage Project Tracker</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Garage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
 <style>
   :root {
-    --bg: #F6F4EF;
-    --surface: #FFFFFF;
-    --surface-2: #EFEBE2;
-    --ink: #26292E;
-    --ink-2: #5C6370;
-    --muted: #8A8F98;
-    --line: #E3DFD6;
-    --accent: #A87430;
-    --accent-ink: #7C5420;
-    --accent-soft: #F2E7D3;
-    --good: #2E7D4F;      --good-soft: #E2F0E7;
-    --warn: #96660F;      --warn-soft: #F5EBD4;
-    --info: #33628C;      --info-soft: #E3ECF4;
-    --neutral: #676D77;   --neutral-soft: #ECECEA;
-    --danger: #A03A2E;
-    --fab-ink: #FFFFFF;
-    --shadow: 0 1px 3px rgba(38, 41, 46, 0.08);
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #1B1D21;
-      --surface: #25282D;
-      --surface-2: #2C3036;
-      --ink: #ECEAE4;
-      --ink-2: #A9AEB7;
-      --muted: #7C828C;
-      --line: #383C43;
-      --accent: #D9A05B;
-      --accent-ink: #E4B87F;
-      --accent-soft: #3A3122;
-      --good: #74C295;      --good-soft: #253B2F;
-      --warn: #D9AE5F;      --warn-soft: #3E3420;
-      --info: #8FB4D8;      --info-soft: #263442;
-      --neutral: #9BA1AB;   --neutral-soft: #33373D;
-      --danger: #E08A7E;
-      --fab-ink: #1B1D21;
-      --shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
-    }
-  }
-  :root[data-theme="light"] {
-    --bg: #F6F4EF; --surface: #FFFFFF; --surface-2: #EFEBE2;
-    --ink: #26292E; --ink-2: #5C6370; --muted: #8A8F98; --line: #E3DFD6;
-    --accent: #A87430; --accent-ink: #7C5420; --accent-soft: #F2E7D3;
-    --good: #2E7D4F; --good-soft: #E2F0E7;
-    --warn: #96660F; --warn-soft: #F5EBD4;
-    --info: #33628C; --info-soft: #E3ECF4;
-    --neutral: #676D77; --neutral-soft: #ECECEA;
-    --danger: #A03A2E; --fab-ink: #FFFFFF; --shadow: 0 1px 3px rgba(38, 41, 46, 0.08);
-  }
-  :root[data-theme="dark"] {
-    --bg: #1B1D21; --surface: #25282D; --surface-2: #2C3036;
-    --ink: #ECEAE4; --ink-2: #A9AEB7; --muted: #7C828C; --line: #383C43;
-    --accent: #D9A05B; --accent-ink: #E4B87F; --accent-soft: #3A3122;
-    --good: #74C295; --good-soft: #253B2F;
-    --warn: #D9AE5F; --warn-soft: #3E3420;
-    --info: #8FB4D8; --info-soft: #263442;
-    --neutral: #9BA1AB; --neutral-soft: #33373D;
-    --danger: #E08A7E; --fab-ink: #1B1D21; --shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+    /* grounds */
+    --ground: #eef0f8;
+    --app: #f6f7fd;
+    --surface: #fbfbff;
+    --sunken: #edeff8;
+    /* accent */
+    --accent: #7a6cd0;
+    --accent-ink: #6a5db3;
+    --accent-sm: #5d5294;
+    --accent-strong: #4a3f86;
+    --accent-tint: #e7e5fe;
+    --accent-fill: #d8d3f8;
+    --accent-soft: #ded9fb;
+    --accent-dim: #8b80cb;
+    --accent-ring: #bdb5f0;
+    /* text */
+    --ink: #23252f;
+    --ink-2: #4a4e5e;
+    --muted: #5f6373;
+    --faint: #5c6070;
+    --faint-2: #676b7c;
+    /* lines & fills */
+    --line: #d2d6e4;
+    --line-sunken: #dfe2ef;
+    --line-hover: #b2b6ca;
+    --track: #dcdfee;
+    --fill-2: #c8ccdc;
+    --fill-3: #c3c7d8;
+    --wall: #a9aec2;
+    --grid: #d9dcec;
+    --divider: rgba(35, 37, 47, .13);
+    --divider-bar: rgba(35, 37, 47, .16);
+    --divider-rule: rgba(35, 37, 47, .18);
+    --danger: #a33a3a;
+    --good: #2f6b4b;
+    --mono: ui-monospace, Menlo, Consolas, monospace;
   }
 
   * { box-sizing: border-box; }
+  html, body { height: 100%; }
   body {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif;
-    font-size: 16px;
-    line-height: 1.45;
     margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 14px;
+    line-height: 1.45;
+    overflow-x: auto;
+    overflow-y: hidden;
     -webkit-text-size-adjust: 100%;
   }
-  .wrap { max-width: 740px; margin: 0 auto; padding: 20px 16px 96px; }
+  /* Columns set display:flex, which would otherwise beat the UA's [hidden] rule. */
+  [hidden] { display: none !important; }
+  button, input, select, textarea { font: inherit; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
 
-  header.app { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
-  .hdr-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
-  .sync-status { font-size: 0.72rem; color: var(--muted); text-align: right; max-width: 170px; }
-  .gh-token { width: 100%; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); font: inherit; padding: 9px 11px; font-size: 0.9rem; }
-  .title h1 { font-size: 1.35rem; font-weight: 650; margin: 0; letter-spacing: -0.01em; }
-  .title p { margin: 2px 0 0; color: var(--ink-2); font-size: 0.85rem; }
-  .title .rule { display: inline-block; width: 34px; height: 4px; background: var(--accent); border-radius: 2px; margin-bottom: 8px; }
-
-  button { font: inherit; cursor: pointer; }
+  /* ---------- Nocturne components ---------- */
   .btn {
-    border: 1px solid var(--line); background: var(--surface); color: var(--ink);
-    border-radius: 8px; padding: 8px 14px; font-size: 0.9rem; font-weight: 550;
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    min-height: 36px; padding: 8px 14px; border-radius: 8px;
+    font-size: 14px; font-weight: 500; line-height: 1.2;
+    color: var(--ink); background: transparent; border: 1px solid transparent;
+    white-space: nowrap;
   }
-  .btn:hover { border-color: var(--muted); }
-  .btn-accent { background: var(--accent); border-color: var(--accent); color: var(--fab-ink); }
-  .btn-accent:hover { filter: brightness(1.05); }
-  button:focus-visible, .chip:focus-visible, .tab:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
-    outline: 2px solid var(--accent); outline-offset: 2px;
-  }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn-primary { color: var(--accent-ink); border-color: var(--accent-ink); }
+  .btn-primary:hover { background: color-mix(in srgb, var(--accent-ink) 12%, transparent); }
+  .btn-primary:active { background: color-mix(in srgb, var(--accent-ink) 22%, transparent); }
+  .btn-secondary { border-color: var(--divider-rule); }
+  .btn-secondary:hover { background: color-mix(in srgb, var(--ink) 7%, transparent); }
+  .btn-secondary:active { background: color-mix(in srgb, var(--ink) 14%, transparent); }
+  .btn-ghost { color: var(--accent-ink); padding-inline: 8px; }
+  .btn-ghost:hover { background: color-mix(in srgb, var(--accent-ink) 10%, transparent); }
+  .btn-danger { color: var(--danger); border-color: var(--divider-rule); }
+  .btn-danger.armed { background: var(--danger); border-color: var(--danger); color: #fff; }
 
-  /* Stat row */
-  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
-  .stat {
-    background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
-    padding: 12px 14px; box-shadow: var(--shadow);
+  .tag {
+    display: inline-flex; align-items: center;
+    font-size: 11px; letter-spacing: .02em; padding: 3px 10px;
+    border-radius: 6px; border: 1px solid transparent;
+    white-space: nowrap;
   }
-  .stat .lbl {
-    font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.07em;
-    color: var(--ink-2); font-weight: 600; margin-bottom: 2px;
-  }
-  .stat .val { font-size: 1.3rem; font-weight: 650; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
-  .stat .sub { font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
+  .tag-accent { background: var(--accent-soft); color: var(--accent-strong); }
+  .tag-neutral { background: var(--line-sunken); color: #3b3e4a; }
+  .tag-outline { border-color: var(--accent-ink); color: var(--accent-sm); }
+  button.tag { font-family: inherit; }
+  button.tag-neutral:hover, button.tag-outline:hover { background: color-mix(in srgb, var(--ink) 7%, transparent); }
 
-  /* Tabs */
-  .tabs { display: flex; gap: 2px; border-bottom: 2px solid var(--line); margin-bottom: 14px; }
-  .tab {
-    background: none; border: none; padding: 9px 14px 8px; font-size: 0.95rem; font-weight: 550;
-    color: var(--ink-2); border-bottom: 2px solid transparent; margin-bottom: -2px;
+  .seg { display: inline-flex; overflow: hidden; border: 1px solid var(--divider-rule); border-radius: 8px; }
+  .seg-opt {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 12px; font-size: 13px; cursor: pointer; color: var(--muted);
+    background: none; border: none;
   }
-  .tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
-  .tab .count { color: var(--muted); font-size: 0.8rem; font-variant-numeric: tabular-nums; }
+  .seg-opt + .seg-opt { border-left: 1px solid var(--divider-rule); }
+  .seg-opt[aria-pressed="true"] { color: var(--accent-ink); box-shadow: inset 0 0 0 1px var(--accent-ink); }
+  .seg-opt:not([aria-pressed="true"]):hover { background: color-mix(in srgb, var(--ink) 7%, transparent); }
 
-  /* Zone filter chips */
-  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
-  .chip {
-    border: 1px solid var(--line); background: var(--surface); color: var(--ink-2);
-    border-radius: 999px; padding: 5px 13px; font-size: 0.82rem; font-weight: 550;
+  .input {
+    width: 100%; min-height: 36px; padding: 6px 10px;
+    font-size: 14px; color: var(--ink); caret-color: var(--accent);
+    background: var(--surface); border: 1px solid var(--divider-rule); border-radius: 8px;
   }
-  .chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
-
-  /* Cards */
-  .list { display: flex; flex-direction: column; gap: 10px; }
-  .card {
-    background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
-    padding: 13px 15px; box-shadow: var(--shadow); cursor: pointer;
-  }
-  .card:hover { border-color: var(--muted); }
-  .card .row1 { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
-  .card h3 { font-size: 0.98rem; font-weight: 600; margin: 0; }
-  .card .price { font-weight: 650; font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .card .meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 7px; }
-  .card .body { color: var(--ink-2); font-size: 0.88rem; margin-top: 7px; white-space: pre-wrap; }
-  .card .chosen { margin-top: 7px; font-size: 0.9rem; }
-  .card .chosen strong { font-weight: 600; }
-
-  .pill {
-    display: inline-block; border-radius: 999px; padding: 2px 10px;
-    font-size: 0.72rem; font-weight: 650; letter-spacing: 0.02em;
-  }
-  .pill.zone { background: var(--surface-2); color: var(--ink-2); }
-  .pill.st-good { background: var(--good-soft); color: var(--good); }
-  .pill.st-warn { background: var(--warn-soft); color: var(--warn); }
-  .pill.st-info { background: var(--info-soft); color: var(--info); }
-  .pill.st-neutral { background: var(--neutral-soft); color: var(--neutral); }
-  .pill.st-accent { background: var(--accent-soft); color: var(--accent-ink); }
-  .card .date { color: var(--muted); font-size: 0.75rem; margin-left: auto; }
-
-  .empty {
-    text-align: center; color: var(--muted); padding: 36px 16px; font-size: 0.92rem;
-    border: 1px dashed var(--line); border-radius: 10px;
-  }
-
-  /* Floating add button */
-  .fab {
-    position: fixed; right: 18px; bottom: 18px; z-index: 5;
-    background: var(--accent); color: var(--fab-ink); border: none; border-radius: 999px;
-    padding: 13px 22px; font-size: 0.98rem; font-weight: 650;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.22);
-  }
-
-  /* Plan view */
-  .plan-toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; min-height: 38px; }
-  .plan-hint { color: var(--muted); font-size: 0.82rem; }
-  .plan-sel { font-size: 0.85rem; font-weight: 600; }
-  .plan-sel .dims { color: var(--ink-2); font-weight: 500; font-variant-numeric: tabular-nums; }
-  .plan-toolbar .spacer { flex: 1; }
-  .plan-svg-wrap { display: flex; justify-content: center; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); padding: 10px 6px; }
-  .plan-svg-wrap svg { width: 100%; max-width: 440px; height: auto; }
-  .eq { cursor: grab; touch-action: none; }
-  .eq text { pointer-events: none; user-select: none; }
-  .eq.selected rect { stroke: var(--accent); stroke-width: 55px; }
-
-  /* Dialogs */
-  dialog {
-    border: 1px solid var(--line); border-radius: 14px; padding: 0;
-    background: var(--surface); color: var(--ink);
-    width: min(480px, calc(100vw - 32px));
-    max-height: calc(100dvh - 48px);
-  }
-  dialog::backdrop { background: rgba(20, 21, 24, 0.45); }
-  .dlg-inner { padding: 18px 18px 16px; overflow-y: auto; max-height: calc(100dvh - 48px); }
-  dialog h2 { font-size: 1.05rem; margin: 0 0 14px; font-weight: 650; }
+  .input:hover { border-color: color-mix(in srgb, var(--ink) 45%, transparent); }
+  .input:focus-visible { border-color: var(--accent-ink); outline-offset: 0; }
+  textarea.input { min-height: 90px; resize: vertical; }
   .field { margin-bottom: 12px; }
-  .field label {
-    display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em;
-    font-weight: 650; color: var(--ink-2); margin-bottom: 4px;
-  }
-  .field input, .field select, .field textarea {
-    width: 100%; border: 1px solid var(--line); border-radius: 8px;
-    background: var(--bg); color: var(--ink); font: inherit; padding: 9px 11px; font-size: 0.95rem;
-  }
-  .field textarea { min-height: 84px; resize: vertical; }
+  .field > label { display: block; font-size: 12px; margin-bottom: 5px; color: var(--muted); }
   .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .dlg-actions { display: flex; gap: 8px; margin-top: 16px; align-items: center; }
-  .dlg-actions .spacer { flex: 1; }
-  .btn-danger { background: none; border: 1px solid var(--line); color: var(--danger); border-radius: 8px; padding: 8px 12px; font-size: 0.88rem; font-weight: 550; }
-  .btn-danger.armed { background: var(--danger); border-color: var(--danger); color: var(--surface); }
 
-  /* Sync dialog */
-  .sync-note { font-size: 0.85rem; color: var(--ink-2); margin: 0 0 10px; }
-  .sync-ta { width: 100%; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); font-family: ui-monospace, Consolas, monospace; font-size: 0.75rem; padding: 9px; min-height: 96px; resize: vertical; }
-  .sync-sec { margin-bottom: 18px; }
-  .sync-sec h3 { font-size: 0.85rem; margin: 0 0 6px; font-weight: 650; }
-  .copied { color: var(--good); font-size: 0.82rem; font-weight: 600; }
-
-  /* Shape links */
-  .plan-links { display: flex; gap: 6px; flex-wrap: wrap; margin: -4px 0 10px; }
-  .plan-links:empty { display: none; }
-  .plan-links button.pill { border: none; cursor: pointer; font-family: inherit; }
-  .field .link-list { max-height: 190px; overflow-y: auto; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; display: flex; flex-direction: column; gap: 6px; background: var(--bg); }
-  .field .link-list .grp { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 650; margin-top: 4px; }
-  .field .link-list label { display: flex; gap: 8px; align-items: center; font-size: 0.85rem; font-weight: 500; color: var(--ink); text-transform: none; letter-spacing: 0; margin: 0; }
-  .field .link-list input[type="checkbox"] { width: auto; accent-color: var(--accent); }
-  .field .link-list .none { color: var(--muted); font-size: 0.82rem; }
-
-  @media (max-width: 480px) {
-    .stats { gap: 7px; }
-    .stat { padding: 10px 11px; }
-    .stat .val { font-size: 1.05rem; }
-    .tab { padding: 9px 10px 8px; font-size: 0.9rem; }
+  .kicker {
+    font: 600 9.5px/1 var(--mono); letter-spacing: .12em;
+    text-transform: uppercase; color: var(--faint-2);
   }
+  .spacer { flex: 1; }
+  .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+  /* ---------- shell ---------- */
+  .app { display: flex; flex-direction: column; height: 100vh; min-width: 1160px; background: var(--app); overflow: hidden; }
+
+  /* app bar */
+  .appbar {
+    display: flex; height: 56px; flex: none; align-items: center; gap: 16px; padding: 0 18px;
+    background: var(--app); box-shadow: inset 0 -1px 0 var(--divider-bar);
+  }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand .bar { display: block; width: 22px; height: 3px; background: var(--accent); border-radius: 2px; }
+  .brand .name { font: 500 16px/1 inherit; color: var(--ink); }
+  .appbar .sub { font-size: 12.5px; color: var(--faint-2); white-space: nowrap; }
+  .search {
+    display: flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 8px;
+    border: 1px solid var(--divider-rule); min-width: 210px; background: transparent;
+  }
+  .search:focus-within { border-color: var(--accent-ink); }
+  .search svg { flex: none; }
+  .search input {
+    border: 0; background: none; padding: 0; min-width: 0; width: 100%;
+    font-size: 12.5px; color: var(--ink); outline: none;
+  }
+  .search input::placeholder { color: var(--faint-2); }
+  .syncbtn {
+    display: flex; align-items: center; gap: 7px; background: none; border: 0;
+    padding: 6px 4px; border-radius: 8px; font-size: 12px; color: var(--muted); white-space: nowrap;
+  }
+  .syncbtn:hover { background: color-mix(in srgb, var(--ink) 5%, transparent); }
+  .syncbtn .dot { width: 6px; height: 6px; border-radius: 999px; background: var(--accent); flex: none; }
+  .syncbtn.bad .dot { background: var(--danger); }
+
+  /* quick add */
+  .quickadd {
+    display: flex; align-items: center; gap: 12px; height: 52px; flex: none; padding: 0 18px;
+    background: var(--sunken); box-shadow: inset 0 -1px 0 var(--divider);
+  }
+  .quickadd > svg { flex: none; }
+  .quickadd input {
+    border: 0; background: none; outline: none; padding: 0;
+    font-size: 14px; color: var(--ink); caret-color: var(--accent);
+    min-width: 180px; width: 26ch; flex: none;
+  }
+  .quickadd input::placeholder { color: var(--faint-2); }
+  .qa-chips { display: flex; gap: 6px; align-items: center; flex-wrap: nowrap; overflow: hidden; }
+  .qa-chips .arrow { font-size: 11px; color: var(--faint); }
+  .quickadd .hint { font-size: 11.5px; color: var(--faint); white-space: nowrap; }
+
+  /* body columns */
+  .body { display: flex; flex: 1; min-height: 0; }
+
+  .navrail {
+    width: 66px; flex: none; background: var(--app); box-shadow: inset -1px 0 0 var(--divider);
+    padding: 14px 0; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  }
+  .navitem {
+    display: flex; flex-direction: column; align-items: center; gap: 5px;
+    padding: 9px 0; width: 52px; border-radius: 8px;
+    background: none; border: 0; color: var(--faint-2);
+  }
+  .navitem span { font: 500 9.5px/1 inherit; }
+  .navitem svg { display: block; }
+  .navitem:hover { background: color-mix(in srgb, var(--ink) 5%, transparent); }
+  .navitem[aria-current="true"] { background: var(--accent-tint); color: var(--accent-sm); }
+
+  .col-plan {
+    width: 424px; flex: none; padding: 16px 16px 0;
+    box-shadow: inset -1px 0 0 var(--divider); display: flex; flex-direction: column;
+  }
+  .colhead { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; }
+  .colhead .h { font: 500 14px/1 inherit; color: var(--ink); flex: none; }
+  .colhead .s { font-size: 11.5px; color: var(--faint); flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .colhead .seg { flex: none; }
+  .colhead .r { font-size: 11.5px; color: var(--faint-2); }
+
+  .legend {
+    display: flex; gap: 14px; margin-bottom: 10px; padding: 7px 10px;
+    border-radius: 6px; background: var(--sunken); flex-wrap: wrap;
+  }
+  .legend > div { display: flex; align-items: center; gap: 6px; }
+  .legend .sw { width: 12px; height: 9px; display: block; border-radius: 1px; }
+  .legend span { font-size: 10.5px; color: var(--muted); }
+
+  .plan-canvas {
+    flex: 1; background: var(--sunken); border-radius: 8px; box-shadow: 0 0 0 1px var(--line-sunken);
+    padding: 8px; display: flex; justify-content: center; overflow: hidden; min-height: 260px;
+  }
+  .plan-canvas svg { width: 100%; height: 100%; }
+  .eq { cursor: pointer; touch-action: none; }
+  /* An undecided shape is fill:none — without this only its dashed outline would be clickable. */
+  .eq .body-rect { pointer-events: all; }
+  .eq text { pointer-events: none; user-select: none; }
+  .eq:hover .body-rect { stroke-width: 60; }
+
+  .tray { display: flex; gap: 8px; padding: 11px 0 13px; flex-wrap: wrap; align-items: center; }
+  .tray .lbl { font-size: 11.5px; color: var(--faint); align-self: center; }
+
+  .col-jobs {
+    flex: 1; min-width: 330px; padding: 16px 18px;
+    box-shadow: inset -1px 0 0 var(--divider);
+    display: flex; flex-direction: column; gap: 12px; overflow: hidden;
+  }
+  .joblist { display: flex; flex-direction: column; gap: 9px; overflow-y: auto; min-height: 0; padding-bottom: 4px; }
+
+  .job {
+    background: var(--surface); border-radius: 8px; padding: 13px 15px;
+    box-shadow: 0 0 0 1px var(--line); border: 0; width: 100%; text-align: left;
+    display: block; color: inherit; font: inherit;
+  }
+  .job:hover { box-shadow: 0 0 0 1px var(--line-hover); }
+  .job.open-calls { box-shadow: 0 0 0 1px var(--accent-ring); }
+  .job.open-calls:hover { box-shadow: 0 0 0 1px var(--accent-ink); }
+  .job.sel { box-shadow: 0 0 0 2px var(--accent); }
+  .job .r1 { display: flex; align-items: baseline; gap: 9px; }
+  /* Only the title may wrap; the tag and the metric hold their width. */
+  .job .t { font: 500 14.5px/1.2 inherit; color: var(--ink); flex: 0 1 auto; min-width: 0; overflow-wrap: break-word; }
+  .job .r1 .tag { flex: none; }
+  .job .metric { font: 400 12px/1 var(--mono); color: var(--faint-2); white-space: nowrap; flex: none; margin-left: auto; }
+  .job .metric.money { color: var(--accent-sm); }
+  .job .note { font-size: 12.5px; line-height: 1.55; color: var(--muted); margin-top: 6px; }
+  .job .chips { display: flex; gap: 7px; margin-top: 10px; flex-wrap: wrap; }
+  .job .chip-call {
+    display: inline-flex; align-items: center; font-size: 11.5px; color: var(--accent-sm);
+    border: 1px dashed var(--accent-dim); border-radius: 6px; padding: 5px 9px;
+  }
+  .job .chip-fact {
+    display: inline-flex; align-items: center; font-size: 11.5px; color: var(--muted);
+    border: 1px solid var(--line); border-radius: 6px; padding: 5px 9px;
+  }
+  .job .bar { display: flex; height: 5px; border-radius: 3px; overflow: hidden; margin-top: 10px; background: var(--track); }
+  .job .bar .a { background: var(--accent); display: block; }
+  .job .bar .b { background: var(--fill-2); display: block; }
+  .job .barnote { display: flex; gap: 12px; margin-top: 8px; font-size: 11.5px; color: var(--faint-2); flex-wrap: wrap; }
+  .job.done { background: var(--sunken); box-shadow: 0 0 0 1px var(--line-sunken); opacity: .7; padding: 12px 15px; }
+  .job.done .t { font-size: 14px; color: var(--muted); text-decoration: line-through; }
+  .job.done .metric { font-family: inherit; font-size: 11.5px; color: var(--faint); }
+
+  /* detail rail */
+  .rail {
+    width: 322px; flex: none; background: var(--sunken); padding: 16px 18px;
+    display: flex; flex-direction: column; gap: 14px; overflow-y: auto;
+  }
+  .rail .name { font: 500 19px/1.2 inherit; color: var(--ink); }
+  .rail .dims { font: 400 12.5px/1 var(--mono); color: #544e85; margin-top: 7px; }
+  .rail .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .rail .note { font-size: 12.5px; line-height: 1.6; color: var(--muted); }
+  .rule { height: 1px; flex: none; background: linear-gradient(to right, transparent, var(--divider-rule) 20%, var(--divider-rule) 80%, transparent); }
+  .rail .kicker { margin-bottom: 9px; display: block; }
+  .rail .rows { display: flex; flex-direction: column; gap: 7px; }
+  .jobrow {
+    display: flex; align-items: center; gap: 8px; padding: 9px 11px; border-radius: 7px;
+    background: var(--surface); box-shadow: 0 0 0 1px var(--line);
+    border: 0; width: 100%; text-align: left; color: inherit; font: inherit;
+  }
+  .jobrow:hover { box-shadow: 0 0 0 1px var(--line-hover); }
+  .jobrow .tick { width: 5px; height: 26px; background: var(--accent); border-radius: 2px; display: block; flex: none; }
+  .jobrow .t { font: 500 13.5px/1.2 inherit; color: var(--ink); }
+  .jobrow .caret { font-size: 15px; color: var(--faint-2); }
+  .callrow {
+    display: flex; align-items: baseline; gap: 8px; padding: 9px 11px; border-radius: 7px;
+    border: 1px dashed var(--accent-dim); background: none; width: 100%; text-align: left; font: inherit;
+  }
+  .callrow:hover { background: color-mix(in srgb, var(--accent-ink) 8%, transparent); }
+  .callrow .t { font-size: 13px; line-height: 1.35; color: var(--accent-strong); }
+  .callrow .s { font-size: 10.5px; color: #565094; }
+  .callrow.settled { border-style: solid; border-color: var(--line); }
+  .callrow.settled .t { color: var(--muted); }
+  .callrow.settled .s { color: var(--faint-2); }
+  .itemrow {
+    display: flex; align-items: baseline; gap: 8px; padding: 9px 11px; border-radius: 7px;
+    background: var(--surface); border: 0; width: 100%; text-align: left; font: inherit;
+  }
+  .itemrow:hover { box-shadow: 0 0 0 1px var(--line); }
+  .itemrow .t { font-size: 13px; line-height: 1.35; color: var(--ink-2); }
+  .itemrow .s { font-size: 11px; color: var(--faint-2); white-space: nowrap; }
+  .itemrow .p { font: 400 12px/1 var(--mono); color: var(--accent-sm); white-space: nowrap; }
+  .rail .actions { display: flex; gap: 8px; flex: none; }
+
+  /* full-width list views */
+  .col-list { flex: 1; min-width: 0; padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; overflow: hidden; }
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .listwrap { display: flex; flex-direction: column; gap: 9px; overflow-y: auto; min-height: 0; padding-bottom: 8px; max-width: 900px; }
+  .grouphead { display: flex; align-items: baseline; gap: 9px; margin-top: 8px; }
+  .grouphead:first-child { margin-top: 0; }
+  .notecard { background: var(--surface); border-radius: 8px; padding: 13px 15px; box-shadow: 0 0 0 1px var(--line); border: 0; width: 100%; text-align: left; font: inherit; }
+  .notecard:hover { box-shadow: 0 0 0 1px var(--line-hover); }
+  .notecard .t { font: 500 14.5px/1.2 inherit; color: var(--ink); }
+  .notecard .b { font-size: 12.5px; line-height: 1.55; color: var(--muted); margin-top: 6px; white-space: pre-wrap; }
+  .notecard .m { display: flex; gap: 8px; align-items: center; margin-top: 9px; flex-wrap: wrap; }
+  .notecard .date { font-size: 11px; color: var(--faint-2); margin-left: auto; }
+  .empty {
+    text-align: center; color: var(--faint-2); padding: 32px 16px; font-size: 13px;
+    border: 1px dashed var(--line); border-radius: 8px;
+  }
+
+  /* dialogs */
+  dialog {
+    border: 0; border-radius: 12px; padding: 0; background: var(--surface); color: var(--ink);
+    width: min(520px, calc(100vw - 32px)); max-height: calc(100dvh - 48px);
+    box-shadow: 0 0 0 1px var(--line-hover), 0 16px 40px rgba(35, 37, 47, .16);
+  }
+  dialog::backdrop { background: rgba(35, 37, 47, .38); }
+  .dlg-inner { padding: 18px; overflow-y: auto; max-height: calc(100dvh - 48px); }
+  dialog h2 { font: 500 17px/1.2 inherit; margin: 0 0 14px; }
+  dialog h3 { font: 500 13px/1.3 inherit; margin: 0 0 6px; }
+  .dlg-actions { display: flex; gap: 8px; margin-top: 16px; align-items: center; flex-wrap: wrap; }
+  .checkline { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-2); }
+  .checkline input { accent-color: var(--accent-ink); }
+  .link-list {
+    max-height: 190px; overflow-y: auto; border: 1px solid var(--divider-rule); border-radius: 8px;
+    padding: 8px 10px; display: flex; flex-direction: column; gap: 6px; background: var(--ground);
+  }
+  .link-list .grp { font: 600 9.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--faint-2); margin-top: 4px; }
+  .link-list label { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--ink); margin: 0; }
+  .link-list input[type="checkbox"] { width: auto; accent-color: var(--accent-ink); }
+  .link-list .none { color: var(--faint-2); font-size: 12.5px; }
+  .sync-sec { margin-bottom: 18px; }
+  .sync-note { font-size: 12.5px; color: var(--muted); margin: 0 0 10px; }
+  .sync-ta {
+    width: 100%; border: 1px solid var(--divider-rule); border-radius: 8px; background: var(--ground);
+    color: var(--ink); font-family: var(--mono); font-size: 11.5px; padding: 9px; min-height: 92px; resize: vertical;
+  }
+  .msg { font-size: 12.5px; font-weight: 500; }
+
   @media (prefers-reduced-motion: no-preference) {
-    .btn, .chip, .tab, .card { transition: border-color 0.12s, background 0.12s, color 0.12s; }
+    .btn, .tag, .seg-opt, .navitem, .job, .jobrow, .callrow, .itemrow, .notecard, .search, .input {
+      transition: border-color .12s, background .12s, color .12s, box-shadow .12s;
+    }
+  }
+
+  /* ---------- phone / narrow fallback ---------- */
+  @media (max-width: 900px) {
+    body { overflow-x: hidden; overflow-y: auto; }
+    .app { height: auto; min-width: 0; min-height: 100vh; overflow: visible; padding-bottom: 64px; }
+    .appbar { height: auto; min-height: 56px; flex-wrap: wrap; padding: 10px 14px; gap: 10px; }
+    .appbar .sub { width: 100%; order: 5; }
+    .search { flex: 1; min-width: 140px; }
+    .quickadd { height: auto; min-height: 52px; flex-wrap: wrap; padding: 10px 14px; }
+    .quickadd input { width: 100%; flex: 1 1 100%; min-width: 0; }
+    .quickadd .hint { display: none; }
+    .qa-chips { flex-wrap: wrap; overflow: visible; }
+    .body { flex-direction: column; }
+    .navrail {
+      /* Above the detail sheet, whose padding-bottom reserves room for it. */
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 8;
+      width: auto; flex-direction: row; justify-content: space-around; gap: 0;
+      padding: 6px 4px; box-shadow: 0 -1px 0 var(--divider); background: var(--app);
+    }
+    .col-plan { width: auto; padding: 14px 14px 0; box-shadow: none; }
+    .plan-canvas { min-height: 380px; }
+    .col-jobs { padding: 4px 14px 14px; box-shadow: none; overflow: visible; }
+    .joblist { overflow: visible; }
+    .rail {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 7; width: auto;
+      max-height: 76vh; border-radius: 14px 14px 0 0;
+      box-shadow: 0 -8px 32px rgba(35, 37, 47, .18);
+      padding-bottom: 76px;
+    }
+    /* On a phone the rail is a bottom sheet: it only exists once you pick something. */
+    .rail:not(.has-sel) { display: none; }
+    .col-list { overflow: visible; padding: 14px; }
+    .listwrap { overflow: visible; }
   }
 </style>
 
-<div class="wrap">
-  <header class="app">
-    <div class="title">
-      <span class="rule"></span>
-      <h1>Garage Project</h1>
-      <p>6.2 × 3.9 m — front area + rear gym</p>
-    </div>
-    <div class="hdr-right">
-      <button class="btn" id="syncBtn">Sync / Backup</button>
-      <span class="sync-status" id="syncStatus"></span>
-    </div>
+<div class="app">
+  <header class="appbar">
+    <div class="brand"><span class="bar"></span><span class="name">Garage</span></div>
+    <span class="sub">6.2 × 3.9 m · 2.4 m ceiling · rear gym + front store</span>
+    <span class="spacer"></span>
+    <label class="search">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#676b7c" stroke-width="1.5" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg>
+      <input id="search" type="search" placeholder="Search jobs, items, sizes" aria-label="Search">
+    </label>
+    <button class="syncbtn" id="syncBtn"><span class="dot"></span><span id="syncStatus">Sync</span></button>
   </header>
 
-  <div class="stats" id="stats"></div>
-
-  <div class="tabs" role="tablist" id="tabs">
-    <button class="tab" role="tab" data-tab="plan">Plan <span class="count"></span></button>
-    <button class="tab" role="tab" data-tab="purchases">Purchases <span class="count"></span></button>
-    <button class="tab" role="tab" data-tab="decisions">Decisions <span class="count"></span></button>
-    <button class="tab" role="tab" data-tab="notes">Notes <span class="count"></span></button>
+  <div class="quickadd">
+    <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#7a6cd0" stroke-width="1.6" aria-hidden="true"><path d="M8 2.5v11M2.5 8h11"/></svg>
+    <input id="qa" autocomplete="off" placeholder="Add anything in one line…" aria-label="Quick add">
+    <div class="qa-chips" id="qaChips"></div>
+    <span class="spacer"></span>
+    <span class="hint">Return saves · Tab to correct a chip</span>
   </div>
 
-  <div class="chips" id="zoneChips"></div>
-  <div class="chips" id="catChips" style="display:none"></div>
+  <div class="body">
+    <nav class="navrail" id="navRail" aria-label="Sections"></nav>
 
-  <div id="planView" style="display:none">
-    <div class="plan-toolbar">
-      <span class="plan-hint" id="planHint">Tap an item to move it · + Shape adds your own.</span>
-      <span class="plan-sel" id="planSel" hidden></span>
-      <button class="btn" id="rotBtn" hidden>Rotate 90°</button>
-      <button class="btn" id="parkBtn" hidden>Park</button>
-      <button class="btn" id="editShapeBtn" hidden>Edit</button>
-      <span class="spacer"></span>
-      <button class="btn" id="addShapeBtn">+ Shape</button>
-      <button class="btn" id="resetLayoutBtn">Reset layout</button>
-    </div>
-    <div class="plan-links" id="planLinks"></div>
-    <div class="plan-svg-wrap" id="planSvgWrap"></div>
+    <section class="col-plan" id="colPlan">
+      <div class="colhead">
+        <span class="h">Floor plan</span>
+        <span class="s">to scale · 1 m grid</span>
+        <span class="spacer"></span>
+        <span class="r">Drag to move · R rotates</span>
+      </div>
+      <div class="legend">
+        <div><span class="sw" style="background:#d8d3f8;box-shadow:inset 0 0 0 1px #7a6cd0"></span><span>Ordered</span></div>
+        <div><span class="sw" style="background:#c3c7d8;box-shadow:inset 0 0 0 1px #8388a0"></span><span>Owned</span></div>
+        <div><span class="sw" style="background:#fbfbff;box-shadow:inset 0 0 0 1px #8a8e9e"></span><span>Decided, not bought</span></div>
+        <div><span class="sw" style="border:1px dashed #9599aa"></span><span>Undecided</span></div>
+      </div>
+      <div class="plan-canvas" id="planCanvas"></div>
+      <div class="tray" id="tray"></div>
+    </section>
+
+    <section class="col-jobs" id="colJobs">
+      <div class="colhead">
+        <span class="h">Jobs</span>
+        <span class="s" id="jobsSub"></span>
+        <span class="spacer"></span>
+        <div class="seg" id="jobFilter" style="transform:scale(.86);transform-origin:right center">
+          <button class="seg-opt" data-filter="open">Open</button>
+          <button class="seg-opt" data-filter="blocked">Blocked</button>
+          <button class="seg-opt" data-filter="done">Done</button>
+        </div>
+      </div>
+      <div class="joblist" id="jobList"></div>
+    </section>
+
+    <aside class="rail" id="rail" hidden></aside>
+
+    <section class="col-list" id="colList" hidden>
+      <div class="colhead">
+        <span class="h" id="listTitle"></span>
+        <span class="s" id="listSub"></span>
+      </div>
+      <div class="filters" id="listFilters"></div>
+      <div class="listwrap" id="listWrap"></div>
+    </section>
   </div>
-
-  <div class="list" id="list"></div>
 </div>
-
-<button class="fab" id="addBtn">+ Add</button>
 
 <!-- Purchase dialog -->
 <dialog id="dlg-purchase">
   <form class="dlg-inner" id="form-purchase">
-    <h2 id="dlg-purchase-title">Add purchase</h2>
-    <div class="field"><label for="p-item">Item</label><input id="p-item" required autocomplete="off"></div>
+    <h2 id="dlg-purchase-title">Add item</h2>
+    <div class="field"><label for="p-item">Item</label><input class="input" id="p-item" required autocomplete="off"></div>
     <div class="field-row">
-      <div class="field"><label for="p-price">Price ($)</label><input id="p-price" type="number" step="0.01" min="0" inputmode="decimal" placeholder="—"></div>
-      <div class="field"><label for="p-zone">Zone</label><select id="p-zone"></select></div>
+      <div class="field"><label for="p-price">Price ($)</label><input class="input" id="p-price" type="number" step="0.01" min="0" inputmode="decimal" placeholder="—"></div>
+      <div class="field"><label for="p-zone">Zone</label><select class="input" id="p-zone"></select></div>
     </div>
     <div class="field-row">
-      <div class="field"><label for="p-status">Status</label><select id="p-status"></select></div>
-      <div class="field"><label for="p-cat">Category</label><select id="p-cat"></select></div>
+      <div class="field"><label for="p-status">Status</label><select class="input" id="p-status"></select></div>
+      <div class="field"><label for="p-cat">Category</label><select class="input" id="p-cat"></select></div>
     </div>
-    <div class="field"><label for="p-vendor">Vendor</label><input id="p-vendor" autocomplete="off" placeholder="optional"></div>
-    <div class="field"><label for="p-notes">Notes</label><textarea id="p-notes" placeholder="optional"></textarea></div>
+    <div class="field"><label for="p-job">Job</label><select class="input" id="p-job"></select></div>
+    <div class="field"><label for="p-vendor">Vendor</label><input class="input" id="p-vendor" autocomplete="off" placeholder="optional"></div>
+    <div class="field"><label for="p-notes">Notes</label><textarea class="input" id="p-notes" placeholder="optional"></textarea></div>
     <div class="dlg-actions">
-      <button type="button" class="btn-danger" data-del hidden>Delete</button>
+      <button type="button" class="btn btn-danger" data-del hidden>Delete</button>
       <span class="spacer"></span>
-      <button type="button" class="btn" data-cancel>Cancel</button>
-      <button type="submit" class="btn btn-accent">Save</button>
+      <button type="button" class="btn btn-secondary" data-cancel>Cancel</button>
+      <button type="submit" class="btn btn-primary">Save</button>
     </div>
   </form>
 </dialog>
@@ -301,19 +483,20 @@
 <!-- Decision dialog -->
 <dialog id="dlg-decision">
   <form class="dlg-inner" id="form-decision">
-    <h2 id="dlg-decision-title">Add decision</h2>
-    <div class="field"><label for="d-title">What's being decided</label><input id="d-title" required autocomplete="off"></div>
+    <h2 id="dlg-decision-title">Add call</h2>
+    <div class="field"><label for="d-title">What's being decided</label><input class="input" id="d-title" required autocomplete="off"></div>
     <div class="field-row">
-      <div class="field"><label for="d-status">Status</label><select id="d-status"></select></div>
-      <div class="field"><label for="d-zone">Zone</label><select id="d-zone"></select></div>
+      <div class="field"><label for="d-status">Status</label><select class="input" id="d-status"></select></div>
+      <div class="field"><label for="d-zone">Zone</label><select class="input" id="d-zone"></select></div>
     </div>
-    <div class="field"><label for="d-chosen">Choice (if made)</label><input id="d-chosen" autocomplete="off" placeholder="what you went with"></div>
-    <div class="field"><label for="d-notes">Options / reasoning</label><textarea id="d-notes" placeholder="options considered, why, links…"></textarea></div>
+    <div class="field"><label for="d-job">Job</label><select class="input" id="d-job"></select></div>
+    <div class="field"><label for="d-chosen">Choice (if made)</label><input class="input" id="d-chosen" autocomplete="off" placeholder="what you went with"></div>
+    <div class="field"><label for="d-notes">Options / reasoning</label><textarea class="input" id="d-notes" placeholder="options considered, why, links…"></textarea></div>
     <div class="dlg-actions">
-      <button type="button" class="btn-danger" data-del hidden>Delete</button>
+      <button type="button" class="btn btn-danger" data-del hidden>Delete</button>
       <span class="spacer"></span>
-      <button type="button" class="btn" data-cancel>Cancel</button>
-      <button type="submit" class="btn btn-accent">Save</button>
+      <button type="button" class="btn btn-secondary" data-cancel>Cancel</button>
+      <button type="submit" class="btn btn-primary">Save</button>
     </div>
   </form>
 </dialog>
@@ -322,14 +505,38 @@
 <dialog id="dlg-note">
   <form class="dlg-inner" id="form-note">
     <h2 id="dlg-note-title">Add note</h2>
-    <div class="field"><label for="n-title">Title</label><input id="n-title" required autocomplete="off"></div>
-    <div class="field"><label for="n-zone">Zone</label><select id="n-zone"></select></div>
-    <div class="field"><label for="n-body">Note</label><textarea id="n-body" placeholder="measurements, layout, reference info…" style="min-height:130px"></textarea></div>
+    <div class="field"><label for="n-title">Title</label><input class="input" id="n-title" required autocomplete="off"></div>
+    <div class="field-row">
+      <div class="field"><label for="n-zone">Zone</label><select class="input" id="n-zone"></select></div>
+      <div class="field"><label for="n-job">Job</label><select class="input" id="n-job"></select></div>
+    </div>
+    <div class="field"><label for="n-body">Note</label><textarea class="input" id="n-body" placeholder="measurements, layout, reference info…" style="min-height:130px"></textarea></div>
     <div class="dlg-actions">
-      <button type="button" class="btn-danger" data-del hidden>Delete</button>
+      <button type="button" class="btn btn-danger" data-del hidden>Delete</button>
       <span class="spacer"></span>
-      <button type="button" class="btn" data-cancel>Cancel</button>
-      <button type="submit" class="btn btn-accent">Save</button>
+      <button type="button" class="btn btn-secondary" data-cancel>Cancel</button>
+      <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Job dialog -->
+<dialog id="dlg-job">
+  <form class="dlg-inner" id="form-job">
+    <h2 id="dlg-job-title">Add job</h2>
+    <div class="field"><label for="j-title">Job</label><input class="input" id="j-title" required autocomplete="off" placeholder="e.g. Line the walls in ply"></div>
+    <div class="field-row">
+      <div class="field"><label for="j-zone">Zone</label><select class="input" id="j-zone"></select></div>
+      <div class="field"><label for="j-status">Status</label><select class="input" id="j-status"></select></div>
+    </div>
+    <div class="field"><label for="j-metric">Key measurement</label><input class="input" id="j-metric" autocomplete="off" placeholder="e.g. 2587 × 2152 mm"></div>
+    <div class="field"><label for="j-note">Summary</label><textarea class="input" id="j-note" placeholder="one line, shown on the card"></textarea></div>
+    <div class="field"><label>Shapes on the plan</label><div class="link-list" id="j-shapes"></div></div>
+    <div class="dlg-actions">
+      <button type="button" class="btn btn-danger" data-del hidden>Delete</button>
+      <span class="spacer"></span>
+      <button type="button" class="btn btn-secondary" data-cancel>Cancel</button>
+      <button type="submit" class="btn btn-primary">Save</button>
     </div>
   </form>
 </dialog>
@@ -338,18 +545,19 @@
 <dialog id="dlg-shape">
   <form class="dlg-inner" id="form-shape">
     <h2 id="dlg-shape-title">Add shape</h2>
-    <div class="field"><label for="s-name">Label</label><input id="s-name" required autocomplete="off" placeholder="e.g. Squat rack, Workbench"></div>
+    <div class="field"><label for="s-name">Label</label><input class="input" id="s-name" required autocomplete="off" placeholder="e.g. Squat rack, Workbench"></div>
     <div class="field-row">
-      <div class="field"><label for="s-w">Width (mm)</label><input id="s-w" type="number" min="100" max="6000" step="10" required inputmode="numeric"></div>
-      <div class="field"><label for="s-d">Depth (mm)</label><input id="s-d" type="number" min="100" max="6000" step="10" required inputmode="numeric"></div>
+      <div class="field"><label for="s-w">Width (mm)</label><input class="input" id="s-w" type="number" min="100" max="6000" step="10" required inputmode="numeric"></div>
+      <div class="field"><label for="s-d">Depth (mm)</label><input class="input" id="s-d" type="number" min="100" max="6000" step="10" required inputmode="numeric"></div>
     </div>
-    <div class="field"><label for="s-tone">Colour</label><select id="s-tone"></select></div>
+    <div class="field"><label for="s-note">Note</label><textarea class="input" id="s-note" placeholder="why it sits there, what to check…"></textarea></div>
+    <div class="field"><label class="checkline"><input type="checkbox" id="s-clear"> Clearance zone — keep this square empty</label></div>
     <div class="field"><label>Linked items</label><div class="link-list" id="s-links"></div></div>
     <div class="dlg-actions">
-      <button type="button" class="btn-danger" data-del hidden>Delete</button>
+      <button type="button" class="btn btn-danger" data-del hidden>Delete</button>
       <span class="spacer"></span>
-      <button type="button" class="btn" data-cancel>Cancel</button>
-      <button type="submit" class="btn btn-accent">Save</button>
+      <button type="button" class="btn btn-secondary" data-cancel>Cancel</button>
+      <button type="submit" class="btn btn-primary">Save</button>
     </div>
   </form>
 </dialog>
@@ -361,11 +569,11 @@
     <div class="sync-sec">
       <h3>GitHub sync</h3>
       <p class="sync-note" id="ghNote"></p>
-      <input class="gh-token" id="ghTokenInput" type="password" autocomplete="off" placeholder="github_pat_…">
+      <input class="input" id="ghTokenInput" type="password" autocomplete="off" placeholder="github_pat_…">
       <div class="dlg-actions" style="margin-top:8px">
-        <button type="button" class="btn" id="ghTokenSave">Save token</button>
-        <button type="button" class="btn" id="ghTokenClear">Clear token</button>
-        <span class="copied" id="ghTokenMsg" hidden></span>
+        <button type="button" class="btn btn-secondary" id="ghTokenSave">Save token</button>
+        <button type="button" class="btn btn-secondary" id="ghTokenClear">Clear token</button>
+        <span class="msg" id="ghTokenMsg" hidden></span>
       </div>
     </div>
     <div class="sync-sec">
@@ -373,50 +581,199 @@
       <p class="sync-note">Copy the format instructions into any Claude chat, describe your decisions or purchases, then paste Claude's JSON reply here. Items are added — nothing is replaced.</p>
       <textarea class="sync-ta" id="snippetTa" placeholder="Paste Claude's JSON snippet here…"></textarea>
       <div class="dlg-actions" style="margin-top:8px">
-        <button type="button" class="btn" id="snippetBtn">Add items</button>
-        <button type="button" class="btn" id="copyPromptBtn">Copy format instructions</button>
-        <span class="copied" id="snippetMsg" hidden></span>
+        <button type="button" class="btn btn-secondary" id="snippetBtn">Add items</button>
+        <button type="button" class="btn btn-secondary" id="copyPromptBtn">Copy format instructions</button>
+        <span class="msg" id="snippetMsg" hidden></span>
       </div>
     </div>
     <div class="sync-sec">
       <h3>Export — this device's data</h3>
       <textarea class="sync-ta" id="exportTa" readonly></textarea>
       <div class="dlg-actions" style="margin-top:8px">
-        <button type="button" class="btn" id="copyBtn">Copy sync code</button>
-        <span class="copied" id="copiedMsg" hidden>Copied</span>
+        <button type="button" class="btn btn-secondary" id="copyBtn">Copy sync code</button>
+        <span class="msg" id="copiedMsg" hidden>Copied</span>
       </div>
     </div>
     <div class="sync-sec">
       <h3>Import full backup — replace this device's data</h3>
       <textarea class="sync-ta" id="importTa" placeholder="Paste a sync code here…"></textarea>
       <div class="dlg-actions" style="margin-top:8px">
-        <button type="button" class="btn" id="importBtn">Import (replaces everything)</button>
-        <span class="copied" id="importMsg" hidden></span>
+        <button type="button" class="btn btn-secondary" id="importBtn">Import (replaces everything)</button>
+        <span class="msg" id="importMsg" hidden></span>
       </div>
     </div>
     <div class="dlg-actions">
       <span class="spacer"></span>
-      <button type="button" class="btn" id="syncClose">Close</button>
+      <button type="button" class="btn btn-primary" id="syncClose">Close</button>
     </div>
   </div>
 </dialog>
 
 <script>
 (function () {
+  // ---------- constants ----------
   var STORE_KEY = "garageTracker.v1";
+  var TOKEN_KEY = "garageTracker.ghToken";
+  var DATA_VERSION = 2;
   var ZONES = ["Gym", "Front area", "General"];
   var P_STATUSES = ["researching", "planned", "ordered", "delivered", "installed"];
   var D_STATUSES = ["deciding", "decided", "revisit"];
-  var STATUS_CLASS = {
-    researching: "st-neutral", planned: "st-info", ordered: "st-warn",
-    delivered: "st-accent", installed: "st-good",
-    deciding: "st-warn", decided: "st-good", revisit: "st-info"
+  var J_STATUSES = ["deciding", "ready", "ordered", "done"];
+  var CATEGORIES = ["Equipment", "Timber", "Electrical", "Flooring", "Doors", "Storage", "Paint", "Other"];
+  var J_STATUS_LABEL = { deciding: "Deciding", ready: "Decided, not bought", ordered: "Ordered", done: "Done" };
+
+  // ---------- floor plan geometry (all mm; interior origin at 700,300) ----------
+  var PLAN = {
+    rx: 700, ry: 300,          // interior top-left in SVG user space
+    w: 3900, l: 6200,          // interior width / length
+    gymL: 4200,                // rear gym zone depth (from top)
+    pilW: 430, pilD: 430,      // pillars at the zone divide
+    lintelW: 300,
+    doorW: 2587
+  };
+  PLAN.pillarY = PLAN.ry + PLAN.gymL;                 // 4500
+  PLAN.frontY = PLAN.pillarY + PLAN.pilD;             // 4930
+  PLAN.botY = PLAN.ry + PLAN.l;                       // 6500
+  PLAN.midX = PLAN.rx + PLAN.w / 2;                   // 2650
+  var VB_W = 5000, VB_H = 7250, GRID = 1000, SNAP_TOL = 120;
+
+  // Paint is derived from state — never chosen by hand.
+  var PAINT = {
+    undecided: { fill: "none", stroke: "#9599aa", dash: "130 90", name: "#4a4e5e", dim: "#676b7c", label: "Undecided" },
+    decided: { fill: "#fbfbff", stroke: "#8a8e9e", dash: "", name: "#4a4e5e", dim: "#676b7c", label: "Decided, not bought" },
+    ordered: { fill: "#d8d3f8", stroke: "#7a6cd0", dash: "", name: "#453a80", dim: "#544e85", label: "Ordered" },
+    owned: { fill: "#c3c7d8", stroke: "#8388a0", dash: "", name: "#2b2e38", dim: "#4a4e5e", label: "Owned" },
+    clearance: { fill: "#fbfbff", stroke: "#7468b0", dash: "", name: "#4a3f86", dim: "#544e85", label: "Keep clear" }
   };
 
+  // Positions are centres; the handoff lists top-left corners.
+  var DEFAULT_SHAPES = [
+    { id: "rack", name: "Power rack", w: 1200, d: 1200, pos: { x: 1300, y: 1100, rot: 0 },
+      note: "Against the left wall, clear of the beam drop zone. A folding wall-mount would hand back 1.2 m of a 3.9 m room.",
+      links: ["p7", "p8", "d7"] },
+    { id: "treadmill", name: "Treadmill", w: 1800, d: 800, pos: { x: 4200, y: 1500, rot: 90 },
+      note: "Along the right wall. 2.4 m ceiling is fine unless the deck sits high — check the listing's step-up height.",
+      links: ["p9"] },
+    { id: "bench", name: "Bench", w: 1200, d: 350, pos: { x: 1500, y: 2125, rot: 0 },
+      note: "Stows under the rack when not in use — the drawn footprint is the in-use position.",
+      links: ["p8"] },
+    { id: "rings", name: "Rings", w: 1000, d: 1000, pos: { x: 2650, y: 3200, rot: 0 }, clearance: true,
+      note: "Hangs off the steel beam on the room centreline. This square stays empty — it is a clearance, not an object.",
+      links: ["p10", "d6"] },
+    { id: "volt", name: "Volt trainer", w: 1400, d: 600, pos: { x: 1800, y: 4150, rot: 0 },
+      note: "Already owned and sited. Near the pillars so the fan noise stays out of the lifting end.",
+      links: ["p14"] },
+    { id: "bike1", name: "Bike 1", w: 700, d: 400, pos: { x: 1150, y: 5250, rot: 0 },
+      note: "Hangs vertically off a wall hook — the floor footprint shown is the swing space to get it up.",
+      links: ["p11"] },
+    { id: "bike2", name: "Bike 2", w: 700, d: 400, pos: { x: 1150, y: 5950, rot: 0 },
+      note: "Second hook, 700 mm along the same wall.",
+      links: ["p11"] },
+    { id: "cupboard", name: "Cupboard", w: 900, d: 500, pos: { x: 2850, y: 5280, rot: 0 },
+      note: "Only if you go enclosed. It eats the middle of the front area — the racks against the wall don't.",
+      links: ["p13", "d8"] },
+    { id: "store1", name: "Racking bay 1", w: 900, d: 450, pos: { x: 4150, y: 5255, rot: 0 },
+      note: "Open shelving on the right wall for grab-every-session things.",
+      links: ["p12"] },
+    { id: "store2", name: "Racking bay 2", w: 900, d: 450, pos: { x: 4150, y: 5925, rot: 0 },
+      note: "Second bay. Leaves 350 mm between it and the door swing.",
+      links: ["p12"] }
+  ];
+  // Names the old build shipped — only these get renamed on migration.
+  var OLD_SHAPE_NAMES = { rings: "Rings zone", store1: "Storage", store2: "Storage" };
+
+  var DEFAULT_JOBS = [
+    { id: "j-lift", title: "Lifting corner", zone: "Gym", status: "deciding",
+      shapeIds: ["rack", "treadmill", "bench", "rings"], metric: "Gym · NE corner",
+      note: "Blocked until the rack type is settled — a folding wall-mount gives back 1.2 m of a 3.9 m room.",
+      purchases: ["p7", "p8", "p9", "p10"], decisions: ["d6", "d7"], notes: ["n3"] },
+    { id: "j-ply", title: "Line the walls in ply", zone: "Gym", status: "ordered",
+      shapeIds: [], metric: "$659",
+      note: "14 sheets of 9 mm over the rendered walls. Clear-seal or whitewash rather than paint.",
+      purchases: ["p1"], decisions: ["d3"], notes: [] },
+    { id: "j-light", title: "Lighting", zone: "Gym", status: "ready",
+      shapeIds: [], metric: "strip + 2 battens",
+      note: "LED strips in the gap at the top of the ply, plus two dimmable battens.",
+      purchases: ["p2", "p3"], decisions: ["d4"], notes: [] },
+    { id: "j-floor", title: "Floor the gym", zone: "Gym", status: "ready",
+      shapeIds: [], metric: "16.4 m² needed",
+      note: "Full rubber across 4.2 × 3.9 m; front 1.5 m stays sealed concrete.",
+      purchases: ["p5", "p6"], decisions: ["d1"], notes: [] },
+    { id: "j-door", title: "Replace the garage door", zone: "Front area", status: "ready",
+      shapeIds: [], metric: "2587 × 2152 mm",
+      note: "Solid double, opening outwards. The measurement is quotable — copy it straight into an enquiry.",
+      purchases: ["p4"], decisions: ["d2"], notes: [] },
+    { id: "j-store", title: "Front-area storage", zone: "Front area", status: "deciding",
+      shapeIds: ["bike1", "bike2", "cupboard", "store1", "store2"], metric: "Front area",
+      note: "Enclosed cupboard hides clutter; open racks are faster to grab from.",
+      purchases: ["p11", "p12", "p13"], decisions: ["d8"], notes: [] },
+    { id: "j-ceil", title: "Paint the ceiling", zone: "Gym", status: "done",
+      shapeIds: [], metric: "done", note: "",
+      purchases: [], decisions: ["d5"], notes: [] }
+  ];
+
+  // Words that imply a category in the quick-add line.
+  var CAT_WORDS = {
+    matting: "Flooring", mat: "Flooring", flooring: "Flooring", floor: "Flooring", rubber: "Flooring", tiles: "Flooring",
+    ply: "Timber", plywood: "Timber", timber: "Timber", sheet: "Timber", sheets: "Timber", batten: "Timber",
+    led: "Electrical", light: "Electrical", lights: "Electrical", lighting: "Electrical", strip: "Electrical",
+    socket: "Electrical", wiring: "Electrical", switch: "Electrical",
+    door: "Doors", doors: "Doors", hinge: "Doors", lock: "Doors",
+    racking: "Storage", shelf: "Storage", shelves: "Storage", shelving: "Storage", cupboard: "Storage",
+    hook: "Storage", hooks: "Storage", storage: "Storage", cabinet: "Storage",
+    paint: "Paint", sealer: "Paint", primer: "Paint", varnish: "Paint",
+    rack: "Equipment", barbell: "Equipment", plates: "Equipment", bench: "Equipment", dumbbell: "Equipment",
+    treadmill: "Equipment", rings: "Equipment", bike: "Equipment", mirror: "Equipment"
+  };
+
+  var NAV = [
+    { id: "plan", label: "Plan", icon: '<rect x="3.5" y="2.5" width="17" height="19" rx="1.5"/><path d="M3.5 15.5h17M9 15.5v6"/>' },
+    { id: "jobs", label: "Jobs", icon: '<rect x="3.5" y="3.5" width="17" height="17" rx="2"/><path d="M8 12.2l2.7 2.8L16.5 9"/>' },
+    { id: "buy", label: "Buy", icon: '<path d="M3 4h2.2l2.3 11h10L20 7H6.3"/><circle cx="9.5" cy="19" r="1.4"/><circle cx="17" cy="19" r="1.4"/>' },
+    { id: "calls", label: "Calls", icon: '<circle cx="6" cy="18" r="2.6"/><circle cx="18" cy="6" r="2.6"/><path d="M6 15.4V8a2 2 0 012-2h7.4"/>' },
+    { id: "notes", label: "Notes", icon: '<path d="M5 4.5h14M5 9.5h14M5 14.5h9M5 19.5h6"/>' }
+  ];
+
+  // ---------- helpers ----------
+  function uid() {
+    return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : "id" + Date.now() + Math.random().toString(36).slice(2, 7);
+  }
+  function today() { return new Date().toISOString().slice(0, 10); }
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function money(n) {
+    if (n == null || isNaN(n)) return "$—";
+    return "$" + Number(n).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  }
+  function fmtDate(iso) {
+    if (!iso) return "";
+    var d = new Date(iso + "T00:00:00");
+    if (isNaN(d)) return iso;
+    return d.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
+  }
+  function cap(s) { return String(s || "").charAt(0).toUpperCase() + String(s || "").slice(1); }
+  function $(id) { return document.getElementById(id); }
+  function findById(list, id) {
+    if (!Array.isArray(list)) return null;
+    for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
+    return null;
+  }
+  function removeById(list, id) {
+    if (id == null) return;
+    for (var i = list.length - 1; i >= 0; i--) if (list[i].id === id) list.splice(i, 1);
+  }
+  function shapeById(id) { return findById(data.shapes, id); }
+  function jobById(id) { return findById(data.jobs, id); }
+  function clamp(v, lo, hi) { return Math.min(Math.max(v, lo), hi); }
+
+  // ---------- seed ----------
   function seed() {
     var t = "2026-08-03";
     return {
-      version: 1,
+      version: DATA_VERSION,
       purchases: [
         { id: "p1", item: "9mm plywood — 14 sheets", zone: "Gym", category: "Timber", price: 659, vendor: "", status: "ordered", notes: "Wall lining for the whole space.", date: t },
         { id: "p2", item: "LED strip lighting", zone: "Gym", category: "Electrical", price: null, vendor: "", status: "planned", notes: "Runs in the gap at the top of the plywood.", date: t },
@@ -424,13 +781,13 @@
         { id: "p4", item: "Solid double doors", zone: "Front area", category: "Doors", price: null, vendor: "", status: "planned", notes: "Replaces the single garage door. Opening: 2587 × 2152 mm. Doors open outwards.", date: t },
         { id: "p5", item: "Rubber gym flooring", zone: "Gym", category: "Flooring", price: null, vendor: "", status: "planned", notes: "Full coverage of the rear gym zone — 4.2 × 3.9 m ≈ 16.4 m².", date: t },
         { id: "p6", item: "Concrete paint / sealer (front floor)", zone: "Front area", category: "Paint", price: null, vendor: "", status: "planned", notes: "Front 1.5 m stays painted/sealed concrete.", date: t },
-        { id: "p7", item: "Power rack (second-hand)", zone: "Gym", category: "Equipment", price: null, vendor: "", status: "researching", notes: "Type still being decided — see Decisions.", date: t },
+        { id: "p7", item: "Power rack (second-hand)", zone: "Gym", category: "Equipment", price: null, vendor: "", status: "researching", notes: "Type still being decided — see Calls.", date: t },
         { id: "p8", item: "Barbell, plates, bench (second-hand)", zone: "Gym", category: "Equipment", price: null, vendor: "", status: "researching", notes: "Lifting basics.", date: t },
         { id: "p9", item: "Treadmill (second-hand)", zone: "Gym", category: "Equipment", price: null, vendor: "", status: "researching", notes: "", date: t },
         { id: "p10", item: "Gymnastic rings", zone: "Gym", category: "Equipment", price: null, vendor: "", status: "planned", notes: "To hang from the steel beam.", date: t },
         { id: "p11", item: "Bike wall hooks ×2", zone: "Front area", category: "Storage", price: null, vendor: "", status: "planned", notes: "Vertical hang for 2 bikes.", date: t },
         { id: "p12", item: "Storage racks", zone: "Front area", category: "Storage", price: null, vendor: "", status: "planned", notes: "", date: t },
-        { id: "p13", item: "Enclosed storage cupboard", zone: "Front area", category: "Storage", price: null, vendor: "", status: "researching", notes: "Maybe — hides clutter; see Decisions.", date: t },
+        { id: "p13", item: "Enclosed storage cupboard", zone: "Front area", category: "Storage", price: null, vendor: "", status: "researching", notes: "Maybe — hides clutter; see Calls.", date: t },
         { id: "p14", item: "JetBlack Volt trainer", zone: "Gym", category: "Equipment", price: null, vendor: "", status: "installed", notes: "Already owned.", date: t }
       ],
       decisions: [
@@ -444,108 +801,152 @@
         { id: "d8", title: "Enclosed cupboard vs open racks only", zone: "Front area", status: "deciding", chosen: "", notes: "Enclosed cupboard hides clutter (better for the 'inviting' goal); open racks for grab-every-session items.", date: t }
       ],
       notes: [
-        { id: "n1", title: "Space dimensions", zone: "General", body: "Whole garage: 6.2 m long × 3.9 m wide, ceiling 2.4 m.\nRear gym zone: 4.2 × 3.9 m (the 4.2 m walls are the side/long walls).\nFront area: 1.5 m long, from the garage door.\nDivide between front and rear: 430 × 430 mm pillars on either side, joined by a 300 × 300 mm overhead lintel.\nGarage door opening: 2587 mm wide × 2152 mm high.\nSteel beam runs down the middle of the ceiling, parallel to the long walls.\nWindow on the left long wall: 2.1 m from the rear corner, 550 mm wide × ~700 mm high.", date: "2026-08-03" },
-        { id: "n2", title: "Finishes", zone: "General", body: "Concrete ceiling painted white.\nWalls rendered and painted limestone; being lined with 9mm plywood.\nLED strips sit in a gap at the top of the ply.\nFloor: bare concrete → rubber matting (rear) + painted/sealed concrete (front).", date: "2026-08-03" },
-        { id: "n3", title: "Layout ideas (to pressure-test)", zone: "Gym", body: "Power rack against a side wall, clear of the beam's drop zone.\nRings on the steel beam = room centreline, keep that floor clear.\nTreadmill along the other long wall (2.4 m ceiling OK unless very tall).\nVolt trainer + bikes toward the front area.\nMirror panel on the long wall opposite the window to bounce light.\nFrench cleat rail on one ply wall for movable hooks/holders.", date: "2026-08-03" }
+        { id: "n1", title: "Space dimensions", zone: "General", body: "Whole garage: 6.2 m long × 3.9 m wide, ceiling 2.4 m.\nRear gym zone: 4.2 × 3.9 m (the 4.2 m walls are the side/long walls).\nFront area: 1.5 m long, from the garage door.\nDivide between front and rear: 430 × 430 mm pillars on either side, joined by a 300 × 300 mm overhead lintel.\nGarage door opening: 2587 mm wide × 2152 mm high.\nSteel beam runs down the middle of the ceiling, parallel to the long walls.\nWindow on the left long wall: 2.1 m from the rear corner, 550 mm wide × ~700 mm high.", date: t },
+        { id: "n2", title: "Finishes", zone: "General", body: "Concrete ceiling painted white.\nWalls rendered and painted limestone; being lined with 9mm plywood.\nLED strips sit in a gap at the top of the ply.\nFloor: bare concrete → rubber matting (rear) + painted/sealed concrete (front).", date: t },
+        { id: "n3", title: "Layout ideas (to pressure-test)", zone: "Gym", body: "Power rack against a side wall, clear of the beam's drop zone.\nRings on the steel beam = room centreline, keep that floor clear.\nTreadmill along the other long wall (2.4 m ceiling OK unless very tall).\nVolt trainer + bikes toward the front area.\nMirror panel on the long wall opposite the window to bounce light.\nFrench cleat rail on one ply wall for movable hooks/holders.", date: t }
       ]
     };
   }
 
-  // ---------- floor plan geometry (all mm, top-down, door at bottom) ----------
-  var PLAN = {
-    rx: 500, ry: 300,          // interior top-left in SVG user space
-    w: 3900, l: 6200,          // interior width / length
-    gymL: 4200,                // rear gym zone depth (from top)
-    pilW: 430, pilD: 430,      // pillars at the zone divide
-    lintelW: 300,
-    doorW: 2587
-  };
-  PLAN.pillarY = PLAN.ry + PLAN.gymL;                 // 4500
-  PLAN.frontY = PLAN.pillarY + PLAN.pilD;             // 4930
-  PLAN.botY = PLAN.ry + PLAN.l;                       // 6500
-  PLAN.doorX1 = PLAN.rx + (PLAN.w - PLAN.doorW) / 2;  // 1156.5
-  PLAN.doorX2 = PLAN.doorX1 + PLAN.doorW;             // 3743.5
-  PLAN.midX = PLAN.rx + PLAN.w / 2;                   // 2450
-  var VB_W = 4800;
-  var SHELF_Y = 8120; // below the outward door-swing arcs
-
-  var TONES = ["accent", "info", "good", "warn", "neutral"];
-  var TONE_LABELS = { accent: "Amber", info: "Blue", good: "Green", warn: "Gold", neutral: "Grey" };
-  var DEFAULT_SHAPES = [
-    { id: "rack", name: "Power rack", w: 1200, d: 1200, tone: "accent", links: [] },
-    { id: "treadmill", name: "Treadmill", w: 1800, d: 800, tone: "info", links: [] },
-    { id: "bench", name: "Bench", w: 1200, d: 350, tone: "info", links: [] },
-    { id: "volt", name: "Volt trainer", w: 1400, d: 600, tone: "good", links: [] },
-    { id: "bike1", name: "Bike 1", w: 700, d: 400, tone: "neutral", links: [] },
-    { id: "bike2", name: "Bike 2", w: 700, d: 400, tone: "neutral", links: [] },
-    { id: "rings", name: "Rings zone", w: 1000, d: 1000, tone: "warn", links: [] },
-    { id: "store1", name: "Storage", w: 900, d: 450, tone: "neutral", links: [] },
-    { id: "store2", name: "Storage", w: 900, d: 450, tone: "neutral", links: [] },
-    { id: "cupboard", name: "Cupboard", w: 900, d: 500, tone: "warn", links: [] }
-  ];
-  var CATEGORIES = ["Equipment", "Timber", "Electrical", "Flooring", "Doors", "Storage", "Paint", "Other"];
-  var SEED_CATEGORY = {
-    p1: "Timber", p2: "Electrical", p3: "Electrical", p4: "Doors", p5: "Flooring",
-    p6: "Paint", p7: "Equipment", p8: "Equipment", p9: "Equipment", p10: "Equipment",
-    p11: "Storage", p12: "Storage", p13: "Storage", p14: "Equipment"
-  };
-
-  function shapeById(id) {
-    for (var i = 0; i < data.shapes.length; i++) if (data.shapes[i].id === id) return data.shapes[i];
-    return null;
+  // ---------- normalise + migrate ----------
+  function seedShapeExtras(d, firstRun) {
+    DEFAULT_SHAPES.forEach(function (t) {
+      var s = findById(d.shapes, t.id);
+      if (!s) return;
+      if (!s.links || !s.links.length) {
+        s.links = t.links.filter(function (id) {
+          return findById(d.purchases, id) || findById(d.decisions, id) || findById(d.notes, id);
+        });
+      }
+      if (!s.note) s.note = t.note;
+      // Only on the first run: after that the flag is the user's to clear.
+      if (firstRun && t.clearance) s.clearance = true;
+      if (OLD_SHAPE_NAMES[t.id] && s.name === OLD_SHAPE_NAMES[t.id]) s.name = t.name;
+      if (firstRun && !d.layout[t.id]) d.layout[t.id] = { x: t.pos.x, y: t.pos.y, rot: t.pos.rot };
+    });
   }
 
-  // Parked positions: pack shapes into rows in the shelf strip below the room
-  function defaultLayout(shapes) {
-    var lay = {}, gap = 120, x = PLAN.rx, y = SHELF_Y, rowH = 0, maxX = PLAN.rx + PLAN.w;
-    shapes.forEach(function (s) {
-      var w = Math.min(s.w, PLAN.w);
-      if (x + w > maxX + 1) { x = PLAN.rx; y += rowH + gap; rowH = 0; }
-      lay[s.id] = { x: x + w / 2, y: y + s.d / 2, rot: 0 };
-      x += w + gap;
-      if (s.d > rowH) rowH = s.d;
+  function buildJobs(d) {
+    var jobs = [], claimedP = {}, claimedD = {}, claimedN = {};
+    DEFAULT_JOBS.forEach(function (t) {
+      var dec = t.decisions.filter(function (id) { return findById(d.decisions, id); });
+      var pur = t.purchases.filter(function (id) { return findById(d.purchases, id); });
+      var nts = t.notes.filter(function (id) { return findById(d.notes, id); });
+      if (!dec.length && !pur.length) return;   // none of this job's records survive in the data
+      jobs.push({
+        id: t.id, title: t.title, zone: t.zone, status: t.status,
+        shapeIds: t.shapeIds.filter(function (id) { return findById(d.shapes, id); }),
+        note: t.note, metric: t.metric, date: today()
+      });
+      dec.forEach(function (id) { claimedD[id] = t.id; });
+      pur.forEach(function (id) { claimedP[id] = t.id; });
+      nts.forEach(function (id) { claimedN[id] = t.id; });
     });
-    return lay;
-  }
-  var VB_H = 0;
-  function computeVBH(d) {
-    var m = SHELF_Y + 800;
-    var def = defaultLayout(d.shapes);
-    d.shapes.forEach(function (s) {
-      var half = Math.max(s.w, s.d) / 2;
-      var it = d.layout[s.id];
-      m = Math.max(m, def[s.id].y + s.d / 2, (it ? it.y : 0) + half);
+
+    // Anything the seeded jobs don't cover: one job per remaining decision…
+    d.decisions.forEach(function (dc) {
+      if (claimedD[dc.id]) return;
+      var j = {
+        id: "j-" + dc.id, title: dc.title, zone: dc.zone,
+        status: dc.status === "decided" ? "ready" : "deciding",
+        shapeIds: [], note: dc.chosen || "", metric: "", date: dc.date || today()
+      };
+      jobs.push(j);
+      claimedD[dc.id] = j.id;
     });
-    return Math.ceil(m + 150);
+    // …then remaining purchases join the first job in their zone, or a per-zone catch-all.
+    // Installed things with nowhere to go stay job-less: they are done and in place.
+    d.purchases.forEach(function (p) {
+      if (claimedP[p.id] || p.status === "installed") return;
+      var host = null, i;
+      for (i = 0; i < jobs.length; i++) {
+        if (jobs[i].zone === p.zone && jobs[i].status !== "done") { host = jobs[i]; break; }
+      }
+      if (!host) {
+        host = { id: "j-other-" + p.zone.toLowerCase().replace(/\s+/g, "-"), title: "Other " + p.zone + " work",
+                 zone: p.zone, status: "deciding", shapeIds: [], note: "", metric: "", date: today() };
+        jobs.push(host);
+      }
+      claimedP[p.id] = host.id;
+    });
+
+    d.jobs = jobs;
+    d.purchases.forEach(function (p) { p.jobId = claimedP[p.id] || null; });
+    d.decisions.forEach(function (x) { x.jobId = claimedD[x.id] || null; });
+    d.notes.forEach(function (n) { n.jobId = claimedN[n.id] || null; });
   }
 
   function normalizeData(d) {
-    if (!Array.isArray(d.shapes)) d.shapes = JSON.parse(JSON.stringify(DEFAULT_SHAPES));
-    d.shapes.forEach(function (s) {
-      if (!Array.isArray(s.links)) s.links = [];
-      if (TONES.indexOf(s.tone) < 0) s.tone = "neutral";
-      s.w = Math.min(Math.max(Number(s.w) || 500, 100), 6000);
-      s.d = Math.min(Math.max(Number(s.d) || 500, 100), 6000);
+    if (!Array.isArray(d.purchases)) d.purchases = [];
+    if (!Array.isArray(d.decisions)) d.decisions = [];
+    if (!Array.isArray(d.notes)) d.notes = [];
+    if (!Array.isArray(d.shapes)) d.shapes = DEFAULT_SHAPES.map(function (t) {
+      return { id: t.id, name: t.name, w: t.w, d: t.d, links: [], note: "", clearance: !!t.clearance };
     });
     if (!d.layout || typeof d.layout !== "object") d.layout = {};
-    var def = defaultLayout(d.shapes);
+
+    // "First run" is either a pre-jobs payload being migrated, or a brand-new empty plan.
+    var migrating = (Number(d.version) || 1) < DATA_VERSION;
+    var firstRun = migrating || !Object.keys(d.layout).length;
+    if (migrating) {
+      // The interior origin moved 500 → 700 when the plan was redrawn to the handoff.
+      Object.keys(d.layout).forEach(function (k) {
+        var it = d.layout[k];
+        if (it && typeof it.x === "number") it.x += 200;
+      });
+      d.version = DATA_VERSION;
+    }
+
     d.shapes.forEach(function (s) {
-      var it = d.layout[s.id];
-      if (!it || typeof it.x !== "number" || typeof it.y !== "number") {
-        d.layout[s.id] = { x: def[s.id].x, y: def[s.id].y, rot: 0 };
-      } else if (it.y > PLAN.botY && it.y < SHELF_Y) {
-        // outside the room but above the current shelf (old shelf position) — re-park
-        d.layout[s.id] = { x: def[s.id].x, y: def[s.id].y, rot: 0 };
+      if (!Array.isArray(s.links)) s.links = [];
+      delete s.tone;                                   // colour is derived now, never stored
+      if (typeof s.note !== "string") s.note = "";
+      s.clearance = !!s.clearance;
+      s.w = clamp(Math.round(Number(s.w) || 500), 100, 6000);
+      s.d = clamp(Math.round(Number(s.d) || 500), 100, 6000);
+    });
+
+    // A shape sitting outside the room (the old off-plan shelf) is simply not placed.
+    Object.keys(d.layout).forEach(function (k) {
+      var it = d.layout[k];
+      if (!it || typeof it.x !== "number" || typeof it.y !== "number" ||
+          it.y < PLAN.ry || it.y > PLAN.botY || it.x < PLAN.rx || it.x > PLAN.rx + PLAN.w ||
+          !findById(d.shapes, k)) {
+        delete d.layout[k];
       } else if (it.rot !== 0 && it.rot !== 90) {
         it.rot = 0;
       }
     });
+
     d.purchases.forEach(function (p) {
-      if (!p.category || CATEGORIES.indexOf(p.category) < 0) p.category = SEED_CATEGORY[p.id] || "Other";
+      if (CATEGORIES.indexOf(p.category) < 0) p.category = "Other";
+      if (P_STATUSES.indexOf(p.status) < 0) p.status = "planned";
+      if (ZONES.indexOf(p.zone) < 0) p.zone = "General";
+    });
+    d.decisions.forEach(function (x) {
+      if (D_STATUSES.indexOf(x.status) < 0) x.status = "deciding";
+      if (ZONES.indexOf(x.zone) < 0) x.zone = "General";
+    });
+    d.notes.forEach(function (n) { if (ZONES.indexOf(n.zone) < 0) n.zone = "General"; });
+
+    seedShapeExtras(d, firstRun);
+    if (!Array.isArray(d.jobs)) buildJobs(d);
+    d.jobs.forEach(function (j) {
+      if (J_STATUSES.indexOf(j.status) < 0) j.status = "deciding";
+      if (ZONES.indexOf(j.zone) < 0) j.zone = "General";
+      if (!Array.isArray(j.shapeIds)) j.shapeIds = [];
+      j.shapeIds = j.shapeIds.filter(function (id) { return findById(d.shapes, id); });
+      if (typeof j.note !== "string") j.note = "";
+      if (typeof j.metric !== "string") j.metric = "";
+    });
+    // Drop dangling job references left by a deleted job.
+    ["purchases", "decisions", "notes"].forEach(function (k) {
+      d[k].forEach(function (x) { if (x.jobId && !findById(d.jobs, x.jobId)) x.jobId = null; });
     });
     return d;
   }
 
+  // ---------- storage ----------
   function load() {
     try {
       var raw = localStorage.getItem(STORE_KEY);
@@ -567,9 +968,8 @@
     schedulePush();
   }
 
-  // Items placed here (by Claude, when republishing the artifact) are merged into
-  // every device's stored data on next load. Each needs a unique id and a kind.
-  // Example: { id: "inbox-2026-08-10-1", kind: "decision", title: "…", status: "decided", chosen: "…", zone: "Gym", notes: "…" }
+  // Items placed here (by Claude, when republishing) are merged into every device's stored
+  // data on next load. Each needs a unique id and a kind.
   var INBOX = [];
 
   function applyInbox(d) {
@@ -577,163 +977,675 @@
     INBOX.forEach(function (m) {
       if (!m || !m.id || d.inboxApplied.indexOf(m.id) >= 0) return;
       d.inboxApplied.push(m.id);
-      d.updatedAt = new Date().toISOString(); // inbox additions should propagate to other devices
-      var t = m.date || new Date().toISOString().slice(0, 10);
+      d.updatedAt = new Date().toISOString();
+      var t = m.date || today();
       var zone = ZONES.indexOf(m.zone) >= 0 ? m.zone : "General";
+      var jobId = m.jobId && findById(d.jobs, m.jobId) ? m.jobId : null;
       if (m.kind === "purchase" && m.item) {
         d.purchases.unshift({
           id: m.id, item: m.item,
           price: (typeof m.price === "number" && isFinite(m.price)) ? m.price : null,
-          vendor: m.vendor || "", zone: zone,
+          vendor: m.vendor || "", zone: zone, jobId: jobId,
           category: CATEGORIES.indexOf(m.category) >= 0 ? m.category : "Other",
           status: P_STATUSES.indexOf(m.status) >= 0 ? m.status : "planned",
           notes: m.notes || "", date: t
         });
       } else if (m.kind === "decision" && m.title) {
         d.decisions.unshift({
-          id: m.id, title: m.title, chosen: m.chosen || "", zone: zone,
+          id: m.id, title: m.title, chosen: m.chosen || "", zone: zone, jobId: jobId,
           status: D_STATUSES.indexOf(m.status) >= 0 ? m.status : "deciding",
           notes: m.notes || "", date: t
         });
       } else if (m.kind === "note" && m.title) {
-        d.notes.unshift({ id: m.id, title: m.title, body: m.body || "", zone: zone, date: t });
+        d.notes.unshift({ id: m.id, title: m.title, body: m.body || "", zone: zone, jobId: jobId, date: t });
       }
     });
     return d;
   }
 
+  // ---------- runtime state ----------
   var data = applyInbox(normalizeData(load()));
   saveLocal(data);
-  var activeTab = "plan";
+  var activeNav = "plan";
+  var jobFilter = "open";
+  var selectedId = null;
   var activeZone = "All";
   var activeCat = "All";
+  var query = "";
   var editingId = null;
+  var editingShapeId = null;
+  var editingJobId = null;
 
-  function uid() {
-    return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : "id" + Date.now() + Math.random().toString(36).slice(2, 7);
-  }
-  function today() { return new Date().toISOString().slice(0, 10); }
-  function esc(s) {
-    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
-      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+  // ---------- derived ----------
+  function linkedRecords(s) {
+    var out = { purchases: [], decisions: [], notes: [] };
+    (s.links || []).forEach(function (id) {
+      var p = findById(data.purchases, id);
+      if (p) { out.purchases.push(p); return; }
+      var c = findById(data.decisions, id);
+      if (c) { out.decisions.push(c); return; }
+      var n = findById(data.notes, id);
+      if (n) out.notes.push(n);
     });
+    return out;
   }
-  function money(n) {
-    if (n == null || isNaN(n)) return "—";
-    return "$" + Number(n).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-  }
-  function fmtDate(iso) {
-    if (!iso) return "";
-    var d = new Date(iso + "T00:00:00");
-    if (isNaN(d)) return iso;
-    return d.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
-  }
-  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+  function isOpenDecision(c) { return c.status === "deciding" || c.status === "revisit"; }
 
-  function byZone(items) {
-    if (activeZone === "All") return items;
-    return items.filter(function (x) { return x.zone === activeZone; });
+  function shapeState(s) {
+    if (s.clearance) return "clearance";
+    var rec = linkedRecords(s), i;
+    for (i = 0; i < rec.purchases.length; i++) {
+      if (rec.purchases[i].status === "ordered" || rec.purchases[i].status === "delivered") return "ordered";
+    }
+    if (rec.purchases.length) {
+      var allIn = true;
+      for (i = 0; i < rec.purchases.length; i++) if (rec.purchases[i].status !== "installed") allIn = false;
+      if (allIn) return "owned";
+    }
+    for (i = 0; i < rec.decisions.length; i++) if (isOpenDecision(rec.decisions[i])) return "undecided";
+    for (i = 0; i < rec.purchases.length; i++) if (rec.purchases[i].status === "researching") return "undecided";
+    if (!rec.purchases.length && !rec.decisions.length) return "undecided";
+    return "decided";
   }
-  function filteredPurchases() {
-    return byZone(data.purchases).filter(function (p) {
-      return activeCat === "All" || p.category === activeCat;
+
+  function jobOfShape(id) {
+    for (var i = 0; i < data.jobs.length; i++) if (data.jobs[i].shapeIds.indexOf(id) >= 0) return data.jobs[i];
+    return null;
+  }
+  function shapeZone(s) {
+    var j = jobOfShape(s.id);
+    if (j) return j.zone;
+    var lay = data.layout[s.id];
+    if (!lay) return "General";
+    return lay.y < PLAN.frontY ? "Gym" : "Front area";
+  }
+  function ofJob(list, jobId) {
+    return list.filter(function (x) { return x.jobId === jobId; });
+  }
+  function openDecisionsOfJob(j) { return ofJob(data.decisions, j.id).filter(isOpenDecision); }
+
+  function matchesQuery(strings) {
+    if (!query) return true;
+    var hay = strings.join(" ").toLowerCase();
+    return hay.indexOf(query) >= 0;
+  }
+
+  // ---------- quick add ----------
+  var qa = { price: null, category: null, zone: null, jobId: null, status: null, item: "", manual: {} };
+
+  function parseQuickAdd(text) {
+    var out = { price: null, category: null, zone: null, jobId: null, status: null, item: "" };
+    var rest = " " + text + " ";
+
+    var m = rest.match(/\$\s*([\d,]+(?:\.\d+)?)/);
+    if (m) { out.price = Number(m[1].replace(/,/g, "")); rest = rest.replace(m[0], " "); }
+
+    // explicit job: "for the <job>", "-> <job>", "→ <job>"
+    m = rest.match(/(?:->|→|\bfor the\b)\s*(.+)$/i);
+    if (m) {
+      var wanted = m[1].trim().toLowerCase();
+      for (var i = 0; i < data.jobs.length; i++) {
+        var t = data.jobs[i].title.toLowerCase();
+        if (t.indexOf(wanted) === 0 || wanted.indexOf(t) === 0) { out.jobId = data.jobs[i].id; break; }
+      }
+      if (out.jobId) rest = rest.replace(m[0], " ");
+    }
+
+    P_STATUSES.forEach(function (st) {
+      if (out.status) return;
+      var re = new RegExp("\\b" + st + "\\b", "i");
+      if (re.test(rest)) { out.status = st; rest = rest.replace(re, " "); }
     });
+
+    CATEGORIES.forEach(function (c) {
+      if (out.category) return;
+      var re = new RegExp("\\b" + c + "\\b", "i");
+      if (re.test(rest)) { out.category = c; rest = rest.replace(re, " "); }
+    });
+    if (!out.category) {
+      var words = rest.toLowerCase().match(/[a-z]+/g) || [];
+      for (var w = 0; w < words.length; w++) {
+        if (CAT_WORDS[words[w]]) { out.category = CAT_WORDS[words[w]]; break; }
+      }
+    }
+
+    if (/\bgym\b/i.test(rest)) { out.zone = "Gym"; rest = rest.replace(/\bgym\b/i, " "); }
+    else if (/\bfront( area)?\b/i.test(rest)) { out.zone = "Front area"; rest = rest.replace(/\bfront( area)?\b/i, " "); }
+
+    // No explicit job? Take the one whose shopping list already holds this category.
+    if (!out.jobId && out.category) {
+      for (var k = 0; k < data.jobs.length; k++) {
+        var j = data.jobs[k];
+        if (j.status === "done") continue;
+        if (out.zone && j.zone !== out.zone) continue;
+        var hit = ofJob(data.purchases, j.id).some(function (p) { return p.category === out.category; });
+        if (hit) { out.jobId = j.id; break; }
+      }
+    }
+    if (!out.zone && out.jobId) { var jj = jobById(out.jobId); if (jj) out.zone = jj.zone; }
+
+    out.item = rest.replace(/\s+/g, " ").trim();
+    return out;
+  }
+
+  function refreshQuickAdd() {
+    var parsed = parseQuickAdd($("qa").value);
+    ["price", "category", "zone", "jobId", "status", "item"].forEach(function (k) {
+      qa[k] = (k !== "item" && qa.manual[k] !== undefined) ? qa.manual[k] : parsed[k];
+    });
+    renderQuickAddChips();
+  }
+
+  function renderQuickAddChips() {
+    var el = $("qaChips"), html = "";
+    var any = qa.price != null || qa.category || qa.zone || qa.jobId || qa.status;
+    if (!any || !$("qa").value.trim()) { el.innerHTML = ""; return; }
+    html += '<span class="arrow">→</span>';
+    if (qa.price != null) html += '<button type="button" class="tag tag-accent" data-qa="price">' + esc(money(qa.price)) + '</button>';
+    if (qa.category) html += '<button type="button" class="tag tag-neutral" data-qa="category">' + esc(qa.category) + '</button>';
+    if (qa.zone) html += '<button type="button" class="tag tag-neutral" data-qa="zone">' + esc(qa.zone) + '</button>';
+    if (qa.jobId) {
+      var j = jobById(qa.jobId);
+      if (j) html += '<button type="button" class="tag tag-outline" data-qa="jobId">Job · ' + esc(j.title) + '</button>';
+    }
+    if (qa.status) html += '<button type="button" class="tag tag-neutral" data-qa="status">' + esc(cap(qa.status)) + '</button>';
+    el.innerHTML = html;
+  }
+
+  function cycleQuickAddField(field) {
+    if (field === "price") { $("qa").focus(); return; }
+    var opts;
+    if (field === "category") opts = CATEGORIES;
+    else if (field === "zone") opts = ZONES;
+    else if (field === "status") opts = P_STATUSES;
+    else opts = data.jobs.map(function (j) { return j.id; });
+    if (!opts.length) return;
+    var cur = qa[field];
+    var next = opts[(opts.indexOf(cur) + 1) % opts.length];
+    qa.manual[field] = next;
+    qa[field] = next;
+    renderQuickAddChips();
+  }
+
+  function commitQuickAdd() {
+    var input = $("qa");
+    if (!qa.item) { input.value = ""; qa.manual = {}; refreshQuickAdd(); return; }
+    var rec = {
+      id: uid(), item: qa.item, price: qa.price,
+      vendor: "", zone: qa.zone || "General", jobId: qa.jobId || null,
+      category: qa.category || "Other", status: qa.status || "planned",
+      notes: "", date: today()
+    };
+    data.purchases.unshift(rec);
+    save(data);
+    input.value = "";
+    qa.manual = {};
+    refreshQuickAdd();
+    render();
   }
 
   // ---------- render ----------
   function render() {
-    renderStats();
-    renderTabs();
-    renderChips();
-    renderList();
-    var isPlan = activeTab === "plan";
-    document.getElementById("planView").style.display = isPlan ? "block" : "none";
-    document.getElementById("list").style.display = isPlan ? "none" : "";
-    document.getElementById("zoneChips").style.display = isPlan ? "none" : "";
-    document.getElementById("catChips").style.display = activeTab === "purchases" ? "" : "none";
-    document.getElementById("addBtn").style.display = isPlan ? "none" : "";
+    renderNav();
+    var isPlan = activeNav === "plan";
+    $("colPlan").hidden = !isPlan;
+    $("colJobs").hidden = !isPlan;
+    $("rail").hidden = !isPlan;
+    $("colList").hidden = isPlan;
+    if (isPlan) {
+      renderJobs();
+      renderTray();
+      renderRail();
+    } else {
+      renderListView();
+    }
   }
 
-  function renderStats() {
-    var spent = 0, planned = 0;
-    data.purchases.forEach(function (p) {
-      var v = (p.price == null || isNaN(p.price)) ? 0 : Number(p.price);
-      if (p.status === "ordered" || p.status === "delivered" || p.status === "installed") spent += v;
-      else planned += v;
-    });
-    var open = data.decisions.filter(function (d) { return d.status !== "decided"; }).length;
-    var noPrice = data.purchases.filter(function (p) { return (p.status === "researching" || p.status === "planned") && (p.price == null || isNaN(p.price)); }).length;
-    document.getElementById("stats").innerHTML =
-      '<div class="stat"><div class="lbl">Spent</div><div class="val">' + money(spent) + '</div><div class="sub">ordered + delivered + installed</div></div>' +
-      '<div class="stat"><div class="lbl">Planned</div><div class="val">' + money(planned) + '</div><div class="sub">' + (noPrice ? noPrice + " item" + (noPrice > 1 ? "s" : "") + " unpriced" : "still to buy") + '</div></div>' +
-      '<div class="stat"><div class="lbl">Open decisions</div><div class="val">' + open + '</div><div class="sub">deciding or revisit</div></div>';
-  }
-
-  function renderTabs() {
-    var counts = { purchases: filteredPurchases().length, decisions: byZone(data.decisions).length, notes: byZone(data.notes).length };
-    document.querySelectorAll("#tabs .tab").forEach(function (t) {
-      var name = t.dataset.tab;
-      t.setAttribute("aria-selected", String(name === activeTab));
-      var c = counts[name];
-      t.querySelector(".count").textContent = c == null ? "" : "(" + c + ")";
-    });
-  }
-
-  function renderChips() {
-    var el = document.getElementById("zoneChips");
-    var zones = ["All"].concat(ZONES);
-    el.innerHTML = zones.map(function (z) {
-      return '<button class="chip" aria-pressed="' + (z === activeZone) + '" data-zone="' + esc(z) + '">' + esc(z) + "</button>";
-    }).join("");
-    var ce = document.getElementById("catChips");
-    var cats = ["All"].concat(CATEGORIES);
-    ce.innerHTML = cats.map(function (c) {
-      return '<button class="chip" aria-pressed="' + (c === activeCat) + '" data-cat="' + esc(c) + '">' + esc(c) + "</button>";
+  function renderNav() {
+    $("navRail").innerHTML = NAV.map(function (n) {
+      return '<button class="navitem" data-nav="' + n.id + '" aria-current="' + (n.id === activeNav) + '">' +
+        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">' + n.icon + '</svg>' +
+        "<span>" + n.label + "</span></button>";
     }).join("");
   }
 
-  function pill(status) {
-    return '<span class="pill ' + (STATUS_CLASS[status] || "st-neutral") + '">' + cap(status) + "</span>";
+  function jobTag(j, open) {
+    if (j.status === "done") return "";
+    if (open.length) return '<span class="tag tag-outline">' + open.length + " call" + (open.length > 1 ? "s" : "") + " to make</span>";
+    if (j.status === "ordered") return '<span class="tag tag-accent">Ordered</span>';
+    return '<span class="tag tag-neutral">' + esc(J_STATUS_LABEL[j.status]) + "</span>";
   }
-  function zonePill(z) { return '<span class="pill zone">' + esc(z) + "</span>"; }
 
-  function renderList() {
-    var el = document.getElementById("list");
-    if (activeTab === "plan") { el.innerHTML = ""; return; }
-    var html = "";
-    if (activeTab === "purchases") {
-      var items = filteredPurchases();
-      if (!items.length) html = '<div class="empty">No purchases here yet. Tap + Add.</div>';
-      items.forEach(function (p) {
-        html += '<div class="card" data-id="' + esc(p.id) + '" tabindex="0" role="button">' +
-          '<div class="row1"><h3>' + esc(p.item) + '</h3><span class="price">' + money(p.price) + "</span></div>" +
-          (p.notes ? '<div class="body">' + esc(p.notes) + "</div>" : "") +
-          '<div class="meta">' + pill(p.status) + zonePill(p.category) + zonePill(p.zone) +
-          (p.vendor ? '<span class="pill zone">' + esc(p.vendor) + "</span>" : "") +
-          '<span class="date">' + fmtDate(p.date) + "</span></div></div>";
-      });
-    } else if (activeTab === "decisions") {
-      var items2 = byZone(data.decisions);
-      if (!items2.length) html = '<div class="empty">No decisions here yet. Tap + Add.</div>';
-      items2.forEach(function (d) {
-        html += '<div class="card" data-id="' + esc(d.id) + '" tabindex="0" role="button">' +
-          '<div class="row1"><h3>' + esc(d.title) + "</h3></div>" +
-          (d.chosen ? '<div class="chosen">→ <strong>' + esc(d.chosen) + "</strong></div>" : "") +
-          (d.notes ? '<div class="body">' + esc(d.notes) + "</div>" : "") +
-          '<div class="meta">' + pill(d.status) + zonePill(d.zone) +
-          '<span class="date">' + fmtDate(d.date) + "</span></div></div>";
+  function jobCardHtml(j) {
+    var open = openDecisionsOfJob(j);
+    var items = ofJob(data.purchases, j.id);
+    if (j.status === "done") {
+      return '<button class="job done" data-job="' + esc(j.id) + '">' +
+        '<div class="r1"><span class="t">' + esc(j.title) + "</span>" +
+        '<span class="metric">' + esc(j.metric || "done") + "</span></div></button>";
+    }
+    var cls = "job" + (open.length ? " open-calls" : "") +
+      (selectedId && j.shapeIds.indexOf(selectedId) >= 0 ? " sel" : "");
+    var isMoney = /^\$/.test(j.metric || "");
+    var html = '<button class="' + cls + '" data-job="' + esc(j.id) + '">' +
+      '<div class="r1"><span class="t">' + esc(j.title) + "</span>" + jobTag(j, open) +
+      '<span class="metric' + (isMoney ? " money" : "") + '">' + esc(j.metric || j.zone) + "</span></div>";
+    if (j.note) html += '<div class="note">' + esc(j.note) + "</div>";
+
+    var done = 0, inHand = 0, unpriced = 0;
+    items.forEach(function (p) {
+      if (p.status === "ordered" || p.status === "delivered") done++;
+      else if (p.status === "installed") inHand++;
+      if (p.price == null || isNaN(p.price)) unpriced++;
+    });
+    if (items.length && (done || inHand)) {
+      html += '<div class="bar"><span class="a" style="width:' + Math.round(done / items.length * 100) + '%"></span>' +
+        '<span class="b" style="width:' + Math.round(inHand / items.length * 100) + '%"></span></div>' +
+        '<div class="barnote"><span>' + items.length + " item" + (items.length > 1 ? "s" : "") + " · " +
+        (done + inHand) + " on the way or here</span></div>";
+    }
+    var chips = "";
+    open.forEach(function (c) { chips += '<span class="chip-call">' + esc(c.title) + "</span>"; });
+    if (unpriced) chips += '<span class="chip-fact">' + unpriced + " item" + (unpriced > 1 ? "s" : "") + " · price unknown</span>";
+    if (chips) html += '<div class="chips">' + chips + "</div>";
+    return html + "</button>";
+  }
+
+  function visibleJobs() {
+    return data.jobs.filter(function (j) {
+      if (!matchesQuery([j.title, j.note, j.metric, j.zone])) return false;
+      if (jobFilter === "done") return j.status === "done";
+      if (jobFilter === "blocked") return j.status !== "done" && openDecisionsOfJob(j).length > 0;
+      return j.status !== "done";
+    });
+  }
+
+  function renderJobs() {
+    var openCount = 0, blocked = 0;
+    data.jobs.forEach(function (j) {
+      if (j.status === "done") return;
+      openCount++;
+      if (openDecisionsOfJob(j).length) blocked++;
+    });
+    $("jobsSub").textContent = openCount + " open · " + blocked + " waiting on you";
+    Array.prototype.forEach.call($("jobFilter").children, function (b) {
+      b.setAttribute("aria-pressed", String(b.dataset.filter === jobFilter));
+    });
+    var list = visibleJobs();
+    $("jobList").innerHTML = list.length
+      ? list.map(jobCardHtml).join("")
+      : '<div class="empty">' + (query ? "Nothing matches that search." : "No jobs here.") + "</div>";
+  }
+
+  function renderTray() {
+    var unplaced = data.shapes.filter(function (s) { return !data.layout[s.id]; });
+    var html = '<span class="lbl">Not placed</span>';
+    unplaced.forEach(function (s) {
+      html += '<button type="button" class="tag tag-neutral" data-place="' + esc(s.id) + '">' + esc(s.name) + "</button>";
+    });
+    html += '<button type="button" class="tag tag-outline" id="addShapeBtn">+ shape</button>';
+    $("tray").innerHTML = html;
+  }
+
+  function renderRail() {
+    var el = $("rail");
+    var s = selectedId ? shapeById(selectedId) : null;
+    el.classList.toggle("has-sel", !!s);
+    if (!s) {
+      // The column stays in the layout on desktop; on a phone the CSS hides it entirely.
+      el.innerHTML =
+        '<div style="display:flex;align-items:center;gap:8px">' +
+          '<span class="kicker" style="color:#5d5294">Selected on plan</span></div>' +
+        '<div class="note">Click a shape on the floor plan — or a job — to see what it needs: ' +
+        'its job, its unsettled calls, its shopping list and its millimetres.</div>' +
+        '<span class="spacer"></span>' +
+        '<div class="actions"><button class="btn btn-secondary" id="railNewShape" style="flex:1">+ Add a shape</button></div>';
+      return;
+    }
+    var st = shapeState(s), rec = linkedRecords(s), j = jobOfShape(s.id);
+    var calls = rec.decisions.filter(isOpenDecision);
+    if (!calls.length && j) calls = openDecisionsOfJob(j);
+    var items = rec.purchases;
+    if (!items.length && j) items = ofJob(data.purchases, j.id);
+
+    var html =
+      '<div style="display:flex;align-items:center;gap:8px">' +
+        '<span class="kicker" style="color:#5d5294">Selected on plan</span><span class="spacer"></span>' +
+        '<span style="font-size:11px;color:var(--faint)">Esc to clear</span></div>' +
+      '<div><div class="name">' + esc(s.name) + '</div>' +
+      '<div class="dims">' + s.w + " × " + s.d + " mm" + (s.clearance ? " keep-clear" : "") + "</div></div>" +
+      '<div class="tags"><span class="tag tag-neutral">' + esc(shapeZone(s)) + "</span>" +
+      '<span class="tag tag-outline">' + esc(PAINT[st].label) + "</span></div>";
+    if (s.note) html += '<div class="note">' + esc(s.note) + "</div>";
+    html += '<div class="rule"></div>';
+
+    html += '<div><span class="kicker">Part of the job</span>';
+    if (j) {
+      html += '<button class="jobrow" data-openjob="' + esc(j.id) + '"><span class="tick"></span>' +
+        '<span class="t">' + esc(j.title) + '</span><span class="spacer"></span><span class="caret">›</span></button>';
+    } else {
+      html += '<button class="jobrow" data-openjob=""><span class="tick" style="background:var(--fill-3)"></span>' +
+        '<span class="t" style="color:var(--muted)">Not part of a job yet</span>' +
+        '<span class="spacer"></span><span class="caret">›</span></button>';
+    }
+    html += "</div>";
+
+    html += '<div><span class="kicker">To settle</span><div class="rows">';
+    if (calls.length) {
+      calls.forEach(function (c) {
+        html += '<button class="callrow" data-call="' + esc(c.id) + '"><span class="t">' + esc(c.title) +
+          '</span><span class="spacer"></span><span class="s">' + esc(c.status) + "</span></button>";
       });
     } else {
-      var items3 = byZone(data.notes);
-      if (!items3.length) html = '<div class="empty">No notes here yet. Tap + Add.</div>';
-      items3.forEach(function (n) {
-        html += '<div class="card" data-id="' + esc(n.id) + '" tabindex="0" role="button">' +
-          '<div class="row1"><h3>' + esc(n.title) + "</h3></div>" +
-          (n.body ? '<div class="body">' + esc(n.body) + "</div>" : "") +
-          '<div class="meta">' + zonePill(n.zone) + '<span class="date">' + fmtDate(n.date) + "</span></div></div>";
-      });
+      html += '<div class="callrow settled"><span class="t">Nothing open</span>' +
+        '<span class="spacer"></span><span class="s">settled</span></div>';
     }
+    html += "</div></div>";
+
+    html += '<div><span class="kicker">Shopping list</span><div class="rows">';
+    if (items.length) {
+      items.forEach(function (p) {
+        html += '<button class="itemrow" data-item="' + esc(p.id) + '"><span class="t">' + esc(p.item) +
+          '</span><span class="spacer"></span><span class="s">' + esc(p.status) + '</span>' +
+          '<span class="p">' + esc(p.status === "installed" && p.price == null ? "owned" : money(p.price)) + "</span></button>";
+      });
+    } else {
+      html += '<div class="itemrow"><span class="t" style="color:var(--faint-2)">Nothing on the list</span></div>';
+    }
+    html += "</div></div>";
+
+    html += '<span class="spacer"></span><div class="actions">' +
+      '<button class="btn btn-primary" id="railAdd" style="flex:1">Add to this</button>' +
+      '<button class="btn btn-secondary" id="railMeasure">Measure</button></div>';
     el.innerHTML = html;
+  }
+
+  // ---------- full-width list views ----------
+  function zoneFilterHtml() {
+    return '<span class="kicker">Zone</span>' + ["All"].concat(ZONES).map(function (z) {
+      return '<button type="button" class="tag ' + (z === activeZone ? "tag-outline" : "tag-neutral") +
+        '" data-zone="' + esc(z) + '">' + esc(z) + "</button>";
+    }).join("");
+  }
+  function catFilterHtml() {
+    return '<span class="kicker" style="margin-left:8px">Category</span>' + ["All"].concat(CATEGORIES).map(function (c) {
+      return '<button type="button" class="tag ' + (c === activeCat ? "tag-outline" : "tag-neutral") +
+        '" data-cat="' + esc(c) + '">' + esc(c) + "</button>";
+    }).join("");
+  }
+  function inZone(x) { return activeZone === "All" || x.zone === activeZone; }
+  function jobTitleOf(id) { var j = jobById(id); return j ? j.title : "No job"; }
+
+  function renderListView() {
+    var title = { jobs: "Jobs", buy: "Buy", calls: "Calls", notes: "Notes" }[activeNav];
+    $("listTitle").textContent = title;
+    var wrap = $("listWrap"), html = "";
+
+    if (activeNav === "jobs") {
+      $("listFilters").innerHTML = zoneFilterHtml();
+      var js = data.jobs.filter(function (j) { return inZone(j) && matchesQuery([j.title, j.note, j.metric]); });
+      $("listSub").textContent = js.length + (js.length === 1 ? " job" : " jobs");
+      html = js.length ? js.map(jobCardHtml).join("") : '<div class="empty">No jobs here yet.</div>';
+      html += '<div style="margin-top:4px"><button class="btn btn-primary" id="addJobBtn">+ New job</button></div>';
+
+    } else if (activeNav === "buy") {
+      $("listFilters").innerHTML = zoneFilterHtml() + catFilterHtml();
+      var ps = data.purchases.filter(function (p) {
+        return inZone(p) && (activeCat === "All" || p.category === activeCat) &&
+          matchesQuery([p.item, p.notes, p.vendor, p.category, p.zone]);
+      });
+      var spent = 0, planned = 0;
+      ps.forEach(function (p) {
+        var v = (p.price == null || isNaN(p.price)) ? 0 : Number(p.price);
+        if (p.status === "ordered" || p.status === "delivered" || p.status === "installed") spent += v; else planned += v;
+      });
+      $("listSub").textContent = ps.length + " items · " + money(spent) + " committed · " + money(planned) + " to come";
+      if (!ps.length) html = '<div class="empty">Nothing here yet. Use the line at the top to add something.</div>';
+      groupBy(ps, function (p) { return p.jobId; }).forEach(function (grp) {
+        html += '<div class="grouphead"><span class="kicker">' + esc(jobTitleOf(grp.key)) + "</span></div>";
+        grp.items.forEach(function (p) {
+          html += '<button class="itemrow" style="box-shadow:0 0 0 1px var(--line)" data-item="' + esc(p.id) + '">' +
+            '<span class="t">' + esc(p.item) + '</span><span class="spacer"></span>' +
+            '<span class="s">' + esc(p.category) + " · " + esc(p.zone) + " · " + esc(p.status) + "</span>" +
+            '<span class="p">' + esc(money(p.price)) + "</span></button>";
+        });
+      });
+
+    } else if (activeNav === "calls") {
+      $("listFilters").innerHTML = zoneFilterHtml();
+      var cs = data.decisions.filter(function (c) {
+        return inZone(c) && matchesQuery([c.title, c.chosen, c.notes, c.zone]);
+      });
+      var open = cs.filter(isOpenDecision), settled = cs.filter(function (c) { return !isOpenDecision(c); });
+      $("listSub").textContent = open.length + " to make · " + settled.length + " settled";
+      if (!cs.length) html = '<div class="empty">No calls logged yet.</div>';
+      if (open.length) {
+        html += '<div class="grouphead"><span class="kicker">To make</span></div>';
+        open.forEach(function (c) {
+          html += '<button class="callrow" data-call="' + esc(c.id) + '"><span class="t">' + esc(c.title) +
+            '</span><span class="spacer"></span><span class="s">' + esc(jobTitleOf(c.jobId)) + " · " + esc(c.status) + "</span></button>";
+        });
+      }
+      if (settled.length) {
+        html += '<div class="grouphead"><span class="kicker">Settled</span></div>';
+        settled.forEach(function (c) {
+          html += '<button class="notecard" data-call="' + esc(c.id) + '"><span class="t">' + esc(c.title) + "</span>" +
+            (c.chosen ? '<div class="b">→ ' + esc(c.chosen) + "</div>" : "") +
+            '<div class="m"><span class="tag tag-neutral">' + esc(c.zone) + "</span>" +
+            '<span class="tag tag-neutral">' + esc(jobTitleOf(c.jobId)) + "</span>" +
+            '<span class="date">' + esc(fmtDate(c.date)) + "</span></div></button>";
+        });
+      }
+      html += '<div style="margin-top:4px"><button class="btn btn-primary" id="addCallBtn">+ New call</button></div>';
+
+    } else {
+      $("listFilters").innerHTML = zoneFilterHtml();
+      var ns = data.notes.filter(function (n) { return inZone(n) && matchesQuery([n.title, n.body, n.zone]); });
+      $("listSub").textContent = ns.length + (ns.length === 1 ? " note" : " notes");
+      if (!ns.length) html = '<div class="empty">No notes here yet.</div>';
+      ns.forEach(function (n) {
+        html += '<button class="notecard" data-note="' + esc(n.id) + '"><span class="t">' + esc(n.title) + "</span>" +
+          (n.body ? '<div class="b">' + esc(n.body) + "</div>" : "") +
+          '<div class="m"><span class="tag tag-neutral">' + esc(n.zone) + "</span>" +
+          '<span class="tag tag-neutral">' + esc(jobTitleOf(n.jobId)) + "</span>" +
+          '<span class="date">' + esc(fmtDate(n.date)) + "</span></div></button>";
+      });
+      html += '<div style="margin-top:4px"><button class="btn btn-primary" id="addNoteBtn">+ New note</button></div>';
+    }
+    wrap.innerHTML = html;
+  }
+
+  function groupBy(list, keyFn) {
+    var order = [], map = {};
+    list.forEach(function (x) {
+      var k = keyFn(x) || "";
+      if (!map[k]) { map[k] = { key: keyFn(x), items: [] }; order.push(k); }
+      map[k].items.push(x);
+    });
+    return order.map(function (k) { return map[k]; });
+  }
+
+  // ---------- floor plan ----------
+  var SVGNS = "http://www.w3.org/2000/svg";
+  var planSvg = null, shapeLayer = null, eqGroups = {};
+  var selRing = null;
+
+  function svgEl(name, attrs, text) {
+    var e = document.createElementNS(SVGNS, name);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    return e;
+  }
+
+  var PLAN_STATIC =
+    '<svg viewBox="0 0 ' + VB_W + " " + VB_H + '" aria-label="Garage floor plan, 6.2 by 3.9 metres">' +
+      '<defs><pattern id="g1m" width="1000" height="1000" patternUnits="userSpaceOnUse" x="700" y="300">' +
+        '<path d="M1000 0V1000M0 1000H1000" fill="none" stroke="#d9dcec" stroke-width="10"/></pattern></defs>' +
+      '<rect x="700" y="300" width="3900" height="4200" fill="#eaecf7"/>' +
+      '<rect x="700" y="4930" width="3900" height="1570" fill="#e2e5f2"/>' +
+      '<rect x="700" y="300" width="3900" height="6200" fill="url(#g1m)"/>' +
+      '<rect x="700" y="300" width="3900" height="6200" fill="none" stroke="#a9aec2" stroke-width="150"/>' +
+      '<rect x="700" y="4500" width="430" height="430" fill="#a9aec2"/>' +
+      '<rect x="4170" y="4500" width="430" height="430" fill="#a9aec2"/>' +
+      '<path d="M1130 4715H4170" stroke="#5c6070" stroke-width="55" stroke-dasharray="130 90"/>' +
+      '<text x="2650" y="4640" text-anchor="middle" font-size="105" fill="#676b7c" letter-spacing="14">LINTEL 300 OVER</text>' +
+      '<path d="M2650 300V4500" stroke="#8b80cb" stroke-width="45" stroke-dasharray="220 140"/>' +
+      '<text x="2700" y="900" font-size="110" fill="#565094" letter-spacing="10">STEEL BEAM</text>' +
+      '<rect x="640" y="2400" width="120" height="550" fill="#eef0f8" stroke="#7a6cd0" stroke-width="40"/>' +
+      '<text x="820" y="2720" font-size="110" fill="#565094">Window 550</text>' +
+      '<path d="M1356 6500H3944" stroke="#7a6cd0" stroke-width="90"/>' +
+      '<path d="M1356 6500a650 650 0 00650 650" fill="none" stroke="#8b80cb" stroke-width="35" stroke-dasharray="90 70"/>' +
+      '<path d="M3944 6500a650 650 0 01-650 650" fill="none" stroke="#8b80cb" stroke-width="35" stroke-dasharray="90 70"/>' +
+      '<text x="2650" y="6960" text-anchor="middle" font-size="125" fill="#544e85" letter-spacing="8">DOUBLE DOORS 2587 × 2152</text>' +
+      '<path d="M430 300V4500M370 300h120M370 4500h120" stroke="#676b7c" stroke-width="22"/>' +
+      '<text x="380" y="2420" font-size="130" fill="#5f6373" text-anchor="middle" transform="rotate(-90 380 2420)">GYM 4.2 m</text>' +
+      '<path d="M430 4930V6500M370 4930h120M370 6500h120" stroke="#676b7c" stroke-width="22"/>' +
+      '<text x="380" y="5730" font-size="130" fill="#5f6373" text-anchor="middle" transform="rotate(-90 380 5730)">FRONT 1.5 m</text>' +
+      '<path d="M700 170H4600M700 110v120M4600 110v120" stroke="#676b7c" stroke-width="22"/>' +
+      '<text x="2650" y="130" font-size="130" fill="#5f6373" text-anchor="middle">3.9 m</text>' +
+      '<g id="shapeLayer"></g>' +
+    "</svg>";
+
+  function buildPlan() {
+    $("planCanvas").innerHTML = PLAN_STATIC;
+    planSvg = $("planCanvas").querySelector("svg");
+    shapeLayer = planSvg.querySelector("#shapeLayer");
+    selRing = svgEl("rect", { fill: "none", stroke: "#7a6cd0", "stroke-width": 70, rx: 24, "pointer-events": "none" });
+    rebuildShapes();
+    wirePlanEvents();
+  }
+
+  function rebuildShapes() {
+    shapeLayer.textContent = "";
+    eqGroups = {};
+    data.shapes.forEach(function (s) {
+      var lay = data.layout[s.id];
+      if (!lay) return;
+      var st = shapeState(s), pa = PAINT[st];
+      var rot = lay.rot === 90 ? 90 : 0;
+      var vw = rot ? s.d : s.w, vd = rot ? s.w : s.d;
+      var g = svgEl("g", { "class": "eq", "data-key": s.id, transform: "translate(" + lay.x + " " + lay.y + ") rotate(" + rot + ")" });
+      var r = svgEl("rect", {
+        "class": "body-rect", x: -s.w / 2, y: -s.d / 2, width: s.w, height: s.d, rx: 20,
+        fill: pa.fill, stroke: pa.stroke, "stroke-width": 45
+      });
+      if (pa.dash) r.setAttribute("stroke-dasharray", pa.dash);
+      g.appendChild(r);
+
+      // Labels are counter-rotated so they stay horizontal on a rotated shape.
+      var tg = svgEl("g", { transform: "rotate(" + (-rot) + ")" });
+      var dims = s.w + " × " + s.d;
+      if (vd >= 500) {
+        tg.appendChild(svgEl("text", { x: 0, y: -30, "text-anchor": "middle", "font-size": 140, fill: pa.name }, s.name));
+        tg.appendChild(svgEl("text", { x: 0, y: 150, "text-anchor": "middle", "font-size": 115, fill: pa.dim },
+          s.clearance ? "keep clear" : dims));
+      } else {
+        tg.appendChild(svgEl("text", {
+          x: 0, y: 0, "text-anchor": "middle", "dominant-baseline": "central", "font-size": 125, fill: pa.name
+        }, vw >= 1000 ? s.name + " " + dims : s.name));
+      }
+      g.appendChild(tg);
+      eqGroups[s.id] = g;
+      shapeLayer.appendChild(g);
+    });
+    placeRing();
+  }
+
+  function placeRing() {
+    if (selRing.parentNode) selRing.parentNode.removeChild(selRing);
+    var s = selectedId ? shapeById(selectedId) : null;
+    if (!s || !eqGroups[selectedId]) return;
+    selRing.setAttribute("x", -s.w / 2 - 70);
+    selRing.setAttribute("y", -s.d / 2 - 70);
+    selRing.setAttribute("width", s.w + 140);
+    selRing.setAttribute("height", s.d + 140);
+    eqGroups[selectedId].appendChild(selRing);
+  }
+
+  function select(id) {
+    if (id && !data.layout[id]) id = null;
+    selectedId = id;
+    placeRing();
+    renderRail();
+    renderJobs();
+  }
+
+  function applyTransform(id) {
+    var it = data.layout[id];
+    if (!it || !eqGroups[id]) return;
+    eqGroups[id].setAttribute("transform", "translate(" + it.x + " " + it.y + ") rotate(" + (it.rot === 90 ? 90 : 0) + ")");
+  }
+
+  // Clamp inside the room, and snap an edge to the 1 m grid when it lands close.
+  function snapAxis(centre, half, lo, hi) {
+    var c = clamp(centre, lo + half, hi - half);
+    var lead = c - half, g = Math.round((lead - lo) / GRID) * GRID + lo;
+    if (Math.abs(lead - g) <= SNAP_TOL) {
+      var t = g + half;
+      if (t >= lo + half && t <= hi - half) return t;
+    }
+    var trail = c + half, g2 = Math.round((trail - lo) / GRID) * GRID + lo;
+    if (Math.abs(trail - g2) <= SNAP_TOL) {
+      var t2 = g2 - half;
+      if (t2 >= lo + half && t2 <= hi - half) return t2;
+    }
+    return c;
+  }
+  function halfSize(s, rot) {
+    return { hw: (rot === 90 ? s.d : s.w) / 2, hd: (rot === 90 ? s.w : s.d) / 2 };
+  }
+  function placeAt(id, x, y) {
+    var s = shapeById(id), it = data.layout[id];
+    if (!s || !it) return;
+    var h = halfSize(s, it.rot);
+    it.x = snapAxis(x, h.hw, PLAN.rx, PLAN.rx + PLAN.w);
+    it.y = snapAxis(y, h.hd, PLAN.ry, PLAN.ry + PLAN.l);
+    applyTransform(id);
+  }
+
+  function toSvgPoint(e) {
+    var p = planSvg.createSVGPoint();
+    p.x = e.clientX; p.y = e.clientY;
+    return p.matrixTransform(planSvg.getScreenCTM().inverse());
+  }
+
+  function wirePlanEvents() {
+    var drag = null;
+    planSvg.addEventListener("pointerdown", function (e) {
+      var g = e.target.closest ? e.target.closest(".eq") : null;
+      if (!g) { select(null); return; }
+      var key = g.getAttribute("data-key");
+      select(key);
+      var pt = toSvgPoint(e), it = data.layout[key];
+      if (!it) return;
+      drag = { key: key, dx: it.x - pt.x, dy: it.y - pt.y, x0: pt.x, y0: pt.y, moved: false };
+      try { g.setPointerCapture(e.pointerId); } catch (err) {}
+      e.preventDefault();
+    });
+    planSvg.addEventListener("pointermove", function (e) {
+      if (!drag) return;
+      var pt = toSvgPoint(e);
+      // A click shouldn't count as a drag — and shouldn't rewrite the layout.
+      if (!drag.moved && Math.abs(pt.x - drag.x0) < 40 && Math.abs(pt.y - drag.y0) < 40) return;
+      placeAt(drag.key, pt.x + drag.dx, pt.y + drag.dy);
+      drag.moved = true;
+    });
+    function endDrag() {
+      if (drag && drag.moved) save(data);
+      drag = null;
+    }
+    planSvg.addEventListener("pointerup", endDrag);
+    planSvg.addEventListener("pointercancel", endDrag);
+  }
+
+  function rotateSelected() {
+    if (!selectedId) return;
+    var it = data.layout[selectedId], s = shapeById(selectedId);
+    if (!it || !s) return;
+    it.rot = it.rot === 90 ? 0 : 90;
+    placeAt(selectedId, it.x, it.y);   // re-clamp: the footprint just changed
+    placeRing();
+    save(data);
   }
 
   // ---------- dialogs ----------
@@ -742,10 +1654,17 @@
       return '<option value="' + esc(o) + '"' + (o === value ? " selected" : "") + ">" + esc(o) + "</option>";
     }).join("");
   }
-  function fillStatusSelect(sel, options, value) {
+  function fillStatusSelect(sel, options, value, labels) {
     sel.innerHTML = options.map(function (o) {
-      return '<option value="' + o + '"' + (o === value ? " selected" : "") + ">" + cap(o) + "</option>";
+      return '<option value="' + esc(o) + '"' + (o === value ? " selected" : "") + ">" + esc(labels ? labels[o] : cap(o)) + "</option>";
     }).join("");
+  }
+  function fillJobSelect(sel, value) {
+    var html = '<option value="">— no job —</option>';
+    data.jobs.forEach(function (j) {
+      html += '<option value="' + esc(j.id) + '"' + (j.id === value ? " selected" : "") + ">" + esc(j.title) + "</option>";
+    });
+    sel.innerHTML = html;
   }
   function resetDeleteBtn(dlg) {
     var del = dlg.querySelector("[data-del]");
@@ -755,117 +1674,222 @@
 
   function openPurchase(p) {
     editingId = p ? p.id : null;
-    var dlg = document.getElementById("dlg-purchase");
-    document.getElementById("dlg-purchase-title").textContent = p ? "Edit purchase" : "Add purchase";
-    document.getElementById("p-item").value = p ? p.item : "";
-    document.getElementById("p-price").value = p && p.price != null ? p.price : "";
-    document.getElementById("p-vendor").value = p ? p.vendor || "" : "";
-    document.getElementById("p-notes").value = p ? p.notes || "" : "";
-    fillSelect(document.getElementById("p-zone"), ZONES, p ? p.zone : (activeZone !== "All" ? activeZone : "Gym"));
-    fillSelect(document.getElementById("p-cat"), CATEGORIES, p ? p.category : (activeCat !== "All" ? activeCat : "Equipment"));
-    fillStatusSelect(document.getElementById("p-status"), P_STATUSES, p ? p.status : "planned");
+    var dlg = $("dlg-purchase");
+    $("dlg-purchase-title").textContent = p ? "Edit item" : "Add item";
+    $("p-item").value = p ? p.item : "";
+    $("p-price").value = p && p.price != null ? p.price : "";
+    $("p-vendor").value = p ? p.vendor || "" : "";
+    $("p-notes").value = p ? p.notes || "" : "";
+    fillSelect($("p-zone"), ZONES, p ? p.zone : (activeZone !== "All" ? activeZone : "Gym"));
+    fillSelect($("p-cat"), CATEGORIES, p ? p.category : (activeCat !== "All" ? activeCat : "Equipment"));
+    fillStatusSelect($("p-status"), P_STATUSES, p ? p.status : "planned");
+    fillJobSelect($("p-job"), p ? p.jobId : null);
     dlg.querySelector("[data-del]").hidden = !p;
     resetDeleteBtn(dlg);
     dlg.showModal();
   }
 
-  function openDecision(d) {
-    editingId = d ? d.id : null;
-    var dlg = document.getElementById("dlg-decision");
-    document.getElementById("dlg-decision-title").textContent = d ? "Edit decision" : "Add decision";
-    document.getElementById("d-title").value = d ? d.title : "";
-    document.getElementById("d-chosen").value = d ? d.chosen || "" : "";
-    document.getElementById("d-notes").value = d ? d.notes || "" : "";
-    fillSelect(document.getElementById("d-zone"), ZONES, d ? d.zone : (activeZone !== "All" ? activeZone : "Gym"));
-    fillStatusSelect(document.getElementById("d-status"), D_STATUSES, d ? d.status : "deciding");
-    dlg.querySelector("[data-del]").hidden = !d;
+  function openDecision(c) {
+    editingId = c ? c.id : null;
+    var dlg = $("dlg-decision");
+    $("dlg-decision-title").textContent = c ? "Edit call" : "Add call";
+    $("d-title").value = c ? c.title : "";
+    $("d-chosen").value = c ? c.chosen || "" : "";
+    $("d-notes").value = c ? c.notes || "" : "";
+    fillSelect($("d-zone"), ZONES, c ? c.zone : (activeZone !== "All" ? activeZone : "Gym"));
+    fillStatusSelect($("d-status"), D_STATUSES, c ? c.status : "deciding");
+    fillJobSelect($("d-job"), c ? c.jobId : null);
+    dlg.querySelector("[data-del]").hidden = !c;
     resetDeleteBtn(dlg);
     dlg.showModal();
   }
 
   function openNote(n) {
     editingId = n ? n.id : null;
-    var dlg = document.getElementById("dlg-note");
-    document.getElementById("dlg-note-title").textContent = n ? "Edit note" : "Add note";
-    document.getElementById("n-title").value = n ? n.title : "";
-    document.getElementById("n-body").value = n ? n.body || "" : "";
-    fillSelect(document.getElementById("n-zone"), ZONES, n ? n.zone : (activeZone !== "All" ? activeZone : "Gym"));
+    var dlg = $("dlg-note");
+    $("dlg-note-title").textContent = n ? "Edit note" : "Add note";
+    $("n-title").value = n ? n.title : "";
+    $("n-body").value = n ? n.body || "" : "";
+    fillSelect($("n-zone"), ZONES, n ? n.zone : (activeZone !== "All" ? activeZone : "Gym"));
+    fillJobSelect($("n-job"), n ? n.jobId : null);
     dlg.querySelector("[data-del]").hidden = !n;
     resetDeleteBtn(dlg);
     dlg.showModal();
   }
 
-  function findById(list, id) {
-    for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
-    return null;
-  }
-  function removeById(list, id) {
-    if (id == null) return;
-    var idx = list.findIndex(function (x) { return x.id === id; });
-    if (idx >= 0) list.splice(idx, 1);
+  function openJob(j) {
+    editingJobId = j ? j.id : null;
+    var dlg = $("dlg-job");
+    $("dlg-job-title").textContent = j ? "Edit job" : "Add job";
+    $("j-title").value = j ? j.title : "";
+    $("j-metric").value = j ? j.metric || "" : "";
+    $("j-note").value = j ? j.note || "" : "";
+    fillSelect($("j-zone"), ZONES, j ? j.zone : "Gym");
+    fillStatusSelect($("j-status"), J_STATUSES, j ? j.status : "deciding", J_STATUS_LABEL);
+    $("j-shapes").innerHTML = data.shapes.length
+      ? data.shapes.map(function (s) {
+          var checked = j && j.shapeIds.indexOf(s.id) >= 0 ? " checked" : "";
+          return '<label><input type="checkbox" value="' + esc(s.id) + '"' + checked + ">" + esc(s.name) + "</label>";
+        }).join("")
+      : '<span class="none">No shapes yet.</span>';
+    dlg.querySelector("[data-del]").hidden = !j;
+    resetDeleteBtn(dlg);
+    dlg.showModal();
   }
 
-  // Purchase form
-  document.getElementById("form-purchase").addEventListener("submit", function (e) {
+  function openShape(s) {
+    editingShapeId = s ? s.id : null;
+    var dlg = $("dlg-shape");
+    $("dlg-shape-title").textContent = s ? "Edit shape" : "Add shape";
+    $("s-name").value = s ? s.name : "";
+    $("s-w").value = s ? s.w : "";
+    $("s-d").value = s ? s.d : "";
+    $("s-note").value = s ? s.note || "" : "";
+    $("s-clear").checked = !!(s && s.clearance);
+    var html = "";
+    [["Items", data.purchases, "item"], ["Calls", data.decisions, "title"], ["Notes", data.notes, "title"]].forEach(function (grp) {
+      if (!grp[1].length) return;
+      html += '<div class="grp">' + grp[0] + "</div>";
+      grp[1].forEach(function (it) {
+        var checked = s && s.links.indexOf(it.id) >= 0 ? " checked" : "";
+        html += '<label><input type="checkbox" value="' + esc(it.id) + '"' + checked + ">" + esc(it[grp[2]]) + "</label>";
+      });
+    });
+    $("s-links").innerHTML = html || '<span class="none">Nothing to link yet.</span>';
+    dlg.querySelector("[data-del]").hidden = !s;
+    resetDeleteBtn(dlg);
+    dlg.showModal();
+  }
+
+  function checkedValues(root) {
+    var out = [], boxes = root.querySelectorAll("input[type=checkbox]");
+    for (var i = 0; i < boxes.length; i++) if (boxes[i].checked) out.push(boxes[i].value);
+    return out;
+  }
+  function jobIdValue(sel) { return sel.value || null; }
+
+  $("form-purchase").addEventListener("submit", function (e) {
     e.preventDefault();
-    var priceRaw = document.getElementById("p-price").value.trim();
+    var priceRaw = $("p-price").value.trim();
     var existing = editingId ? findById(data.purchases, editingId) : null;
     var rec = {
       id: editingId || uid(),
-      item: document.getElementById("p-item").value.trim(),
+      item: $("p-item").value.trim(),
       price: priceRaw === "" ? null : Number(priceRaw),
-      vendor: document.getElementById("p-vendor").value.trim(),
-      zone: document.getElementById("p-zone").value,
-      category: document.getElementById("p-cat").value,
-      status: document.getElementById("p-status").value,
-      notes: document.getElementById("p-notes").value.trim(),
+      vendor: $("p-vendor").value.trim(),
+      zone: $("p-zone").value,
+      jobId: jobIdValue($("p-job")),
+      category: $("p-cat").value,
+      status: $("p-status").value,
+      notes: $("p-notes").value.trim(),
       date: existing ? existing.date : today()
     };
     removeById(data.purchases, editingId);
     data.purchases.unshift(rec);
-    save(data); render();
-    document.getElementById("dlg-purchase").close();
+    save(data); rebuildShapes(); render();
+    $("dlg-purchase").close();
   });
 
-  // Decision form
-  document.getElementById("form-decision").addEventListener("submit", function (e) {
+  $("form-decision").addEventListener("submit", function (e) {
     e.preventDefault();
     var existing = editingId ? findById(data.decisions, editingId) : null;
     var rec = {
       id: editingId || uid(),
-      title: document.getElementById("d-title").value.trim(),
-      chosen: document.getElementById("d-chosen").value.trim(),
-      zone: document.getElementById("d-zone").value,
-      status: document.getElementById("d-status").value,
-      notes: document.getElementById("d-notes").value.trim(),
+      title: $("d-title").value.trim(),
+      chosen: $("d-chosen").value.trim(),
+      zone: $("d-zone").value,
+      jobId: jobIdValue($("d-job")),
+      status: $("d-status").value,
+      notes: $("d-notes").value.trim(),
       date: existing ? existing.date : today()
     };
     removeById(data.decisions, editingId);
     data.decisions.unshift(rec);
-    save(data); render();
-    document.getElementById("dlg-decision").close();
+    save(data); rebuildShapes(); render();
+    $("dlg-decision").close();
   });
 
-  // Note form
-  document.getElementById("form-note").addEventListener("submit", function (e) {
+  $("form-note").addEventListener("submit", function (e) {
     e.preventDefault();
     var existing = editingId ? findById(data.notes, editingId) : null;
     var rec = {
       id: editingId || uid(),
-      title: document.getElementById("n-title").value.trim(),
-      body: document.getElementById("n-body").value,
-      zone: document.getElementById("n-zone").value,
+      title: $("n-title").value.trim(),
+      body: $("n-body").value,
+      zone: $("n-zone").value,
+      jobId: jobIdValue($("n-job")),
       date: existing ? existing.date : today()
     };
     removeById(data.notes, editingId);
     data.notes.unshift(rec);
     save(data); render();
-    document.getElementById("dlg-note").close();
+    $("dlg-note").close();
   });
 
-  // Delete buttons: two-tap confirm
+  $("form-job").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var existing = editingJobId ? jobById(editingJobId) : null;
+    var rec = {
+      id: editingJobId || uid(),
+      title: $("j-title").value.trim(),
+      zone: $("j-zone").value,
+      status: $("j-status").value,
+      shapeIds: checkedValues($("j-shapes")),
+      note: $("j-note").value.trim(),
+      metric: $("j-metric").value.trim(),
+      date: existing ? existing.date : today()
+    };
+    if (existing) {
+      removeById(data.jobs, editingJobId);
+      data.jobs.unshift(rec);
+    } else {
+      data.jobs.push(rec);
+    }
+    save(data); rebuildShapes(); render();
+    $("dlg-job").close();
+  });
+
+  $("form-shape").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var w = clamp(Math.round(Number($("s-w").value)) || 500, 100, 6000);
+    var d = clamp(Math.round(Number($("s-d").value)) || 500, 100, 6000);
+    var links = checkedValues($("s-links"));
+    var s;
+    if (editingShapeId) {
+      s = shapeById(editingShapeId);
+      if (!s) return;
+      s.name = $("s-name").value.trim();
+      s.w = w; s.d = d;
+      s.note = $("s-note").value.trim();
+      s.clearance = $("s-clear").checked;
+      s.links = links;
+    } else {
+      s = {
+        id: uid(), name: $("s-name").value.trim(), w: w, d: d,
+        note: $("s-note").value.trim(), clearance: $("s-clear").checked, links: links
+      };
+      data.shapes.push(s);
+      data.layout[s.id] = { x: PLAN.midX, y: PLAN.ry + PLAN.gymL / 2, rot: 0 };
+      placeAtInitial(s.id);
+    }
+    save(data);
+    rebuildShapes();
+    select(s.id);
+    render();
+    $("dlg-shape").close();
+  });
+
+  function placeAtInitial(id) {
+    var it = data.layout[id], s = shapeById(id);
+    if (!it || !s) return;
+    var h = halfSize(s, it.rot);
+    it.x = clamp(it.x, PLAN.rx + h.hw, PLAN.rx + PLAN.w - h.hw);
+    it.y = clamp(it.y, PLAN.ry + h.hd, PLAN.ry + PLAN.l - h.hd);
+  }
+
+  // delete buttons: two-tap confirm
   [["dlg-purchase", "purchases"], ["dlg-decision", "decisions"], ["dlg-note", "notes"]].forEach(function (pair) {
-    var dlg = document.getElementById(pair[0]);
+    var dlg = $(pair[0]);
     var del = dlg.querySelector("[data-del]");
     del.addEventListener("click", function () {
       if (!del.classList.contains("armed")) {
@@ -874,85 +1898,181 @@
         return;
       }
       removeById(data[pair[1]], editingId);
-      save(data); render();
+      data.shapes.forEach(function (s) {
+        s.links = s.links.filter(function (id) { return id !== editingId; });
+      });
+      save(data); rebuildShapes(); render();
       dlg.close();
     });
     dlg.querySelector("[data-cancel]").addEventListener("click", function () { dlg.close(); });
   });
 
-  // Card click / keyboard -> edit
-  document.getElementById("list").addEventListener("click", function (e) {
-    var card = e.target.closest(".card");
-    if (card) openEditor(card.dataset.id);
-  });
-  document.getElementById("list").addEventListener("keydown", function (e) {
-    if (e.key !== "Enter" && e.key !== " ") return;
-    var card = e.target.closest(".card");
-    if (!card) return;
-    e.preventDefault();
-    openEditor(card.dataset.id);
-  });
-  function openEditor(id) {
-    if (activeTab === "purchases") openPurchase(findById(data.purchases, id));
-    else if (activeTab === "decisions") openDecision(findById(data.decisions, id));
-    else openNote(findById(data.notes, id));
-  }
+  (function () {
+    var dlg = $("dlg-job"), del = dlg.querySelector("[data-del]");
+    del.addEventListener("click", function () {
+      if (!del.classList.contains("armed")) {
+        del.classList.add("armed"); del.textContent = "Really delete?"; return;
+      }
+      removeById(data.jobs, editingJobId);
+      ["purchases", "decisions", "notes"].forEach(function (k) {
+        data[k].forEach(function (x) { if (x.jobId === editingJobId) x.jobId = null; });
+      });
+      save(data); rebuildShapes(); render();
+      dlg.close();
+    });
+    dlg.querySelector("[data-cancel]").addEventListener("click", function () { dlg.close(); });
+  })();
 
-  // Tabs & chips & add
-  document.getElementById("tabs").addEventListener("click", function (e) {
-    var t = e.target.closest(".tab");
-    if (!t) return;
-    activeTab = t.dataset.tab;
+  (function () {
+    var dlg = $("dlg-shape"), del = dlg.querySelector("[data-del]");
+    del.addEventListener("click", function () {
+      if (!del.classList.contains("armed")) {
+        del.classList.add("armed"); del.textContent = "Really delete?"; return;
+      }
+      removeById(data.shapes, editingShapeId);
+      delete data.layout[editingShapeId];
+      data.jobs.forEach(function (j) {
+        j.shapeIds = j.shapeIds.filter(function (id) { return id !== editingShapeId; });
+      });
+      save(data);
+      rebuildShapes();
+      select(null);
+      render();
+      dlg.close();
+    });
+    dlg.querySelector("[data-cancel]").addEventListener("click", function () { dlg.close(); });
+  })();
+
+  // ---------- events ----------
+  $("navRail").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-nav]");
+    if (!b) return;
+    activeNav = b.dataset.nav;
     render();
-  });
-  document.getElementById("zoneChips").addEventListener("click", function (e) {
-    var c = e.target.closest(".chip");
-    if (!c) return;
-    activeZone = c.dataset.zone;
-    render();
-  });
-  document.getElementById("catChips").addEventListener("click", function (e) {
-    var c = e.target.closest(".chip");
-    if (!c) return;
-    activeCat = c.dataset.cat;
-    render();
-  });
-  document.getElementById("addBtn").addEventListener("click", function () {
-    if (activeTab === "purchases") openPurchase(null);
-    else if (activeTab === "decisions") openDecision(null);
-    else openNote(null);
   });
 
-  // Sync dialog
-  var syncDlg = document.getElementById("dlg-sync");
-  document.getElementById("syncBtn").addEventListener("click", function () {
-    document.getElementById("exportTa").value = JSON.stringify(data);
-    document.getElementById("importTa").value = "";
-    document.getElementById("copiedMsg").hidden = true;
-    document.getElementById("importMsg").hidden = true;
-    var hasToken = false;
-    try { hasToken = !!localStorage.getItem("garageTracker.ghToken"); } catch (e) {}
-    document.getElementById("ghNote").textContent = hasToken
+  $("jobFilter").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-filter]");
+    if (!b) return;
+    jobFilter = b.dataset.filter;
+    renderJobs();
+  });
+
+  $("jobList").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-job]");
+    if (!b) return;
+    var j = jobById(b.dataset.job);
+    if (!j) return;
+    // Clicking a job selects its zone on the plan — the inverse of clicking a shape.
+    var placed = j.shapeIds.filter(function (id) { return data.layout[id]; });
+    if (placed.length) select(placed[0]); else openJob(j);
+  });
+
+  $("tray").addEventListener("click", function (e) {
+    if (e.target.closest("#addShapeBtn")) { openShape(null); return; }
+    var b = e.target.closest("[data-place]");
+    if (!b) return;
+    var id = b.dataset.place;
+    data.layout[id] = { x: PLAN.midX, y: PLAN.ry + PLAN.gymL / 2, rot: 0 };
+    placeAtInitial(id);
+    save(data);
+    rebuildShapes();
+    select(id);
+    renderTray();
+  });
+
+  $("rail").addEventListener("click", function (e) {
+    var b;
+    if (e.target.closest("#railNewShape")) { openShape(null); return; }
+    if ((b = e.target.closest("[data-openjob]"))) {
+      var j = b.dataset.openjob ? jobById(b.dataset.openjob) : null;
+      if (j) { openJob(j); }
+      else if (selectedId) { openJob(null); }
+      return;
+    }
+    if ((b = e.target.closest("[data-call]"))) { openDecision(findById(data.decisions, b.dataset.call)); return; }
+    if ((b = e.target.closest("[data-item]"))) { openPurchase(findById(data.purchases, b.dataset.item)); return; }
+    if (e.target.closest("#railMeasure")) { if (selectedId) openShape(shapeById(selectedId)); return; }
+    if (e.target.closest("#railAdd")) {
+      var s = selectedId ? shapeById(selectedId) : null;
+      var job = s ? jobOfShape(s.id) : null;
+      var input = $("qa");
+      input.value = job ? " for the " + job.title : "";
+      input.focus();
+      try { input.setSelectionRange(0, 0); } catch (err) {}
+      refreshQuickAdd();
+    }
+  });
+
+  $("listFilters").addEventListener("click", function (e) {
+    var b;
+    if ((b = e.target.closest("[data-zone]"))) { activeZone = b.dataset.zone; renderListView(); return; }
+    if ((b = e.target.closest("[data-cat]"))) { activeCat = b.dataset.cat; renderListView(); }
+  });
+
+  $("listWrap").addEventListener("click", function (e) {
+    var b;
+    if (e.target.closest("#addJobBtn")) { openJob(null); return; }
+    if (e.target.closest("#addCallBtn")) { openDecision(null); return; }
+    if (e.target.closest("#addNoteBtn")) { openNote(null); return; }
+    if ((b = e.target.closest("[data-job]"))) { openJob(jobById(b.dataset.job)); return; }
+    if ((b = e.target.closest("[data-item]"))) { openPurchase(findById(data.purchases, b.dataset.item)); return; }
+    if ((b = e.target.closest("[data-call]"))) { openDecision(findById(data.decisions, b.dataset.call)); return; }
+    if ((b = e.target.closest("[data-note]"))) { openNote(findById(data.notes, b.dataset.note)); }
+  });
+
+  $("qa").addEventListener("input", function () { qa.manual = {}; refreshQuickAdd(); });
+  $("qa").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") { e.preventDefault(); commitQuickAdd(); }
+  });
+  $("qaChips").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-qa]");
+    if (b) cycleQuickAddField(b.dataset.qa);
+  });
+
+  $("search").addEventListener("input", function () {
+    query = this.value.trim().toLowerCase();
+    if (activeNav === "plan") renderJobs(); else renderListView();
+  });
+
+  document.addEventListener("keydown", function (e) {
+    var t = e.target;
+    var typing = t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT" || t.isContentEditable);
+    if (e.key === "Escape") {
+      if (document.querySelector("dialog[open]")) return;   // let the dialog close itself
+      if (selectedId) { select(null); }
+      return;
+    }
+    if (typing) return;
+    if ((e.key === "r" || e.key === "R") && selectedId) { e.preventDefault(); rotateSelected(); }
+  });
+
+  // ---------- sync ----------
+  var syncDlg = $("dlg-sync");
+  $("syncBtn").addEventListener("click", function () {
+    $("exportTa").value = JSON.stringify(data);
+    $("importTa").value = "";
+    $("copiedMsg").hidden = true;
+    $("importMsg").hidden = true;
+    var hasToken = !!ghToken();
+    $("ghNote").textContent = hasToken
       ? "A token is saved in this browser — changes sync to GitHub automatically."
       : "Create a fine-grained token on GitHub (Settings → Developer settings → Fine-grained tokens), scoped to only the garage-tracker repo with Contents: Read and write. Paste it here — it stays in this browser only.";
-    document.getElementById("ghTokenMsg").hidden = true;
+    $("ghTokenMsg").hidden = true;
     syncDlg.showModal();
   });
-  document.getElementById("syncClose").addEventListener("click", function () { syncDlg.close(); });
-  document.getElementById("copyBtn").addEventListener("click", function () {
-    var ta = document.getElementById("exportTa");
+  $("syncClose").addEventListener("click", function () { syncDlg.close(); });
+
+  $("copyBtn").addEventListener("click", function () {
+    var ta = $("exportTa");
     ta.select();
-    function showCopied() { document.getElementById("copiedMsg").hidden = false; }
-    function fallbackCopy() {
-      try { document.execCommand("copy"); showCopied(); } catch (e) {}
-    }
+    function showCopied() { $("copiedMsg").hidden = false; }
+    function fallbackCopy() { try { document.execCommand("copy"); showCopied(); } catch (e) {} }
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(ta.value).then(showCopied, fallbackCopy);
-    } else {
-      fallbackCopy();
-    }
+    } else fallbackCopy();
   });
-  // Add-items snippet (merge, not replace)
+
   var CLAUDE_PROMPT =
     "When I describe decisions, purchases, or notes for my garage gym project, format them as a single JSON code block with exactly this schema (only include the arrays and fields I give you information for):\n" +
     '{"purchases":[{"item":"","price":null,"vendor":"","zone":"Gym","category":"Equipment","status":"planned","notes":""}],' +
@@ -975,21 +2095,21 @@
         id: uid(), item: p.item.trim(),
         price: (typeof p.price === "number" && isFinite(p.price)) ? p.price : null,
         vendor: typeof p.vendor === "string" ? p.vendor : "",
-        zone: zoneOf(p.zone),
+        zone: zoneOf(p.zone), jobId: null,
         category: CATEGORIES.indexOf(p.category) >= 0 ? p.category : "Other",
         status: P_STATUSES.indexOf(p.status) >= 0 ? p.status : "planned",
         notes: typeof p.notes === "string" ? p.notes : "", date: t
       });
       added++;
     });
-    (Array.isArray(parsed.decisions) ? parsed.decisions : []).forEach(function (d) {
-      if (!d || typeof d.title !== "string" || !d.title.trim()) return;
+    (Array.isArray(parsed.decisions) ? parsed.decisions : []).forEach(function (c) {
+      if (!c || typeof c.title !== "string" || !c.title.trim()) return;
       data.decisions.unshift({
-        id: uid(), title: d.title.trim(),
-        chosen: typeof d.chosen === "string" ? d.chosen : "",
-        zone: zoneOf(d.zone),
-        status: D_STATUSES.indexOf(d.status) >= 0 ? d.status : "deciding",
-        notes: typeof d.notes === "string" ? d.notes : "", date: t
+        id: uid(), title: c.title.trim(),
+        chosen: typeof c.chosen === "string" ? c.chosen : "",
+        zone: zoneOf(c.zone), jobId: null,
+        status: D_STATUSES.indexOf(c.status) >= 0 ? c.status : "deciding",
+        notes: typeof c.notes === "string" ? c.notes : "", date: t
       });
       added++;
     });
@@ -998,25 +2118,23 @@
       data.notes.unshift({
         id: uid(), title: n.title.trim(),
         body: typeof n.body === "string" ? n.body : "",
-        zone: zoneOf(n.zone), date: t
+        zone: zoneOf(n.zone), jobId: null, date: t
       });
       added++;
     });
     return added;
   }
 
-  document.getElementById("copyPromptBtn").addEventListener("click", function () {
-    var msg = document.getElementById("snippetMsg");
+  $("copyPromptBtn").addEventListener("click", function () {
+    var msg = $("snippetMsg");
     function ok() { msg.hidden = false; msg.style.color = "var(--good)"; msg.textContent = "Instructions copied — paste into any Claude chat."; }
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(CLAUDE_PROMPT).then(ok, function () {});
-    }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(CLAUDE_PROMPT).then(ok, function () {});
   });
 
-  document.getElementById("snippetBtn").addEventListener("click", function () {
-    var msg = document.getElementById("snippetMsg");
+  $("snippetBtn").addEventListener("click", function () {
+    var msg = $("snippetMsg");
     msg.hidden = false;
-    var raw = document.getElementById("snippetTa").value.trim();
+    var raw = $("snippetTa").value.trim();
     var parsed = raw ? extractJson(raw) : null;
     if (!parsed) {
       msg.textContent = "Couldn't read that — paste the whole JSON block from Claude.";
@@ -1029,17 +2147,17 @@
       msg.style.color = "var(--danger)";
       return;
     }
-    save(data); render();
-    document.getElementById("snippetTa").value = "";
-    document.getElementById("exportTa").value = JSON.stringify(data);
+    save(data); rebuildShapes(); render();
+    $("snippetTa").value = "";
+    $("exportTa").value = JSON.stringify(data);
     msg.textContent = "Added " + added + " item" + (added > 1 ? "s" : "") + ".";
     msg.style.color = "var(--good)";
   });
 
-  document.getElementById("importBtn").addEventListener("click", function () {
-    var msg = document.getElementById("importMsg");
+  $("importBtn").addEventListener("click", function () {
+    var msg = $("importMsg");
     msg.hidden = false;
-    var raw = document.getElementById("importTa").value.trim();
+    var raw = $("importTa").value.trim();
     if (!raw) { msg.textContent = "Paste a sync code first."; msg.style.color = "var(--danger)"; return; }
     var parsed;
     try { parsed = JSON.parse(raw); } catch (e) { parsed = null; }
@@ -1049,337 +2167,22 @@
       return;
     }
     data = applyInbox(normalizeData(parsed));
-    save(data); render(); rebuildShapes(); selectEq(null);
+    save(data);
+    rebuildShapes(); select(null); render();
     msg.textContent = "Imported — this device now matches the sync code.";
     msg.style.color = "var(--good)";
   });
 
-  // ---------- floor plan ----------
-  var SVGNS = "http://www.w3.org/2000/svg";
-  var planSvg = null;
-  var selectedKey = null;
-  var eqGroups = {};
-
-  function svgEl(name, attrs, text) {
-    var e = document.createElementNS(SVGNS, name);
-    for (var k in attrs) e.setAttribute(k, attrs[k]);
-    if (text != null) e.textContent = text;
-    return e;
-  }
-
-  function buildPlan() {
-    var P = PLAN;
-    var svg = svgEl("svg", { viewBox: "0 0 " + VB_W + " " + VB_H, "aria-label": "Floor plan of the garage" });
-    planSvg = svg;
-
-    // zone fills
-    svg.appendChild(svgEl("rect", { x: P.rx, y: P.ry, width: P.w, height: P.gymL, fill: "var(--surface-2)" }));
-    svg.appendChild(svgEl("rect", { x: P.rx, y: P.frontY, width: P.w, height: P.botY - P.frontY, fill: "var(--bg)" }));
-    svg.appendChild(svgEl("text", { x: P.midX, y: P.ry + 320, "text-anchor": "middle", "font-size": 130, "letter-spacing": 30, fill: "var(--muted)" }, "GYM — RUBBER FLOOR"));
-    svg.appendChild(svgEl("text", { x: P.midX, y: P.frontY + 260, "text-anchor": "middle", "font-size": 130, "letter-spacing": 30, fill: "var(--muted)" }, "FRONT — PAINTED CONCRETE"));
-
-    // steel beam (overhead, dashed) down the middle of the gym zone
-    svg.appendChild(svgEl("line", { x1: P.midX, y1: P.ry + 60, x2: P.midX, y2: P.pillarY, stroke: "var(--muted)", "stroke-width": 50, "stroke-dasharray": "220 140" }));
-    svg.appendChild(svgEl("text", { "font-size": 115, fill: "var(--muted)", transform: "rotate(90 " + (P.midX + 130) + " " + (P.ry + 500) + ")", x: P.midX + 130, y: P.ry + 500 }, "steel beam (overhead)"));
-
-    // lintel (overhead, dashed) spanning between the pillars
-    svg.appendChild(svgEl("rect", { x: P.rx + P.pilW, y: P.pillarY + (P.pilD - P.lintelW) / 2, width: P.w - 2 * P.pilW, height: P.lintelW, fill: "none", stroke: "var(--muted)", "stroke-width": 35, "stroke-dasharray": "160 120" }));
-    svg.appendChild(svgEl("text", { x: P.midX, y: P.pillarY + P.pilD / 2 + 45, "text-anchor": "middle", "font-size": 110, fill: "var(--muted)" }, "lintel over"));
-
-    // pillars
-    svg.appendChild(svgEl("rect", { x: P.rx, y: P.pillarY, width: P.pilW, height: P.pilD, fill: "var(--ink-2)" }));
-    svg.appendChild(svgEl("rect", { x: P.rx + P.w - P.pilW, y: P.pillarY, width: P.pilW, height: P.pilD, fill: "var(--ink-2)" }));
-
-    // walls (gap at the door opening)
-    svg.appendChild(svgEl("path", {
-      d: "M " + P.doorX2 + " " + P.botY + " L " + (P.rx + P.w) + " " + P.botY +
-         " L " + (P.rx + P.w) + " " + P.ry + " L " + P.rx + " " + P.ry +
-         " L " + P.rx + " " + P.botY + " L " + P.doorX1 + " " + P.botY,
-      fill: "none", stroke: "var(--ink)", "stroke-width": 80, "stroke-linecap": "square"
-    }));
-
-    // window on the left long wall: 2.1 m from the rear corner, 550 mm wide (~700 mm high)
-    var winY1 = P.ry + 2100, winY2 = winY1 + 550;
-    svg.appendChild(svgEl("line", { x1: P.rx, y1: winY1, x2: P.rx, y2: winY2, stroke: "var(--info)", "stroke-width": 110 }));
-    svg.appendChild(svgEl("text", { "font-size": 105, fill: "var(--info)", transform: "rotate(90 " + (P.rx + 150) + " " + (winY1 - 250) + ")", x: P.rx + 150, y: winY1 - 250 }, "window 550 w × 700 h"));
-
-    // double door leaves + swing arcs (doors open outwards)
-    var leaf = P.doorW / 2;
-    svg.appendChild(svgEl("line", { x1: P.doorX1, y1: P.botY, x2: P.doorX1, y2: P.botY + leaf, stroke: "var(--ink-2)", "stroke-width": 40 }));
-    svg.appendChild(svgEl("line", { x1: P.doorX2, y1: P.botY, x2: P.doorX2, y2: P.botY + leaf, stroke: "var(--ink-2)", "stroke-width": 40 }));
-    svg.appendChild(svgEl("path", { d: "M " + P.midX + " " + P.botY + " A " + leaf + " " + leaf + " 0 0 1 " + P.doorX1 + " " + (P.botY + leaf), fill: "none", stroke: "var(--muted)", "stroke-width": 25, "stroke-dasharray": "110 100" }));
-    svg.appendChild(svgEl("path", { d: "M " + P.midX + " " + P.botY + " A " + leaf + " " + leaf + " 0 0 0 " + P.doorX2 + " " + (P.botY + leaf), fill: "none", stroke: "var(--muted)", "stroke-width": 25, "stroke-dasharray": "110 100" }));
-
-    // dimension lines + labels
-    function tick(x, y, vertical) {
-      return svgEl("line", vertical
-        ? { x1: x - 60, y1: y, x2: x + 60, y2: y, stroke: "var(--line)", "stroke-width": 25 }
-        : { x1: x, y1: y - 60, x2: x, y2: y + 60, stroke: "var(--line)", "stroke-width": 25 });
-    }
-    // top: 3.9 m
-    svg.appendChild(svgEl("line", { x1: P.rx, y1: 180, x2: P.rx + P.w, y2: 180, stroke: "var(--line)", "stroke-width": 25 }));
-    svg.appendChild(tick(P.rx, 180, false)); svg.appendChild(tick(P.rx + P.w, 180, false));
-    svg.appendChild(svgEl("text", { x: P.midX, y: 130, "text-anchor": "middle", "font-size": 135, fill: "var(--ink-2)" }, "3.9 m"));
-    // right: 6.2 m overall
-    svg.appendChild(svgEl("line", { x1: 4620, y1: P.ry, x2: 4620, y2: P.botY, stroke: "var(--line)", "stroke-width": 25 }));
-    svg.appendChild(tick(4620, P.ry, true)); svg.appendChild(tick(4620, P.botY, true));
-    svg.appendChild(svgEl("text", { "font-size": 135, fill: "var(--ink-2)", transform: "rotate(90 4740 3300)", x: 4740, y: 3300, "text-anchor": "middle" }, "6.2 m"));
-    // left: 4.2 m gym + 1.5 m front
-    svg.appendChild(svgEl("line", { x1: 300, y1: P.ry, x2: 300, y2: P.pillarY, stroke: "var(--line)", "stroke-width": 25 }));
-    svg.appendChild(tick(300, P.ry, true)); svg.appendChild(tick(300, P.pillarY, true));
-    svg.appendChild(svgEl("text", { "font-size": 135, fill: "var(--ink-2)", transform: "rotate(-90 180 2400)", x: 180, y: 2400, "text-anchor": "middle" }, "4.2 m"));
-    svg.appendChild(svgEl("line", { x1: 300, y1: P.frontY, x2: 300, y2: P.botY, stroke: "var(--line)", "stroke-width": 25 }));
-    svg.appendChild(tick(300, P.frontY, true)); svg.appendChild(tick(300, P.botY, true));
-    svg.appendChild(svgEl("text", { "font-size": 135, fill: "var(--ink-2)", transform: "rotate(-90 180 5715)", x: 180, y: 5715, "text-anchor": "middle" }, "1.5 m"));
-    // door width
-    svg.appendChild(svgEl("text", { x: P.midX, y: P.botY - 120, "text-anchor": "middle", "font-size": 120, fill: "var(--ink-2)" }, "door 2587 mm — opens out"));
-
-    // shelf label
-    svg.appendChild(svgEl("text", { x: P.rx, y: SHELF_Y - 110, "font-size": 115, "letter-spacing": 25, fill: "var(--muted)" }, "SHELF — DRAG ITEMS INTO THE ROOM"));
-
-    rebuildShapes();
-
-    document.getElementById("planSvgWrap").appendChild(svg);
-    wirePlanEvents();
-  }
-
-  function rebuildShapes() {
-    Object.keys(eqGroups).forEach(function (k) {
-      if (eqGroups[k].parentNode) eqGroups[k].parentNode.removeChild(eqGroups[k]);
-    });
-    eqGroups = {};
-    data.shapes.forEach(function (s) {
-      var g = svgEl("g", { class: "eq", "data-key": s.id });
-      g.appendChild(svgEl("rect", { x: -s.w / 2, y: -s.d / 2, width: s.w, height: s.d, rx: 60, fill: "var(--" + s.tone + "-soft)", stroke: "var(--" + s.tone + ")", "stroke-width": 30 }));
-      g.appendChild(svgEl("text", { x: 0, y: 0, "text-anchor": "middle", "dominant-baseline": "central", "font-size": 120, "font-weight": 600, fill: "var(--ink)" }, s.name));
-      eqGroups[s.id] = g;
-      planSvg.appendChild(g);
-    });
-    VB_H = computeVBH(data);
-    planSvg.setAttribute("viewBox", "0 0 " + VB_W + " " + VB_H);
-    applyLayout();
-  }
-
-  function applyOne(key) {
-    var it = data.layout[key];
-    if (!it || !eqGroups[key]) return;
-    eqGroups[key].setAttribute("transform", "translate(" + it.x + " " + it.y + ") rotate(" + it.rot + ")");
-  }
-  function applyLayout() {
-    data.shapes.forEach(function (s) { applyOne(s.id); });
-  }
-
-  function selectEq(key) {
-    if (selectedKey && eqGroups[selectedKey]) eqGroups[selectedKey].classList.remove("selected");
-    selectedKey = key;
-    var sel = document.getElementById("planSel");
-    var hint = document.getElementById("planHint");
-    var rot = document.getElementById("rotBtn");
-    var park = document.getElementById("parkBtn");
-    var edit = document.getElementById("editShapeBtn");
-    var s = key ? shapeById(key) : null;
-    if (!s) {
-      selectedKey = null;
-      sel.hidden = true; rot.hidden = true; park.hidden = true; edit.hidden = true; hint.hidden = false;
-      renderPlanLinks();
-      return;
-    }
-    eqGroups[key].classList.add("selected");
-    sel.innerHTML = esc(s.name) + ' <span class="dims">' + s.w + "×" + s.d + " mm</span>";
-    sel.hidden = false; rot.hidden = false; park.hidden = false; edit.hidden = false; hint.hidden = true;
-    renderPlanLinks();
-  }
-
-  function findItemAnywhere(id) {
-    var it = findById(data.purchases, id);
-    if (it) return { list: "purchases", item: it };
-    it = findById(data.decisions, id);
-    if (it) return { list: "decisions", item: it };
-    it = findById(data.notes, id);
-    if (it) return { list: "notes", item: it };
-    return null;
-  }
-
-  function renderPlanLinks() {
-    var el = document.getElementById("planLinks");
-    el.innerHTML = "";
-    var s = selectedKey ? shapeById(selectedKey) : null;
-    if (!s || !s.links.length) return;
-    var html = "";
-    s.links.forEach(function (id) {
-      var hit = findItemAnywhere(id);
-      if (!hit) return;
-      html += '<button class="pill st-accent" data-link="' + esc(id) + '">' + esc(hit.item.item || hit.item.title) + "</button>";
-    });
-    el.innerHTML = html;
-  }
-
-  function toSvgPoint(e) {
-    var p = planSvg.createSVGPoint();
-    p.x = e.clientX; p.y = e.clientY;
-    return p.matrixTransform(planSvg.getScreenCTM().inverse());
-  }
-
-  function wirePlanEvents() {
-    var drag = null;
-    planSvg.addEventListener("pointerdown", function (e) {
-      var g = e.target.closest ? e.target.closest(".eq") : null;
-      if (!g) { selectEq(null); return; }
-      var key = g.getAttribute("data-key");
-      selectEq(key);
-      var pt = toSvgPoint(e);
-      var it = data.layout[key];
-      drag = { key: key, dx: it.x - pt.x, dy: it.y - pt.y };
-      try { g.setPointerCapture(e.pointerId); } catch (err) {}
-      e.preventDefault();
-    });
-    planSvg.addEventListener("pointermove", function (e) {
-      if (!drag) return;
-      var pt = toSvgPoint(e);
-      var it = data.layout[drag.key];
-      var eq = shapeById(drag.key);
-      if (!it || !eq) return;
-      var hw = (it.rot === 90 ? eq.d : eq.w) / 2;
-      var hd = (it.rot === 90 ? eq.w : eq.d) / 2;
-      it.x = Math.min(Math.max(pt.x + drag.dx, hw + 40), VB_W - hw - 40);
-      it.y = Math.min(Math.max(pt.y + drag.dy, hd + 240), VB_H - hd - 40);
-      applyOne(drag.key);
-    });
-    function endDrag() {
-      if (drag) { save(data); drag = null; }
-    }
-    planSvg.addEventListener("pointerup", endDrag);
-    planSvg.addEventListener("pointercancel", endDrag);
-
-    document.getElementById("rotBtn").addEventListener("click", function () {
-      if (!selectedKey) return;
-      var it = data.layout[selectedKey];
-      it.rot = it.rot === 90 ? 0 : 90;
-      applyOne(selectedKey); save(data);
-    });
-    document.getElementById("parkBtn").addEventListener("click", function () {
-      if (!selectedKey) return;
-      var def = defaultLayout(data.shapes)[selectedKey];
-      data.layout[selectedKey] = { x: def.x, y: def.y, rot: 0 };
-      applyOne(selectedKey); save(data);
-    });
-    document.getElementById("resetLayoutBtn").addEventListener("click", function () {
-      data.layout = defaultLayout(data.shapes);
-      rebuildShapes(); selectEq(null); save(data);
-    });
-    document.getElementById("addShapeBtn").addEventListener("click", function () { openShape(null); });
-    document.getElementById("editShapeBtn").addEventListener("click", function () {
-      if (selectedKey) openShape(shapeById(selectedKey));
-    });
-    document.getElementById("planLinks").addEventListener("click", function (e) {
-      var b = e.target.closest("[data-link]");
-      if (!b) return;
-      var hit = findItemAnywhere(b.getAttribute("data-link"));
-      if (!hit) return;
-      activeTab = hit.list;
-      render();
-      if (hit.list === "purchases") openPurchase(hit.item);
-      else if (hit.list === "decisions") openDecision(hit.item);
-      else openNote(hit.item);
-    });
-  }
-
-  // ---------- shape dialog ----------
-  var editingShapeId = null;
-  function openShape(s) {
-    editingShapeId = s ? s.id : null;
-    var dlg = document.getElementById("dlg-shape");
-    document.getElementById("dlg-shape-title").textContent = s ? "Edit shape" : "Add shape";
-    document.getElementById("s-name").value = s ? s.name : "";
-    document.getElementById("s-w").value = s ? s.w : "";
-    document.getElementById("s-d").value = s ? s.d : "";
-    var toneSel = document.getElementById("s-tone");
-    toneSel.innerHTML = TONES.map(function (t) {
-      return '<option value="' + t + '"' + ((s ? s.tone : "neutral") === t ? " selected" : "") + ">" + TONE_LABELS[t] + "</option>";
-    }).join("");
-    var linksEl = document.getElementById("s-links");
-    var html = "";
-    [["Purchases", data.purchases, "item"], ["Decisions", data.decisions, "title"], ["Notes", data.notes, "title"]].forEach(function (grp) {
-      if (!grp[1].length) return;
-      html += '<div class="grp">' + grp[0] + "</div>";
-      grp[1].forEach(function (it) {
-        var checked = s && s.links.indexOf(it.id) >= 0 ? " checked" : "";
-        html += '<label><input type="checkbox" value="' + esc(it.id) + '"' + checked + ">" + esc(it[grp[2]]) + "</label>";
-      });
-    });
-    linksEl.innerHTML = html || '<span class="none">Nothing to link yet.</span>';
-    dlg.querySelector("[data-del]").hidden = !s;
-    resetDeleteBtn(dlg);
-    dlg.showModal();
-  }
-
-  document.getElementById("form-shape").addEventListener("submit", function (e) {
-    e.preventDefault();
-    var w = Math.min(Math.max(Math.round(Number(document.getElementById("s-w").value)) || 500, 100), 6000);
-    var d = Math.min(Math.max(Math.round(Number(document.getElementById("s-d").value)) || 500, 100), 6000);
-    var links = [];
-    var boxes = document.querySelectorAll("#s-links input[type=checkbox]");
-    for (var i = 0; i < boxes.length; i++) if (boxes[i].checked) links.push(boxes[i].value);
-    var s;
-    if (editingShapeId) {
-      s = shapeById(editingShapeId);
-      if (!s) return;
-      s.name = document.getElementById("s-name").value.trim();
-      s.w = w; s.d = d;
-      s.tone = document.getElementById("s-tone").value;
-      s.links = links;
-    } else {
-      s = {
-        id: uid(),
-        name: document.getElementById("s-name").value.trim(),
-        w: w, d: d,
-        tone: document.getElementById("s-tone").value,
-        links: links
-      };
-      data.shapes.push(s);
-      var def = defaultLayout(data.shapes)[s.id];
-      data.layout[s.id] = { x: def.x, y: def.y, rot: 0 };
-    }
-    save(data);
-    rebuildShapes();
-    selectEq(s.id);
-    document.getElementById("dlg-shape").close();
-  });
-
-  (function () {
-    var dlg = document.getElementById("dlg-shape");
-    var del = dlg.querySelector("[data-del]");
-    del.addEventListener("click", function () {
-      if (!del.classList.contains("armed")) {
-        del.classList.add("armed");
-        del.textContent = "Really delete?";
-        return;
-      }
-      for (var i = data.shapes.length - 1; i >= 0; i--) {
-        if (data.shapes[i].id === editingShapeId) data.shapes.splice(i, 1);
-      }
-      delete data.layout[editingShapeId];
-      save(data);
-      rebuildShapes();
-      selectEq(null);
-      dlg.close();
-    });
-    dlg.querySelector("[data-cancel]").addEventListener("click", function () { dlg.close(); });
-  })();
-
   // ---------- GitHub sync ----------
   var GH = { owner: "daniellawrence38", repo: "garage-tracker", path: "data.json", branch: "main" };
-  var TOKEN_KEY = "garageTracker.ghToken";
-  var remoteSha = null;
-  var pushTimer = null;
-  var pushing = false;
+  var remoteSha = null, pushTimer = null, pushing = false;
 
   function ghToken() { try { return localStorage.getItem(TOKEN_KEY) || ""; } catch (e) { return ""; } }
   function setSyncStatus(txt, tone) {
-    var el = document.getElementById("syncStatus");
+    var el = $("syncStatus");
     if (!el) return;
     el.textContent = txt;
-    el.style.color = tone === "good" ? "var(--good)" : tone === "bad" ? "var(--danger)" : "var(--muted)";
+    $("syncBtn").classList.toggle("bad", tone === "bad");
   }
   function ghUrl() { return "https://api.github.com/repos/" + GH.owner + "/" + GH.repo + "/contents/" + GH.path; }
   function ghHeaders() {
@@ -1391,7 +2194,6 @@
   function b64encode(str) { return btoa(unescape(encodeURIComponent(str))); }
   function b64decode(b64) { return decodeURIComponent(escape(atob(b64.replace(/\s/g, "")))); }
 
-  // cb(parsed) — parsed data object, null if file doesn't exist, undefined on error
   function fetchRemote(cb) {
     fetch(ghUrl() + "?ref=" + GH.branch + "&_=" + Date.now(), { headers: ghHeaders() })
       .then(function (r) {
@@ -1412,30 +2214,30 @@
   function adoptRemote(remote) {
     data = applyInbox(normalizeData(remote));
     saveLocal(data);
+    if (planSvg) { rebuildShapes(); select(null); }
     render();
-    if (planSvg) { rebuildShapes(); selectEq(null); }
   }
 
   function initSync() {
-    if (!window.fetch) { setSyncStatus("sync unavailable in this browser"); return; }
+    if (!window.fetch) { setSyncStatus("sync unavailable"); return; }
     setSyncStatus("checking GitHub…");
     fetchRemote(function (remote) {
-      if (remote === undefined) { setSyncStatus("offline — data saved in this browser"); return; }
+      if (remote === undefined) { setSyncStatus("offline — saved here"); return; }
       if (remote === null) {
         if (ghToken()) schedulePush();
-        else setSyncStatus("add a GitHub token to enable sync");
+        else setSyncStatus("add a token to sync");
         return;
       }
       var r = remote.updatedAt || "", l = data.updatedAt || "";
-      if (r > l) { adoptRemote(remote); setSyncStatus("synced from GitHub ✓", "good"); }
+      if (r > l) { adoptRemote(remote); setSyncStatus("synced from GitHub"); }
       else if (l > r && ghToken()) schedulePush();
-      else setSyncStatus(ghToken() ? "synced ✓" : "viewing shared data — add a token to save changes", ghToken() ? "good" : "");
+      else setSyncStatus(ghToken() ? "synced" : "read-only — add a token");
     });
   }
 
   function schedulePush() {
-    if (!ghToken()) { setSyncStatus("local only — add a GitHub token to sync"); return; }
-    setSyncStatus("saving to GitHub…");
+    if (!ghToken()) { setSyncStatus("local only — add a token"); return; }
+    setSyncStatus("saving…");
     if (pushTimer) clearTimeout(pushTimer);
     pushTimer = setTimeout(function () { doPush(false); }, 1200);
   }
@@ -1451,7 +2253,7 @@
         if (r.ok) {
           return r.json().then(function (j) {
             if (j.content && j.content.sha) remoteSha = j.content.sha;
-            setSyncStatus("synced ✓", "good");
+            setSyncStatus("synced");
           });
         }
         if ((r.status === 409 || r.status === 422) && !isRetry) {
@@ -1459,25 +2261,22 @@
           fetchRemote(function (remote) {
             if (remote && (remote.updatedAt || "") > (data.updatedAt || "")) {
               adoptRemote(remote);
-              setSyncStatus("synced from GitHub ✓", "good");
-            } else {
-              doPush(true);
-            }
+              setSyncStatus("synced from GitHub");
+            } else doPush(true);
           });
           return;
         }
-        if (r.status === 401 || r.status === 403) setSyncStatus("token rejected — check your GitHub token", "bad");
+        if (r.status === 401 || r.status === 403) setSyncStatus("token rejected", "bad");
         else setSyncStatus("sync failed (HTTP " + r.status + ")", "bad");
       })
       .catch(function () {
         pushing = false;
-        setSyncStatus("offline — changes saved in this browser");
+        setSyncStatus("offline — saved here");
       });
   }
 
-  document.getElementById("ghTokenSave").addEventListener("click", function () {
-    var input = document.getElementById("ghTokenInput");
-    var msg = document.getElementById("ghTokenMsg");
+  $("ghTokenSave").addEventListener("click", function () {
+    var input = $("ghTokenInput"), msg = $("ghTokenMsg");
     var v = input.value.trim();
     msg.hidden = false;
     if (!v) { msg.textContent = "Paste a token first."; msg.style.color = "var(--danger)"; return; }
@@ -1485,21 +2284,23 @@
     input.value = "";
     msg.textContent = "Token saved to this browser.";
     msg.style.color = "var(--good)";
-    document.getElementById("ghNote").textContent = "A token is saved in this browser — changes sync to GitHub automatically.";
+    $("ghNote").textContent = "A token is saved in this browser — changes sync to GitHub automatically.";
     remoteSha = null;
     initSync();
   });
-  document.getElementById("ghTokenClear").addEventListener("click", function () {
+  $("ghTokenClear").addEventListener("click", function () {
     try { localStorage.removeItem(TOKEN_KEY); } catch (e) {}
-    var msg = document.getElementById("ghTokenMsg");
+    var msg = $("ghTokenMsg");
     msg.hidden = false;
     msg.textContent = "Token cleared.";
     msg.style.color = "var(--good)";
-    setSyncStatus("local only — add a GitHub token to sync");
+    setSyncStatus("local only — add a token");
   });
 
+  // ---------- go ----------
   buildPlan();
   render();
+  refreshQuickAdd();
   initSync();
 })();
 </script>
